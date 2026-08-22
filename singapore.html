@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Angoli con il metodo di Singapore: concreto, pittorico, astratto; modello a barre, legami numerici e padronanza prima di procedere.">
+<meta name="theme-color" content="#FAF6EF">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%23FAF6EF'/%3E%3Crect x='7' y='17' width='20' height='14' fill='%232A6FB0'/%3E%3Crect x='27' y='17' width='14' height='14' fill='%23D64545'/%3E%3C/svg%3E">
+<title>Metodo Singapore · Angoli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Karla:wght@400;600;800&display=swap">
+<style>
+:root{
+  --paper:#FAF6EF; --card:#FFFFFF; --ink:#16202B; --ink-2:#5B6875; --rule:#E6DFD2; --rule-2:#F1EADD;
+  --blue:#2A6FB0; --red:#D64545; --amber:#EBA31D; --green:#2E8B62; --violet:#7A5AC8;
+  --ok:#2E8B62; --no:#D64545;
+  --f-disp:"Fraunces",Georgia,"Times New Roman",serif;
+  --f-body:"Karla",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+html,body{margin:0;padding:0}
+body{
+  background:
+    linear-gradient(var(--paper) 0 0) padding-box,
+    repeating-linear-gradient(180deg,transparent 0 31px,var(--rule-2) 31px 32px);
+  color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-radius:4px}
+
+.sheet{max-width:760px;margin:0 auto;padding:18px 18px 56px}
+
+/* ---------- intestazione ---------- */
+.mast{display:flex;align-items:flex-end;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:4px}
+.mast .t{flex:1;min-width:0}
+.mast h1{font-family:var(--f-disp);font-weight:700;font-size:24px;line-height:1;margin:0;letter-spacing:-.01em}
+.mast .sub{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-top:5px}
+.mast a.home{font-size:12px;color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);white-space:nowrap}
+.mast a.home:hover{color:var(--blue);border-color:var(--blue)}
+.pips{display:flex;gap:5px}
+.pips i{width:11px;height:11px;border-radius:50%;border:1.8px solid var(--ink-2);display:block}
+.pips i.on{background:var(--green);border-color:var(--green)}
+.pips i.now{border-color:var(--blue);box-shadow:inset 0 0 0 2.5px var(--card);background:var(--blue)}
+
+/* ---------- percorso ---------- */
+.lede{font-size:17px;line-height:1.5;margin:16px 0 6px;max-width:60ch}
+.lede b{font-weight:800}
+.motto{font-family:var(--f-disp);font-size:19px;font-weight:500;font-style:italic;color:var(--ink-2);margin:0 0 18px;padding-left:14px;border-left:3px solid var(--amber)}
+
+.unit{
+  display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;width:100%;text-align:left;
+  background:var(--card);border:1.5px solid var(--rule);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;
+  transition:border-color .15s,transform .15s,box-shadow .15s;
+}
+.unit:not(.locked):hover{border-color:var(--blue);transform:translateX(3px);box-shadow:0 6px 18px -14px var(--ink)}
+.unit .n{font-family:var(--f-disp);font-size:26px;font-weight:700;color:var(--blue);line-height:1;text-align:center}
+.unit h3{margin:0;font-size:17px;font-weight:800;line-height:1.2}
+.unit p{margin:3px 0 0;font-size:13.5px;color:var(--ink-2);line-height:1.35}
+.unit .st{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--ink-2);white-space:nowrap}
+.unit.done{border-color:var(--green);background:#F6FBF8}
+.unit.done .n{color:var(--green)}
+.unit.done .st{color:var(--green)}
+.unit.locked{opacity:.5;cursor:not-allowed;background:#FBF9F5}
+.unit.locked .n{color:var(--ink-2)}
+.cpa{display:inline-flex;gap:4px;margin-top:6px}
+.cpa span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;padding:2px 7px;border-radius:99px;border:1.2px solid var(--rule)}
+.cpa .c{color:var(--red);border-color:#F0C9C9}
+.cpa .p{color:var(--blue);border-color:#C7DCEE}
+.cpa .a{color:var(--ink);border-color:var(--rule)}
+
+/* ---------- scheda di lavoro ---------- */
+.hide{display:none!important}
+.crumb{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:12.5px;color:var(--ink-2)}
+.crumb button{border:1.5px solid var(--rule);border-radius:99px;padding:5px 12px;font-size:12.5px;background:var(--card)}
+.crumb button:hover{border-color:var(--ink)}
+.crumb .qn{margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.queue{display:flex;gap:4px}
+.queue i{width:22px;height:4px;border-radius:2px;background:var(--rule);display:block}
+.queue i.ok{background:var(--green)}
+.queue i.again{background:var(--amber)}
+.queue i.now{background:var(--ink)}
+
+.work{background:var(--card);border:1.5px solid var(--rule);border-radius:var(--r);overflow:hidden}
+.work .phase{display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1.5px solid var(--rule);background:#FCFAF6}
+.work .phase b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800}
+.work .phase .cc{color:var(--red)}.work .phase .pp{color:var(--blue)}.work .phase .aa{color:var(--ink)}
+.work .phase span.step{margin-left:auto;font-size:11.5px;color:var(--ink-2)}
+.work .body{padding:16px}
+.work h2{font-family:var(--f-disp);font-weight:700;font-size:20px;line-height:1.25;margin:0 0 6px;text-wrap:balance}
+.work .ctx{font-size:14.5px;color:var(--ink-2);margin:0 0 12px}
+.fig{margin:0 auto 14px;max-width:520px}
+.fig svg{width:100%;height:auto;display:block;touch-action:none}
+.cap{text-align:center;font-size:12.5px;color:var(--ink-2);margin-top:6px}
+
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--rule);border-radius:8px;background:var(--card);
+  padding:11px 13px;text-align:left;font-size:15.5px;transition:.13s;line-height:1.35}
+.opt:hover:not(:disabled){border-color:var(--blue);background:#F7FBFE}
+.opt .k{flex:0 0 auto;width:24px;height:24px;border-radius:6px;border:1.5px solid var(--rule);display:grid;place-items:center;
+  font-size:12px;font-weight:800;color:var(--ink-2)}
+.opt.good{border-color:var(--ok);background:#F3FAF6}.opt.good .k{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.bad{border-color:var(--no);background:#FDF5F5}.opt.bad .k{background:var(--no);color:#fff;border-color:var(--no)}
+.opt:disabled{cursor:default}
+
+.numrow{display:flex;flex-direction:column;align-items:stretch;gap:11px}
+.disp{border:1.5px solid var(--rule);border-radius:8px;background:#FCFAF6;padding:8px 16px;
+  font-family:var(--f-disp);font-weight:700;font-size:30px;line-height:1.2;font-variant-numeric:tabular-nums;
+  display:flex;align-items:baseline;gap:4px}
+.disp .v{color:var(--blue)}
+.disp .u{font-size:17px;color:var(--ink-2);font-family:var(--f-body);font-weight:600}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:330px}
+.keys button{border:1.5px solid var(--rule);border-radius:8px;background:var(--card);padding:13px 0;font-size:20px;font-weight:700;
+  font-variant-numeric:tabular-nums;transition:.12s}
+.keys button:hover{border-color:var(--blue);background:#F7FBFE}
+.keys button:active{transform:scale(.97)}
+.keys .go{background:var(--blue);border-color:var(--blue);color:#fff}
+.keys .go:hover{background:#3480c6}
+.keys .bk{color:var(--red)}
+
+.note{border-left:3px solid var(--blue);background:#F7FAFD;padding:11px 14px;border-radius:0 8px 8px 0;margin-top:12px;display:none}
+.note.on{display:block;animation:slide .25s ease-out}
+.note.win{border-color:var(--ok);background:#F3FAF6}
+.note.again{border-color:var(--amber);background:#FEF9EF}
+.note b{display:block;font-family:var(--f-disp);font-size:15px;font-weight:700;margin-bottom:3px}
+.note.win b{color:var(--ok)}.note.again b{color:#B57708}
+.note p{margin:0;font-size:14.5px;line-height:1.45}
+.note .why{margin-top:7px;font-size:13.5px;color:var(--ink-2)}
+@keyframes slide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.btn{border-radius:8px;padding:11px 19px;font-weight:800;font-size:15px;border:1.5px solid transparent;transition:.14s}
+.btn.pri{background:var(--ink);color:var(--paper)}
+.btn.pri:hover{background:#26343f}
+.btn.gh{border-color:var(--rule);color:var(--ink-2)}
+.btn.gh:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ---------- fine unità ---------- */
+.done-card{background:var(--card);border:1.5px solid var(--green);border-radius:var(--r);padding:26px 22px;text-align:center}
+.done-card .seal{width:64px;height:64px;margin:0 auto 12px}
+.done-card h2{font-family:var(--f-disp);font-weight:700;font-size:26px;margin:0 0 6px}
+.done-card p{margin:0 auto;max-width:46ch;color:var(--ink-2);font-size:15px}
+.journal{text-align:left;margin-top:18px;border-top:1.5px solid var(--rule);padding-top:14px}
+.journal h4{font-family:var(--f-disp);font-size:14px;font-weight:700;margin:0 0 8px;letter-spacing:.02em}
+.journal li{font-size:14px;margin:6px 0;color:var(--ink-2)}
+.journal li b{color:var(--ink)}
+
+/* ---------- SVG ---------- */
+.ln{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;fill:none}
+.ln.thin{stroke-width:1.8}
+.gh2{stroke:#B9AF9D;stroke-width:2;stroke-dasharray:2.5 6;stroke-linecap:round;fill:none}
+.bl{stroke:var(--blue)}.rd{stroke:var(--red)}.gr{stroke:var(--green)}.am{stroke:var(--amber)}.vi{stroke:var(--violet)}
+.sec{fill:rgba(42,111,176,.16);stroke:var(--blue);stroke-width:2}
+.sec.r{fill:rgba(214,69,69,.15);stroke:var(--red)}
+.sec.g{fill:rgba(46,139,98,.15);stroke:var(--green)}
+.sec.a{fill:rgba(235,163,29,.18);stroke:var(--amber)}
+.sec.n{fill:rgba(22,32,43,.06);stroke:#AFA694}
+.tx{font-family:var(--f-body);font-size:15px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:middle}
+.tx.s{font-size:12.5px;font-weight:600;fill:var(--ink-2)}
+.tx.b{fill:var(--blue)}.tx.r{fill:var(--red)}.tx.g{fill:var(--green)}.tx.a{fill:#A97400}
+.tx.w{fill:#fff}
+.pt{fill:var(--ink)}
+.bar{stroke:var(--ink);stroke-width:1.6}
+.grab{fill:var(--amber);stroke:var(--ink);stroke-width:2;cursor:grab}
+.pickable{cursor:pointer}
+.pickable rect,.pickable circle{transition:fill .15s}
+.pickable:hover .hitbg{fill:rgba(42,111,176,.10)}
+
+@media (max-width:600px){
+  .sheet{padding:14px 13px 44px}
+  .mast h1{font-size:20px}
+  .unit{grid-template-columns:34px 1fr;gap:11px;padding:12px 13px}
+  .unit .st{grid-column:2;margin-top:4px}
+  .work .body{padding:13px}
+  .work h2{font-size:18px}
+  .keys{max-width:100%}
+  .disp{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+#sgtest{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px;padding:12px}
+</style>
+
+<div class="sheet">
+  <header class="mast">
+    <div class="t">
+      <h1>Metodo Singapore · Angoli</h1>
+      <div class="sub">Concreto → Pittorico → Astratto</div>
+    </div>
+    <div class="pips" id="pips" aria-label="Unità padroneggiate"></div>
+    <a class="home" href="./" id="homeLink">↩ Le due scuole</a>
+  </header>
+
+  <!-- ============ PERCORSO ============ -->
+  <main id="path">
+    <p class="lede">Qui non si sceglie da dove cominciare: si <b>sale una scala</b>. Ogni unità si apre solo quando la precedente
+    è padroneggiata, e ogni concetto passa per tre forme — prima lo <b>tocchi</b>, poi lo <b>disegni</b>, infine lo <b>scrivi</b>.</p>
+    <p class="motto">«Insegnare meno, imparare di più.»</p>
+    <div id="units"></div>
+    <p class="lede" style="font-size:14px;color:var(--ink-2);margin-top:18px">
+      Se sbagli, la scheda non sparisce: <b>torna in fondo alla fila</b> e la rivedi prima di finire l'unità.
+      Non è una punizione, è il modo in cui si costruisce la padronanza.
+      <button id="reset" style="text-decoration:underline;color:var(--ink-2);font-size:13.5px">Azzera il percorso</button>
+    </p>
+  </main>
+
+  <!-- ============ SCHEDA ============ -->
+  <main id="card" class="hide">
+    <div class="crumb">
+      <button id="back">← Percorso</button>
+      <div class="queue" id="queue"></div>
+      <span class="qn" id="qn"></span>
+    </div>
+    <section class="work">
+      <div class="phase" id="phase"></div>
+      <div class="body">
+        <h2 id="qTitle"></h2>
+        <p class="ctx" id="qCtx"></p>
+        <div class="fig" id="fig"></div>
+        <p class="cap" id="cap"></p>
+        <div id="input"></div>
+        <div class="note" id="note"></div>
+        <div class="actions">
+          <button class="btn gh" id="hint">Mostrami il modello</button>
+          <button class="btn pri hide" id="next">Avanti →</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ UNITÀ COMPLETATA ============ -->
+  <main id="seal" class="hide">
+    <div class="done-card">
+      <svg class="seal" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="28" fill="none" stroke="#2E8B62" stroke-width="2.5"/>
+        <circle cx="32" cy="32" r="22" fill="none" stroke="#2E8B62" stroke-width="1.2" stroke-dasharray="3 4"/>
+        <path d="M21 33 L29 41 L44 24" fill="none" stroke="#2E8B62" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h2 id="sealTitle"></h2>
+      <p id="sealMsg"></p>
+      <div class="journal" id="journal"></div>
+      <div class="actions" style="justify-content:center;margin-top:20px">
+        <button class="btn pri" id="goNext">Unità successiva →</button>
+        <button class="btn gh" id="goPath">Torna al percorso</button>
+      </div>
+    </div>
+  </main>
+</div>
+<pre id="sgtest" class="hide"></pre>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg",PI=Math.PI;
+function $(s){return document.querySelector(s)}
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function R(n){return Math.round(n*100)/100}
+function pol(cx,cy,r,d){var t=d*PI/180;return[cx+r*Math.cos(t),cy-r*Math.sin(t)]}
+function ang(cx,cy,x,y){return(Math.atan2(cy-y,x-cx)*180/PI+360)%360}
+function board(w,h){return E("svg",{viewBox:"0 0 "+w+" "+h,width:"100%"})}
+function line(s,x1,y1,x2,y2,c){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"ln "+(c||"")},s)}
+function ghost(s,x1,y1,x2,y2){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"gh2"},s)}
+function txt(s,x,y,t,c){var e=E("text",{x:R(x),y:R(y),"class":"tx "+(c||"")},s);e.textContent=t;return e}
+function txtAt(s,cx,cy,r,d,t,c){var p=pol(cx,cy,r,d);return txt(s,p[0],p[1],t,c)}
+function dot(s,x,y,c){return E("circle",{cx:R(x),cy:R(y),r:4.5,"class":"pt "+(c||"")},s)}
+function sector(s,cx,cy,r,a,b,c){
+  var sp=((b-a)%360+360)%360,p1=pol(cx,cy,r,a),p2=pol(cx,cy,r,b),lg=sp>180?1:0;
+  return E("path",{d:"M "+R(cx)+" "+R(cy)+" L "+R(p1[0])+" "+R(p1[1])+" A "+r+" "+r+" 0 "+lg+" 0 "+R(p2[0])+" "+R(p2[1])+" Z","class":"sec "+(c||"")},s);
+}
+function ray(s,cx,cy,d,len,c,tail){
+  var a=pol(cx,cy,len,d);line(s,cx,cy,a[0],a[1],c);
+  if(tail!==0){var b=pol(cx,cy,len+(tail||14),d);ghost(s,a[0],a[1],b[0],b[1])}
+  return a;
+}
+function fullline(s,cx,cy,d,l1,l2,c){
+  var a=pol(cx,cy,l1,d+180),b=pol(cx,cy,l2,d);line(s,a[0],a[1],b[0],b[1],c);
+  ghost(s,a[0],a[1],pol(cx,cy,l1+14,d+180)[0],pol(cx,cy,l1+14,d+180)[1]);
+  ghost(s,b[0],b[1],pol(cx,cy,l2+14,d)[0],pol(cx,cy,l2+14,d)[1]);
+}
+function rightMark(s,cx,cy,d,sz){
+  var p1=pol(cx,cy,sz,d),p3=pol(cx,cy,sz,d+90);
+  E("polyline",{points:R(p1[0])+","+R(p1[1])+" "+R(p1[0]+p3[0]-cx)+","+R(p1[1]+p3[1]-cy)+" "+R(p3[0])+","+R(p3[1]),
+    fill:"none",stroke:"var(--ink)","stroke-width":1.8},s);
+}
+var FILL={b:"rgba(42,111,176,.22)",r:"rgba(214,69,69,.20)",a:"rgba(235,163,29,.28)",g:"rgba(46,139,98,.20)",
+          v:"rgba(122,90,200,.20)",n:"rgba(22,32,43,.05)"};
+var STROKE={b:"#2A6FB0",r:"#D64545",a:"#EBA31D",g:"#2E8B62",v:"#7A5AC8",n:"#AFA694"};
+
+/* ---------- MODELLO A BARRE ---------- */
+/* parts: [{u:peso, t:testo dentro, c:colore}]  total: testo della graffa (o null) */
+function bars(s,x,y,w,h,parts,total,opts){
+  opts=opts||{};
+  var sum=0;parts.forEach(function(p){sum+=p.u});
+  var cx=x;
+  parts.forEach(function(p){
+    var pw=w*p.u/sum;
+    E("rect",{x:R(cx),y:R(y),width:R(pw),height:h,fill:FILL[p.c||"b"],stroke:STROKE[p.c||"b"],
+      "stroke-width":1.8,rx:3},s);
+    if(p.t!==undefined&&p.t!==null)txt(s,cx+pw/2,y+h/2,p.t,p.tc||"");
+    cx+=pw;
+  });
+  if(total)brace(s,x,x+w,y-9,total,-1);
+  if(opts.under)brace(s,x,x+w,y+h+9,opts.under,1);
+  return {x:x,y:y,w:w,h:h};
+}
+/* graffa: dir -1 sopra, 1 sotto */
+function brace(s,x1,x2,y,label,dir){
+  var d=dir||-1,tick=6*(-d);
+  E("path",{d:"M "+R(x1)+" "+R(y-tick)+" L "+R(x1)+" "+R(y)+" L "+R(x2)+" "+R(y)+" L "+R(x2)+" "+R(y-tick),
+    fill:"none",stroke:"var(--ink-2)","stroke-width":1.5},s);
+  if(label)txt(s,(x1+x2)/2,y+(d<0?-13:15),label,"s");
+}
+/* segno di uguaglianza fra unità (tacche) */
+function unitTicks(s,x,y,w,h,n){
+  for(var i=1;i<n;i++)E("line",{x1:R(x+w*i/n),y1:R(y),x2:R(x+w*i/n),y2:R(y+h),
+    stroke:"#fff","stroke-width":2,"stroke-dasharray":"4 4"},s);
+}
+
+/* ---------- NUMBER BOND ---------- */
+/* whole in alto, due parti in basso; valori null diventano "?" */
+function bond(s,cx,cy,whole,left,right,cls){
+  var r=30,dx=78,dy=64;
+  E("line",{x1:R(cx),y1:R(cy+r-4),x2:R(cx-dx),y2:R(cy+dy-r+4),stroke:"var(--ink-2)","stroke-width":1.8},s);
+  E("line",{x1:R(cx),y1:R(cy+r-4),x2:R(cx+dx),y2:R(cy+dy-r+4),stroke:"var(--ink-2)","stroke-width":1.8},s);
+  function node(x,y,v,c){
+    E("circle",{cx:R(x),cy:R(y),r:r,fill:v===null?"#fff":FILL[c],stroke:STROKE[c],"stroke-width":2.2,
+      "stroke-dasharray":v===null?"5 4":""},s);
+    txt(s,x,y,v===null?"?":String(v)+"°",v===null?"b":"");
+  }
+  node(cx,cy,whole,cls||"n");
+  node(cx-dx,cy+dy,left,"b");
+  node(cx+dx,cy+dy,right,"r");
+}
+
+/* ---------- VENTAGLIO (concreto) ---------- */
+function fan(s,cx,cy,a,len,cls,ribs){
+  sector(s,cx,cy,len*.92,0,a,cls||"a");
+  var n=ribs||5;
+  for(var i=0;i<=n;i++){
+    var d=a*i/n,p=pol(cx,cy,len,d);
+    E("line",{x1:R(cx),y1:R(cy),x2:R(p[0]),y2:R(p[1]),stroke:i===0||i===n?"var(--ink)":"#B9AF9D",
+      "stroke-width":i===0||i===n?2.6:1.4,"stroke-linecap":"round"},s);
+  }
+  E("path",{d:"M "+R(pol(cx,cy,len,0)[0])+" "+R(pol(cx,cy,len,0)[1])+" A "+len+" "+len+" 0 "+(a>180?1:0)+" 0 "+
+    R(pol(cx,cy,len,a)[0])+" "+R(pol(cx,cy,len,a)[1]),fill:"none",stroke:STROKE[cls||"a"],"stroke-width":2},s);
+  dot(s,cx,cy);
+  return s;
+}
+
+/* ---------- utilità ---------- */
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function kindOf(v){return v<90?"acuto":v===90?"retto":v<180?"ottuso":v===180?"piatto":"concavo"}
+function choices(list){return shuffle(list.map(function(c){return{label:c[0],ok:!!c[1],why:c[2]||""}}))}
+
+window.SG={$:$,E:E,R:R,pol:pol,ang:ang,board:board,line:line,ghost:ghost,txt:txt,txtAt:txtAt,dot:dot,
+  sector:sector,ray:ray,fullline:fullline,rightMark:rightMark,bars:bars,brace:brace,unitTicks:unitTicks,
+  bond:bond,fan:fan,rnd:rnd,pick:pick,shuffle:shuffle,kindOf:kindOf,choices:choices,FILL:FILL,STROKE:STROKE};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var S=window.SG,rnd=S.rnd,pick=S.pick,shuffle=S.shuffle,ch=S.choices;
+
+/* ============================================================
+   UNITÀ 1 — L'APERTURA (Concreto → Pittorico → Astratto)
+   ============================================================ */
+function u1a(){
+  var a=rnd(5,11)*10;
+  return{phase:"C",step:"tocca e confronta",
+    title:"Quale ventaglio è aperto di più?",
+    ctx:"Due ventagli identici nell'apertura, ma con stecche di lunghezza diversa.",
+    cap:"Le stecche lunghe non aprono di più: cambiano solo di lunghezza.",
+    w:520,h:230,
+    draw:function(s){
+      S.fan(s,150,180,a,58,"a");S.txt(s,150,212,"ventaglio A","s");
+      S.fan(s,370,180,a,115,"b");S.txt(s,370,212,"ventaglio B","s");
+    },
+    kind:"choice",
+    choices:ch([["Il ventaglio A",false],["Il ventaglio B",false],
+      ["Sono aperti uguale",true],["Non si può confrontare",false]]),
+    hint:"Guarda soltanto quanto si allontanano le due stecche esterne, non quanto sono lunghe.",
+    why:"L'apertura è la stessa: allungare le stecche non cambia l'angolo. È la prima idea di tutto il capitolo.",
+    journal:"L'angolo è un'<b>apertura</b>: non dipende dalla lunghezza dei lati."};
+}
+function u1b(){
+  var big=rnd(7,11)*10,small=big-rnd(3,5)*10;
+  var bigFirst=Math.random()<.5;
+  var A=bigFirst?big:small,B=bigFirst?small:big;
+  var lenA=bigFirst?55:120,lenB=bigFirst?120:55;
+  return{phase:"C",step:"non fidarti dell'occhio",
+    title:"Adesso quale è aperto di più?",
+    ctx:"Attenzione: qui cambiano sia l'apertura sia la lunghezza delle stecche.",
+    cap:"Il ventaglio con le stecche lunghe sembra più grande. Sembra.",
+    w:520,h:230,
+    draw:function(s){
+      S.fan(s,150,180,A,lenA,"a");S.txt(s,150,212,"ventaglio A","s");
+      S.fan(s,370,180,B,lenB,"b");S.txt(s,370,212,"ventaglio B","s");
+    },
+    kind:"choice",
+    choices:ch([["Il ventaglio A",A>B],["Il ventaglio B",B>A],["Sono aperti uguale",false]]),
+    hint:"Copri con un dito la parte esterna delle stecche: resta solo l'apertura vicino al vertice.",
+    why:"Vince l'apertura, non la lunghezza: "+(A>B?"A":"B")+" misura "+Math.max(A,B)+"° contro "+Math.min(A,B)+"°.",
+    journal:"Per confrontare due angoli guardo l'apertura vicino al vertice."};
+}
+function u1c(){
+  var v=pick([40,60,90,120,135,150]);
+  var cand=[45,90,120,60,150,30],alt=[];
+  cand.forEach(function(x){if(x!==v&&alt.indexOf(x)<0&&alt.length<2)alt.push(x)});
+  var opts=shuffle([v].concat(alt));
+  return{phase:"P",step:"disegna l'ampiezza",
+    title:"Quale barra rappresenta questo angolo?",
+    ctx:"La barra intera vale un angolo piatto: 180°. La parte colorata è l'ampiezza dell'angolo.",
+    cap:"Stessa quantità, due modi di mostrarla: l'apertura e la lunghezza.",
+    w:520,h:250,
+    draw:function(s){
+      S.sector(s,90,110,44,0,v,"b");S.ray(s,90,110,0,120,"");S.ray(s,90,110,v,110,"");S.dot(s,90,110);
+      S.txt(s,250,64,"↕ la stessa ampiezza, disegnata come barra","s");
+      var y=150;
+      opts.forEach(function(o,i){
+        var x=40,w=440;
+        S.bars(s,x,y+i*32,w,22,[{u:o,t:"",c:"b"},{u:180-o,t:"",c:"n"}],null);
+        S.txt(s,x-14,y+i*32+11,"ABC"[i],"s");
+      });
+      S.brace(s,40,480,y-8,"180° in tutto",-1);
+    },
+    kind:"choice",
+    choices:(function(){
+      return opts.map(function(o,i){return{label:"Barra "+"ABC"[i],ok:o===v}});
+    })(),
+    hint:"L'angolo è più o meno di un angolo retto? Metà barra = 90°.",
+    why:"L'angolo misura "+v+"°: sulla barra da 180° ne occupa "+(v<90?"meno della metà":v===90?"esattamente la metà":"più della metà")+".",
+    journal:"Posso rappresentare un angolo come <b>parte di una barra</b> da 180°."};
+}
+function u1d(){
+  var parts=pick([[1,3],[2,3],[1,4],[3,4],[1,6],[5,6]]),n=parts[0],d=parts[1],v=180*n/d;
+  return{phase:"A",step:"scrivi il numero",
+    title:"Quanto misura l'angolo colorato?",
+    ctx:"La barra intera vale 180° ed è divisa in "+d+" parti uguali.",
+    cap:"Prima le parti, poi il numero: 180 : "+d+" = "+(180/d)+"° per ogni parte.",
+    w:520,h:150,
+    draw:function(s){
+      var ps=[];for(var i=0;i<d;i++)ps.push({u:1,t:"",c:i<n?"b":"n"});
+      S.bars(s,40,60,440,34,ps,"180°");
+      S.brace(s,40,40+440*n/d,110,n+" parti su "+d,1);
+    },
+    kind:"number",answer:v,
+    hint:"Quanto vale <b>una</b> parte? 180 : "+d+". Poi moltiplica per "+n+".",
+    why:"180 : "+d+" = "+(180/d)+"° per parte, e "+n+" parti fanno "+v+"°.",
+    journal:"Trovo prima quanto vale <b>una parte</b>, poi moltiplico."};
+}
+
+/* ============================================================
+   UNITÀ 2 — LEGAMI NUMERICI (number bond)
+   ============================================================ */
+function bondTask(whole,cls,ctx,journal){
+  return function(){
+    var missing=pick(["right","left","whole"]);
+    var a=rnd(2,(whole/10)-2)*10+pick([0,5]);
+    if(a>=whole)a=whole-10;
+    var b=whole-a;
+    var ask,answer,l,r,w;
+    if(missing==="right"){l=a;r=null;w=whole;answer=b;ask="Quanto vale la parte che manca?"}
+    else if(missing==="left"){l=null;r=b;w=whole;answer=a;ask="Quanto vale la parte che manca?"}
+    else{l=a;r=b;w=null;answer=whole;ask="Quanto vale il tutto?"}
+    return{phase:"P",step:"il tutto e le parti",
+      title:ask,ctx:ctx,
+      cap:"Il cerchio in alto è il <b>tutto</b>, quelli in basso sono le <b>parti</b>.",
+      w:400,h:190,
+      draw:function(s){S.bond(s,200,42,w,l,r,cls)},
+      kind:"number",answer:answer,
+      hint:missing==="whole"?"Somma le due parti.":"Togli la parte nota dal tutto: "+whole+" − "+(missing==="right"?a:b),
+      why:missing==="whole"?(a+" + "+b+" = "+whole+"°"):(whole+" − "+(missing==="right"?a:b)+" = "+answer+"°"),
+      journal:journal};
+  };
+}
+var u2a=bondTask(90,"g","Due angoli <b>complementari</b>: insieme formano un angolo retto.",
+  "Complementari → il tutto è <b>90°</b>.");
+var u2b=bondTask(180,"a","Due angoli <b>supplementari</b>: insieme formano un angolo piatto.",
+  "Supplementari → il tutto è <b>180°</b>.");
+var u2c=bondTask(360,"v","Due angoli <b>esplementari</b>: insieme formano un angolo giro.",
+  "Esplementari → il tutto è <b>360°</b>.");
+function u2d(){
+  var a=rnd(4,15)*10,b=180-a;
+  return{phase:"A",step:"dal disegno al legame",
+    title:"Quanto misura l'angolo β?",
+    ctx:"I punti A, O e B stanno sulla stessa retta.",
+    cap:"Sulla retta il tutto vale sempre 180°.",
+    w:480,h:210,
+    draw:function(s){
+      S.fullline(s,200,150,0,150,150,"");
+      S.ray(s,200,150,a,120,"");
+      S.sector(s,200,150,46,0,a,"b");S.txtAt(s,200,150,66,a/2,a+"°","b");
+      S.sector(s,200,150,46,a,180,"r");S.txtAt(s,200,150,66,(a+180)/2,"β","r");
+      S.dot(s,200,150);S.txt(s,54,164,"A","s");S.txt(s,346,164,"B","s");S.txt(s,196,166,"O","s");
+    },
+    hintDraw:function(s){
+      S.fullline(s,200,150,0,150,150,"");S.ray(s,200,150,a,120,"");
+      S.sector(s,200,150,46,0,a,"b");S.sector(s,200,150,46,a,180,"r");
+      S.dot(s,200,150);
+      S.bond(s,360,26,180,a,null,"a");
+    },
+    kind:"number",answer:b,
+    hint:"Disegna il legame: il tutto è 180°, una parte è "+a+"°.",
+    why:"180 − "+a+" = "+b+"°. Sulla retta le due parti formano sempre il tutto.",
+    journal:"Ogni figura nasconde un legame: trovo il <b>tutto</b> e poi le parti."};
+}
+
+/* ============================================================
+   UNITÀ 3 — IL MODELLO A BARRE
+   ============================================================ */
+function u3a(){
+  var whole=rnd(11,44)*4,half=whole/2;
+  return{phase:"P",step:"due parti uguali",
+    title:"La bisettrice divide l'angolo in due parti uguali. Quanto misura una parte?",
+    ctx:"L'angolo intero misura "+whole+"°.",
+    cap:"Due unità uguali: il modello lo dice prima ancora del calcolo.",
+    w:520,h:210,
+    draw:function(s){
+      S.sector(s,90,150,52,0,whole/2,"b");S.sector(s,90,150,52,whole/2,whole,"b");
+      S.ray(s,90,150,0,110,"");S.ray(s,90,150,whole,105,"");
+      S.line(s,90,150,S.pol(90,150,100,whole/2)[0],S.pol(90,150,100,whole/2)[1],"vi");
+      S.dot(s,90,150);S.txtAt(s,90,150,74,whole/2,whole+"°","b");
+      S.bars(s,250,120,230,34,[{u:1,t:"?",c:"b"},{u:1,t:"?",c:"b"}],whole+"°");
+      S.txt(s,365,178,"due unità uguali","s");
+    },
+    kind:"number",answer:half,
+    hint:"Due unità uguali formano "+whole+"°: quanto vale una unità?",
+    why:whole+" : 2 = "+half+"°",
+    journal:"Bisettrice → <b>due unità uguali</b>: divido per 2."};
+}
+function u3b(){
+  var one=rnd(3,12)*5,tot=one*3;
+  var whole=180,unit=60;
+  one=unit;tot=180;
+  return{phase:"P",step:"unità diverse",
+    title:"Quanto misura l'angolo più grande?",
+    ctx:"Due angoli sono <b>supplementari</b> e uno è il <b>doppio</b> dell'altro.",
+    cap:"Il piccolo vale 1 unità, il grande 2: in tutto 3 unità.",
+    w:520,h:190,
+    draw:function(s){
+      S.bars(s,40,54,440,36,[{u:1,t:"1 unità",c:"b"},{u:2,t:"2 unità",c:"r"}],"180°");
+      S.unitTicks(s,40+440/3,54,440*2/3,36,2);
+      S.txt(s,260,124,"3 unità = 180°  →  1 unità = 60°","s");
+    },
+    kind:"number",answer:120,
+    hint:"3 unità valgono 180°. Quanto vale 1 unità? E 2 unità?",
+    why:"180 : 3 = 60° (una unità), quindi il grande è 2 × 60 = 120°. Controllo: 60 + 120 = 180 ✔",
+    journal:"«Il doppio» → <b>1 + 2 = 3 unità</b>. Prima trovo l'unità."};
+}
+function u3c(){
+  var k=pick([3,4,5]),whole=pick([90,180]);
+  if(whole===90&&k===3)k=pick([4,5]);           /* 90:4 non e intero */
+  var unit=whole/(k+1),ans=unit*k;
+  return{phase:"A",step:"dal testo al modello",
+    title:"Quanto misura l'angolo?",
+    ctx:"Un angolo è il <b>"+(k===3?"triplo":k===4?"quadruplo":"quintuplo")+"</b> del suo "+(whole===90?"<b>complementare</b>":"<b>supplementare</b>")+".",
+    cap:"Le unità si contano prima di calcolare: "+k+" + 1 = "+(k+1)+".",
+    w:520,h:180,
+    draw:function(s){
+      var ps=[{u:k,t:"l'angolo: "+k+" unità",c:"r"},{u:1,t:"1",c:"b"}];
+      S.bars(s,40,54,440,36,ps,whole+"°");
+      S.unitTicks(s,40,54,440*k/(k+1),36,k);
+      S.txt(s,260,120,(k+1)+" unità = "+whole+"°  →  1 unità = "+unit+"°","s");
+    },
+    kind:"number",answer:ans,
+    hint:"In tutto ci sono "+(k+1)+" unità e valgono "+whole+"°.",
+    why:whole+" : "+(k+1)+" = "+unit+"° per unità, quindi l'angolo è "+k+" × "+unit+" = "+ans+"°.",
+    journal:"«Triplo, quadruplo…» → conto le unità, poi divido il tutto."};
+}
+function u3d(){
+  var diff=rnd(2,7)*10,small=(180-diff)/2,big=small+diff;
+  return{phase:"P",step:"il modello della differenza",
+    title:"Quanto misura l'angolo più piccolo?",
+    ctx:"Due angoli sono <b>supplementari</b> e uno <b>supera l'altro di "+diff+"°</b>.",
+    cap:"Tolgo la differenza, resta il doppio del piccolo.",
+    w:520,h:210,
+    draw:function(s){
+      S.bars(s,40,46,200,32,[{u:1,t:"?",c:"b"}],null,{under:"il piccolo"});
+      S.bars(s,40,118,200+120,32,[{u:200,t:"?",c:"b"},{u:120,t:diff+"°",c:"a"}],null,{under:"il grande"});
+      S.brace(s,40,480,20,"i due insieme: 180°",-1);
+      S.txt(s,430,62,"180 − "+diff+" = "+(180-diff),"s");
+      S.txt(s,430,80,"poi : 2","s");
+    },
+    kind:"number",answer:small,
+    hint:"Se togli i "+diff+"° in più, restano due parti uguali: (180 − "+diff+") : 2",
+    why:"(180 − "+diff+") : 2 = "+small+"°. L'altro è "+small+" + "+diff+" = "+big+"°. Controllo: "+small+" + "+big+" = 180 ✔",
+    journal:"Con «supera di…» tolgo la differenza e divido a metà."};
+}
+function u3e(){
+  var right=pick([
+    ["Due angoli supplementari: uno è il doppio dell'altro.",[{u:1,c:"b"},{u:2,c:"r"}],180],
+    ["Due angoli complementari: uno è il doppio dell'altro.",[{u:1,c:"b"},{u:2,c:"r"}],90],
+    ["Un angolo di 180° diviso dalla bisettrice.",[{u:1,c:"b"},{u:1,c:"b"}],180]
+  ]);
+  var wrong=[["Due angoli uguali che formano un angolo giro.",false],
+             ["Un angolo diviso in tre parti uguali.",false],
+             ["Due angoli che differiscono di 30°.",false]];
+  return{phase:"A",step:"leggi il modello",
+    title:"Quale problema è rappresentato da questo modello?",
+    ctx:"Qui il modello c'è già: devi capire che cosa racconta.",
+    cap:"Saper leggere un modello vale quanto saperlo disegnare.",
+    w:520,h:150,
+    draw:function(s){
+      var ps=right[1].map(function(p){return{u:p.u,t:p.u+" unità",c:p.c}});
+      S.bars(s,60,54,400,36,ps,right[2]+"°");
+    },
+    kind:"choice",
+    choices:ch([[right[0],true]].concat(shuffle(wrong).slice(0,3))),
+    hint:"Guarda due cose: quanto vale il tutto e quante unità ci sono.",
+    why:"Il tutto è "+right[2]+"° ed è diviso in "+right[1].length+" parti come indicato: "+right[0].toLowerCase(),
+    journal:"Un modello si legge in due mosse: <b>il tutto</b> e <b>le unità</b>."};
+}
+
+window.SGU1=[u1a,u1b,u1c,u1d];
+window.SGU2=[u2a,u2b,u2c,u2d];
+window.SGU3=[u3a,u3b,u3c,u3d,u3e];
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var S=window.SG,rnd=S.rnd,pick=S.pick,shuffle=S.shuffle,ch=S.choices;
+
+/* ============================================================
+   UNITÀ 4 — VARIAZIONE: che cosa cambia, che cosa resta
+   ============================================================ */
+function u4a(){
+  var v=pick([50,65,110,125]);
+  var rots=[0,90,205,300],lens=[80,58,70,64];
+  return{phase:"P",step:"quattro figure, un solo angolo",
+    title:"Che cosa <b>non</b> cambia nelle quattro figure?",
+    ctx:"Sono lo stesso angolo, girato e disegnato con lati diversi.",
+    cap:"In matematica la regola è ciò che resta uguale quando tutto il resto cambia.",
+    w:520,h:210,
+    draw:function(s){
+      rots.forEach(function(r,i){
+        var cx=75+i*125,cy=115;
+        S.sector(s,cx,cy,32,r,r+v,"b");
+        S.ray(s,cx,cy,r,lens[i],"",0);S.ray(s,cx,cy,r+v,lens[i],"",0);
+        S.dot(s,cx,cy);S.txt(s,cx,190,"figura "+(i+1),"s");
+      });
+    },
+    kind:"choice",
+    choices:ch([["L'ampiezza dell'angolo",true],["La lunghezza dei lati",false],
+      ["La direzione dei lati",false],["La posizione del vertice",false]]),
+    hint:"Prova a sovrapporle mentalmente facendole ruotare: che cosa combacia?",
+    why:"Tutte e quattro misurano "+v+"°. Ruotare la figura o accorciare i lati non tocca l'apertura.",
+    journal:"Se ruoto o allungo, l'<b>ampiezza resta</b>: è l'invariante."};
+}
+function u4b(){
+  var base=rnd(2,5)*10,rows=[base,base+10,base+20],ask=base+30;
+  return{phase:"A",step:"una variazione alla volta",
+    title:"Completa la tabella: quanto vale il complementare di "+ask+"°?",
+    ctx:"Guarda come cambiano i numeri man mano che l'angolo cresce di 10° per volta.",
+    cap:"Cambia una cosa sola: così si vede la regola.",
+    w:520,h:200,
+    draw:function(s){
+      var x=110,y=40,w=300,rh=32;
+      S.E("rect",{x:x,y:y,width:w,height:rh,fill:"#F1EADD",stroke:"#AFA694","stroke-width":1.4},s);
+      S.txt(s,x+w*.25,y+rh/2,"angolo","s");S.txt(s,x+w*.75,y+rh/2,"complementare","s");
+      rows.concat([ask]).forEach(function(v,i){
+        var yy=y+rh*(i+1);
+        S.E("rect",{x:x,y:yy,width:w,height:rh,fill:i===3?"#F7FBFE":"#fff",stroke:"#E6DFD2","stroke-width":1.4},s);
+        S.txt(s,x+w*.25,yy+rh/2,v+"°",i===3?"b":"");
+        S.txt(s,x+w*.75,yy+rh/2,i===3?"?":(90-v)+"°",i===3?"b":"");
+      });
+    },
+    kind:"number",answer:90-ask,
+    hint:"Ogni volta che l'angolo cresce di 10°, il complementare cala di 10°.",
+    why:"90 − "+ask+" = "+(90-ask)+"°. Il tutto resta 90: se una parte cresce, l'altra cala della stessa quantità.",
+    journal:"Se il <b>tutto</b> non cambia, ciò che una parte guadagna l'altra lo perde."};
+}
+function u4c(){
+  var pairs=[[40,140],[65,115],[85,95]],odd=[70,100];
+  var all=shuffle(pairs.concat([odd]));
+  return{phase:"A",step:"quale non appartiene",
+    title:"Tre coppie seguono la stessa regola. Quale è l'intrusa?",
+    ctx:"Osserva le somme prima di rispondere.",
+    cap:"Trovare l'intrusa costringe a nominare la regola.",
+    w:520,h:170,
+    draw:function(s){
+      all.forEach(function(p,i){
+        var x=30+i*124,y=42;
+        S.E("rect",{x:x,y:y,width:104,height:70,fill:"#fff",stroke:"#E6DFD2","stroke-width":1.6,rx:6},s);
+        S.txt(s,x+52,y+26,p[0]+"°","b");S.txt(s,x+52,y+48,p[1]+"°","r");
+        S.txt(s,x+52,y+92,"ABCD"[i],"s");
+      });
+    },
+    kind:"choice",
+    choices:all.map(function(p,i){return{label:"Coppia "+"ABCD"[i]+" ("+p[0]+"° e "+p[1]+"°)",ok:p===odd}}),
+    hint:"Somma i due numeri di ogni coppia: tre danno lo stesso risultato.",
+    why:"Le altre tre sono <b>supplementari</b> (somma 180°); "+odd[0]+" + "+odd[1]+" = 170, quindi non lo sono.",
+    journal:"Per trovare l'intrusa devo prima dire ad alta voce <b>qual è la regola</b>."};
+}
+function u4d(){
+  var items=[
+    ["Due angoli complementari sono entrambi acuti.","sempre",
+     "Se la somma è 90°, nessuno dei due può arrivare a 90°."],
+    ["Due angoli adiacenti sono uguali fra loro.","a volte",
+     "Succede solo quando sono entrambi retti: 90° + 90° = 180°."],
+    ["Un angolo ottuso ha un complementare.","mai",
+     "Supera già 90° da solo: non resta niente da aggiungere."],
+    ["Due angoli opposti al vertice sono congruenti.","sempre",
+     "Sono entrambi il supplementare dello stesso angolo."],
+    ["Due angoli supplementari sono entrambi ottusi.","mai",
+     "Se lo fossero, la somma supererebbe 180°."]
+  ];
+  var it=pick(items);
+  return{phase:"A",step:"sempre, a volte, mai",
+    title:"«"+it[0]+"»",
+    ctx:"Questa affermazione è vera sempre, solo a volte, oppure mai?",
+    cap:"Un esempio non basta per dire «sempre»; ne basta uno per dire «a volte».",
+    w:460,h:120,
+    draw:function(s){
+      ["sempre","a volte","mai"].forEach(function(w,i){
+        var x=20+i*146;
+        S.E("rect",{x:x,y:34,width:126,height:44,rx:8,fill:i===0?"#F3FAF6":i===1?"#FEF9EF":"#FDF5F5",
+          stroke:i===0?"#2E8B62":i===1?"#EBA31D":"#D64545","stroke-width":1.6},s);
+        S.txt(s,x+63,56,w.toUpperCase(),i===0?"g":i===1?"a":"r");
+      });
+    },
+    kind:"choice",
+    choices:["sempre","a volte","mai"].map(function(w){return{label:w.charAt(0).toUpperCase()+w.slice(1)+" vero",ok:w===it[1]}}),
+    hint:"Prova a cercare un controesempio: se lo trovi, non è «sempre».",
+    why:"È <b>"+it[1]+"</b> vero: "+it[2],
+    journal:"«Sempre / a volte / mai»: cerco un <b>controesempio</b> prima di decidere."};
+}
+
+/* ============================================================
+   UNITÀ 5 — DALLA FIGURA AL MODELLO
+   ============================================================ */
+function u5a(){
+  var a=rnd(11,38)*2,mid=180-a,half=mid/2;
+  return{phase:"P",step:"figura → modello → numero",
+    title:"Quanto misura M&Ocirc;B?",
+    ctx:"A, O, B sono allineati; A&Ocirc;C misura "+a+"° e <b>OM è la bisettrice</b> di C&Ocirc;B.",
+    cap:"Due passaggi: prima il tutto meno la parte, poi due unità uguali.",
+    w:520,h:230,
+    draw:function(s){
+      var cx=250,cy=150,d=180-a;
+      S.fullline(s,cx,cy,0,120,120,"");S.fullline(s,cx,cy,d,105,105,"");
+      S.line(s,cx,cy,S.pol(cx,cy,95,d/2)[0],S.pol(cx,cy,95,d/2)[1],"vi");
+      S.sector(s,cx,cy,44,d,180,"r");S.txtAt(s,cx,cy,62,d+(180-d)/2,a+"°","r");
+      S.sector(s,cx,cy,30,0,d/2,"b");S.sector(s,cx,cy,30,d/2,d,"b");
+      S.dot(s,cx,cy);
+      S.txt(s,cx-136,164,"A","s");S.txt(s,cx+136,164,"B","s");
+      S.txtAt(s,cx,cy,120,d,"C","s");S.txtAt(s,cx,cy,108,d/2,"M","s");
+      S.txtAt(s,cx,cy,46,d/4,"?","b");
+    },
+    hintDraw:function(s){
+      S.bars(s,40,40,440,32,[{u:a,t:a+"°",c:"r"},{u:mid,t:"C&Ocirc;B",c:"b"}],"180°");
+      S.bars(s,40+440*a/180,110,440*mid/180,32,[{u:1,t:"?",c:"b"},{u:1,t:"?",c:"b"}],null,{under:"due unità uguali"});
+      S.txt(s,260,190,"prima il tutto meno la parte, poi : 2","s");
+    },
+    kind:"number",answer:half,
+    hint:"Guarda il modello: 180 − "+a+" dà C&Ocirc;B, poi lo dividi in due unità.",
+    why:"180 − "+a+" = "+mid+"°, e "+mid+" : 2 = "+half+"°. Controllo: "+half+" + "+half+" + "+a+" = 180 ✔",
+    journal:"Traduco la figura in barre: <b>tutto − parte</b>, poi <b>unità</b>."};
+}
+function u5b(){
+  var d=rnd(15,35)*2,other=180-d;
+  return{phase:"A",step:"due soli valori",
+    title:"Quanto misura l'angolo x?",
+    ctx:"Le rette r ed s sono <b>parallele</b> e l'angolo segnato misura "+d+"°.",
+    cap:"Fra due parallele esistono solo due valori, e insieme fanno 180°.",
+    w:520,h:250,
+    draw:function(s){
+      var cx=230,cy=120,H=96,rad=d*Math.PI/180,t=(H/2)/Math.sin(rad);
+      var x1=cx+t*Math.cos(rad),x2=cx-t*Math.cos(rad);
+      S.line(s,cx-170,cy-H/2,cx+170,cy-H/2,"gr");S.line(s,cx-170,cy+H/2,cx+170,cy+H/2,"gr");
+      var L=t+30;
+      S.line(s,cx-L*Math.cos(rad),cy+L*Math.sin(rad),cx+L*Math.cos(rad),cy-L*Math.sin(rad),"bl");
+      S.sector(s,x1,cy-H/2,26,180,d+180,"r");S.txtAt(s,x1,cy-H/2,44,(d+360)/2,d+"°","r");
+      S.sector(s,x2,cy+H/2,26,d,180,"b");S.txtAt(s,x2,cy+H/2,44,(d+180)/2,"x","b");
+      S.dot(s,x1,cy-H/2);S.dot(s,x2,cy+H/2);
+      S.txt(s,cx+186,cy-H/2,"r","s");S.txt(s,cx+186,cy+H/2,"s","s");
+      S.txt(s,cx-150,cy,"r // s","g");
+    },
+    hintDraw:function(s){
+      S.bars(s,40,60,440,36,[{u:d,t:d+"°",c:"r"},{u:other,t:"x",c:"b"}],"180°");
+      S.txt(s,260,130,"i due angoli sono coniugati interni: insieme fanno un angolo piatto","s");
+    },
+    kind:"number",answer:other,
+    hint:"I due angoli stanno dentro le parallele, dalla stessa parte: formano il tutto, 180°.",
+    why:"180 − "+d+" = "+other+"°. In tutta la figura esistono solo "+d+"° e "+other+"°.",
+    journal:"Parallele → <b>due soli valori</b>, che insieme fanno 180°."};
+}
+function u5c(){
+  var a=rnd(7,13)*5,b=rnd(7,13)*5,c=180-a-b;
+  if(c<20){a=60;b=70;c=50}
+  return{phase:"P",step:"tre parti, un tutto",
+    title:"Quanto misura il terzo angolo del triangolo?",
+    ctx:"I tre angoli interni misurano "+a+"°, "+b+"° e un terzo sconosciuto.",
+    cap:"Anche il triangolo è un modello a barre: tre parti che formano 180°.",
+    w:520,h:240,
+    draw:function(s){
+      var A=[70,190],B=[290,190],C=[190,66];
+      S.line(s,A[0],A[1],B[0],B[1],"");S.line(s,A[0],A[1],C[0],C[1],"");S.line(s,B[0],B[1],C[0],C[1],"");
+      S.sector(s,A[0],A[1],34,0,a,"b");S.txtAt(s,A[0],A[1],52,a/2,a+"°","b");
+      S.sector(s,B[0],B[1],34,180-b,180,"r");S.txtAt(s,B[0],B[1],52,180-b/2,b+"°","r");
+      S.txt(s,190,96,"?","g");
+      S.dot(s,A[0],A[1]);S.dot(s,B[0],B[1]);S.dot(s,C[0],C[1]);
+      S.bars(s,340,110,150,28,[{u:a,t:"",c:"b"},{u:b,t:"",c:"r"},{u:c,t:"?",c:"g"}],"180°");
+    },
+    kind:"number",answer:c,
+    hint:"Somma i due angoli noti e togli il risultato da 180.",
+    why:a+" + "+b+" = "+(a+b)+", e 180 − "+(a+b)+" = "+c+"°.",
+    journal:"Triangolo → <b>tre parti che formano 180°</b>."};
+}
+function u5d(){
+  var a=rnd(9,13)*5,b=rnd(9,13)*5,ans=180-a-b;
+  return{phase:"A",step:"il problema completo",
+    title:"Quanto misura l'angolo di tiro?",
+    ctx:"La retta r passa per V ed è <b>parallela</b> alla linea di porta. I due angoli fra r e le traiettorie misurano "+a+"° e "+b+"°.",
+    cap:"Gli angoli scendono sui pali, poi il vertice V racconta un angolo piatto.",
+    w:520,h:250,
+    draw:function(s){
+      var px=120,qx=400,gy=200;
+      S.E("rect",{x:30,y:36,width:460,height:gy-36,rx:4,fill:"#F4FAF6",stroke:"#CBE3D5","stroke-width":1.6},s);
+      S.line(s,30,gy,490,gy,"thin");
+      S.E("line",{x1:px,y1:gy,x2:qx,y2:gy,stroke:"#D64545","stroke-width":4,"stroke-linecap":"round"},s);
+      var A=a*Math.PI/180,B=b*Math.PI/180,t=(qx-px)/(Math.cos(A)+Math.sin(A)/Math.tan(B));
+      var vx=px+t*Math.cos(A),vy=gy-t*Math.sin(A);
+      S.line(s,vx,vy,px,gy,"bl");S.line(s,vx,vy,qx,gy,"bl");
+      S.line(s,vx-110,vy,vx+110,vy,"gr");
+      S.sector(s,vx,vy,34,180,180+a,"r");S.txtAt(s,vx,vy,50,180+a/2,a+"°","r");
+      S.sector(s,vx,vy,34,360-b,360,"r");S.txtAt(s,vx,vy,50,360-b/2,b+"°","r");
+      S.sector(s,vx,vy,46,180+a,360-b,"b");S.txtAt(s,vx,vy,64,(180+a+360-b)/2,"?","b");
+      S.dot(s,vx,vy);S.dot(s,px,gy);S.dot(s,qx,gy);
+      S.txt(s,vx,vy-18,"V","s");S.txt(s,px-14,gy+16,"P","s");S.txt(s,qx+14,gy+16,"Q","s");
+      S.txt(s,vx+128,vy-14,"r // PQ","g");
+    },
+    hintDraw:function(s){
+      S.bars(s,40,60,440,36,[{u:a,t:a+"°",c:"r"},{u:ans,t:"?",c:"b"},{u:b,t:b+"°",c:"r"}],"180° in V");
+      S.txt(s,260,130,"i tre angoli in V formano un angolo piatto","s");
+    },
+    kind:"number",answer:ans,
+    hint:"In V ci sono tre parti che formano 180°: due le conosci.",
+    why:"180 − ("+a+" + "+b+") = "+ans+"°. Gli angoli sui pali valgono "+a+"° e "+b+"° (alterni interni).",
+    journal:"Il problema del tiro è una <b>barra da 180°</b> con tre parti."};
+}
+function u5e(){
+  var x=rnd(4,8)*5,tot=90,big=tot-x;
+  var a=rnd(5,9)*10,b=180-a,half=b/2;
+  return{phase:"A",step:"problema finale",
+    title:"Il problema della bandierina",
+    ctx:"Sul campo, la linea di fondo e la traiettoria del pallone formano un angolo di <b>"+a+"°</b>. "+
+        "Il portiere si piazza sulla <b>bisettrice</b> dell'angolo che resta fino al palo opposto.",
+    cap:"Tre passi: il tutto, la parte che resta, le due unità della bisettrice.",
+    w:520,h:210,
+    draw:function(s){
+      var cx=150,cy=150;
+      S.fullline(s,cx,cy,0,110,110,"");
+      S.ray(s,cx,cy,a,110,"bl");
+      S.sector(s,cx,cy,40,0,a,"r");S.txtAt(s,cx,cy,58,a/2,a+"°","r");
+      S.sector(s,cx,cy,56,a,180,"n");S.txtAt(s,cx,cy,76,(a+180)/2,"?","b");
+      S.line(s,cx,cy,S.pol(cx,cy,100,(a+180)/2)[0],S.pol(cx,cy,100,(a+180)/2)[1],"vi");
+      S.dot(s,cx,cy);
+      S.txt(s,400,60,"passo 1: il tutto è 180°","s");
+      S.txt(s,400,84,"passo 2: 180 − "+a,"s");
+      S.txt(s,400,108,"passo 3: : 2","s");
+    },
+    kind:"chain",
+    steps:[
+      {q:"Passo 1 — quanto misura l'angolo che resta fino al palo opposto?",answer:b,
+       hint:"Sulla retta il tutto è 180°: togli "+a+".",why:"180 − "+a+" = "+b+"°"},
+      {q:"Passo 2 — su che angolo si mette il portiere rispetto alla linea di fondo?",answer:a+half,
+       hint:"La bisettrice divide "+b+"° in due unità uguali: "+half+"°. Poi somma l'angolo di partenza "+a+"°.",
+       why:a+" + "+half+" = "+(a+half)+"°, cioè metà dell'angolo che resta, misurata dalla linea di fondo."}
+    ],
+    hint:"Un passo alla volta: prima il tutto meno la parte, poi le due unità della bisettrice.",
+    why:"Prima 180 − "+a+" = "+b+"°, poi "+b+" : 2 = "+half+"° e infine "+a+" + "+half+" = "+(a+half)+"°.",
+    journal:"Nei problemi lunghi scrivo <b>un passo per riga</b>: tutto, parte, unità."};
+}
+
+window.SGU4=[u4a,u4b,u4c,u4d];
+window.SGU5=[u5a,u5b,u5c,u5d,u5e];
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var S=window.SG,$=S.$;
+var UNITS=[
+  {id:"u1",n:1,name:"L'apertura",desc:"Che cos'è davvero un angolo: si tocca, si disegna, si scrive.",
+   cpa:["c","p","a"],tasks:window.SGU1},
+  {id:"u2",n:2,name:"Il tutto e le parti",desc:"I legami numerici di 90°, 180° e 360°.",
+   cpa:["p","a"],tasks:window.SGU2},
+  {id:"u3",n:3,name:"Il modello a barre",desc:"Disegnare le unità prima di calcolare: doppio, triplo, differenza.",
+   cpa:["p","a"],tasks:window.SGU3},
+  {id:"u4",n:4,name:"Che cosa resta uguale",desc:"Variazione, intrusi, «sempre · a volte · mai».",
+   cpa:["p","a"],tasks:window.SGU4},
+  {id:"u5",n:5,name:"Dalla figura al modello",desc:"Tradurre un disegno in barre e risolvere il problema completo.",
+   cpa:["p","a"],tasks:window.SGU5}
+];
+var KEY="singapore-angoli-v1",P={done:{}};
+try{var raw=localStorage.getItem(KEY);if(raw)P=JSON.parse(raw)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+
+var Q={u:null,queue:[],task:null,tries:0,step:0,typed:"",lock:false,learned:[],firstTotal:0,perfect:0};
+
+/* ---------------- percorso ---------------- */
+function unlocked(i){return i===0||!!P.done[UNITS[i-1].id]}
+function paintPips(){
+  var p=$("#pips");p.innerHTML="";
+  UNITS.forEach(function(u){
+    var i=document.createElement("i");
+    if(P.done[u.id])i.className="on";
+    p.appendChild(i);
+  });
+}
+function paintPath(){
+  var box=$("#units");box.innerHTML="";
+  UNITS.forEach(function(u,i){
+    var open=unlocked(i),done=!!P.done[u.id];
+    var b=document.createElement("button");
+    b.className="unit"+(done?" done":"")+(open?"":" locked");
+    b.innerHTML='<span class="n">'+u.n+'</span>'+
+      '<span><h3>'+u.name+'</h3><p>'+u.desc+'</p>'+
+      '<span class="cpa">'+u.cpa.map(function(c){
+        return '<span class="'+c+'">'+(c==="c"?"concreto":c==="p"?"pittorico":"astratto")+'</span>'}).join("")+'</span></span>'+
+      '<span class="st">'+(done?"padroneggiata ✓":open?(u.tasks.length+" schede"):"da sbloccare")+'</span>';
+    if(open)b.addEventListener("click",function(){startUnit(i)});
+    else b.disabled=true;
+    box.appendChild(b);
+  });
+  paintPips();
+}
+function show(id){["path","card","seal"].forEach(function(s){$("#"+s).classList.toggle("hide",s!==id)});
+  window.scrollTo({top:0,behavior:"smooth"})}
+
+/* ---------------- sessione ---------------- */
+function startUnit(i){
+  var u=UNITS[i];
+  Q={u:u,ui:i,queue:u.tasks.map(function(f){return{gen:f,again:0}}),task:null,tries:0,step:0,typed:"",
+     lock:false,learned:[],firstTotal:u.tasks.length,perfect:0};
+  show("card");nextCard();
+}
+function nextCard(){
+  if(!Q.queue.length)return finishUnit();
+  var item=Q.queue[0];
+  Q.task=item.gen();Q.task._item=item;
+  Q.tries=0;Q.step=0;Q.typed="";Q.lock=false;
+  var t=Q.task;
+  $("#phase").innerHTML=(t.phase?'<b class="'+(t.phase==="C"?"cc":t.phase==="P"?"pp":"aa")+'">'+
+      (t.phase==="C"?"concreto":t.phase==="P"?"pittorico":"astratto")+'</b>':'')+
+    '<span class="step">'+(t.step||"")+'</span>';
+  $("#qTitle").innerHTML=t.title;
+  $("#qCtx").innerHTML=t.ctx||"";
+  $("#qCtx").style.display=t.ctx?"":"none";
+  $("#cap").innerHTML=t.cap||"";
+  $("#note").className="note";$("#note").innerHTML="";
+  $("#next").classList.add("hide");
+  $("#hint").classList.remove("hide");
+  $("#hint").disabled=false;
+  $("#hint").textContent=t.hintDraw?"Mostrami il modello":"Dammi un indizio";
+  paintQueue();draw();renderInput();
+}
+function paintQueue(){
+  var q=$("#queue");q.innerHTML="";
+  var done=Q.firstTotal-Q.queue.length;
+  for(var i=0;i<Q.firstTotal;i++){var e=document.createElement("i");
+    e.className=i<done?"ok":i===done?"now":"";q.appendChild(e)}
+  var extra=Q.queue.length-(Q.firstTotal-done);
+  for(var j=0;j<extra;j++){var x=document.createElement("i");x.className="again";q.appendChild(x)}
+  $("#qn").textContent=Q.u.name+" · "+Q.queue.length+(Q.queue.length===1?" scheda":" schede")+" da chiudere";
+}
+function draw(withHint){
+  var t=Q.task,host=$("#fig");host.innerHTML="";
+  var s=S.board(t.w||520,t.h||220);
+  try{ (withHint&&t.hintDraw?t.hintDraw:t.draw)(s) }catch(e){}
+  host.appendChild(s);
+}
+
+/* ---------------- input ---------------- */
+function renderInput(){
+  var t=Q.task,box=$("#input");box.innerHTML="";
+  if(t.kind==="choice"){
+    var g=document.createElement("div");g.className="opts";
+    t.choices.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";
+      b.innerHTML='<span class="k">'+"ABCD"[i]+'</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(Q.lock||b.disabled)return;
+        b.classList.add(c.ok?"good":"bad");
+        if(!c.ok)b.disabled=true;
+        judge(c.ok);
+      });
+      g.appendChild(b);
+    });
+    box.appendChild(g);
+  }else{
+    var st=(t.kind==="chain")?t.steps[Q.step]:null;
+    if(st){var h=document.createElement("p");h.className="ctx";h.style.fontWeight="700";h.style.color="var(--ink)";
+      h.innerHTML=st.q;box.appendChild(h)}
+    var row=document.createElement("div");row.className="numrow";
+    row.innerHTML='<div class="disp" id="disp"><span class="v">–</span><span class="u">&nbsp;gradi</span></div>';
+    var keys=document.createElement("div");keys.className="keys";
+    ["1","2","3","4","5","6","7","8","9","←","0","✓"].forEach(function(k){
+      var b=document.createElement("button");b.textContent=k;
+      if(k==="✓")b.className="go";if(k==="←")b.className="bk";
+      b.addEventListener("click",function(){typeKey(k)});
+      keys.appendChild(b);
+    });
+    row.appendChild(keys);box.appendChild(row);
+  }
+}
+function typeKey(k){
+  if(Q.lock)return;
+  var t=Q.task;
+  if(k==="←")Q.typed=Q.typed.slice(0,-1);
+  else if(k==="✓"){
+    if(!Q.typed)return;
+    var v=parseInt(Q.typed,10);Q.typed="";paintDisp();
+    var target=(t.kind==="chain")?t.steps[Q.step].answer:t.answer;
+    judge(v===target);
+    return;
+  }else if(Q.typed.length<3)Q.typed+=k;
+  paintDisp();
+}
+function paintDisp(){var d=$("#disp");if(d)d.innerHTML='<span class="v">'+(Q.typed||"–")+'</span><span class="u">&nbsp;gradi</span>'}
+
+/* ---------------- valutazione ---------------- */
+function note(cls,title,body,why){
+  var n=$("#note");n.className="note on "+cls;
+  n.innerHTML="<b>"+title+"</b><p>"+body+"</p>"+(why?'<p class="why">'+why+'</p>':"");
+}
+function judge(ok){
+  var t=Q.task;Q.tries++;
+  if(t.kind==="chain"&&ok&&Q.step<t.steps.length-1){
+    var s0=t.steps[Q.step];
+    Q.step++;Q.tries=0;
+    note("win","Passo chiuso",s0.why+" Ora il passo successivo.");
+    renderInput();return;
+  }
+  if(ok){
+    var first=(Q.tries===1);
+    if(first)Q.perfect++;
+    if(t.journal&&Q.learned.indexOf(t.journal)<0)Q.learned.push(t.journal);
+    note("win",first?"Esatto":"Giusto, al secondo tentativo",t.why,
+      first?"":"Questa scheda tornerà in fondo alla fila: la rivedrai con numeri nuovi.");
+    Q.queue.shift();
+    if(!first){var it=t._item;it.again++;if(it.again<=1)Q.queue.push(it)}
+    close();
+    return;
+  }
+  if(Q.tries<2){
+    var hintTxt=(t.kind==="chain")?t.steps[Q.step].hint:t.hint;
+    note("again","Non ancora",hintTxt,"Prova di nuovo: nessuna fretta.");
+    if(t.hintDraw)draw(true);
+    return;
+  }
+  var sol=(t.kind==="choice")?"":((t.kind==="chain"?t.steps[Q.step].answer:t.answer)+"°");
+  if(t.kind==="choice"){
+    document.querySelectorAll(".opt").forEach(function(b,i){
+      if(t.choices[i].ok)b.classList.add("good");b.disabled=true});
+  }
+  if(t.hintDraw)draw(true);
+  note("again","Guardiamola insieme",(sol?"La risposta è <b>"+sol+"</b>. ":"")+
+    ((t.kind==="chain")?t.steps[Q.step].why:t.why),
+    "La scheda torna in fondo alla fila: la rifarai con numeri nuovi.");
+  Q.queue.shift();
+  var item=t._item;item.again++;if(item.again<=2)Q.queue.push(item);
+  close();
+}
+function close(){
+  Q.lock=true;
+  document.querySelectorAll(".opt").forEach(function(b){b.disabled=true});
+  var k=document.querySelector(".keys");if(k)k.querySelectorAll("button").forEach(function(b){b.disabled=true});
+  $("#hint").classList.add("hide");
+  var n=$("#next");n.classList.remove("hide");
+  n.textContent=Q.queue.length?"Avanti →":"Chiudi l'unità →";
+  paintQueue();
+}
+
+/* ---------------- fine unità ---------------- */
+function finishUnit(){
+  var u=Q.u;P.done[u.id]=true;save();
+  $("#sealTitle").textContent="Unità "+u.n+" padroneggiata";
+  var netta=Q.perfect>=Q.firstTotal;
+  $("#sealMsg").innerHTML=netta
+    ? "Tutte le schede chiuse al primo colpo. L'unità successiva è aperta."
+    : "Hai chiuso tutte le schede, comprese quelle ripetute: è così che si costruisce la padronanza. L'unità successiva è aperta.";
+  var j=$("#journal");
+  j.innerHTML='<h4>Il tuo quaderno dei metodi</h4><ul>'+
+    Q.learned.map(function(x){return"<li>"+x+"</li>"}).join("")+'</ul>';
+  var last=Q.ui>=UNITS.length-1;
+  $("#goNext").textContent=last?"Torna al percorso":"Unità "+(UNITS[Q.ui+1].n)+" →";
+  $("#goNext").onclick=function(){ if(last){paintPath();show("path")} else startUnit(Q.ui+1) };
+  show("seal");paintPips();
+}
+
+/* ---------------- eventi ---------------- */
+$("#next").addEventListener("click",nextCard);
+$("#back").addEventListener("click",function(){paintPath();show("path")});
+$("#goPath").addEventListener("click",function(){paintPath();show("path")});
+$("#hint").addEventListener("click",function(){
+  var t=Q.task;
+  if(t.hintDraw){draw(true);note("","Il modello",t.hint||"Ecco come si rappresenta il problema.")}
+  else note("","Indizio",(t.kind==="chain")?t.steps[Q.step].hint:t.hint);
+  $("#hint").disabled=true;
+});
+$("#reset").addEventListener("click",function(){
+  P={done:{}};save();paintPath();this.textContent="Percorso azzerato";
+});
+document.addEventListener("keydown",function(e){
+  if($("#card").classList.contains("hide"))return;
+  var t=Q.task;if(!t)return;
+  if(t.kind!=="choice"){
+    if(/^[0-9]$/.test(e.key))typeKey(e.key);
+    else if(e.key==="Backspace")typeKey("←");
+    else if(e.key==="Enter"){if(!$("#next").classList.contains("hide"))nextCard();else typeKey("✓")}
+  }else if(e.key==="Enter"&&!$("#next").classList.contains("hide"))nextCard();
+});
+
+/* ---------------- collaudo ---------------- */
+function selftest(){
+  var out=[],n=0,bad=0;
+  UNITS.forEach(function(u,ui){
+    u.tasks.forEach(function(gen,ti){
+      for(var k=0;k<30;k++){
+        n++;
+        try{
+          var t=gen(),s=S.board(t.w||520,t.h||220);
+          t.draw(s);
+          if(t.hintDraw)t.hintDraw(S.board(520,220));
+          if(!t.title||!t.why||!t.hint||!t.journal)throw new Error("testo mancante");
+          if(t.kind==="choice"){
+            var ok=t.choices.filter(function(c){return c.ok});
+            if(ok.length!==1)throw new Error("corrette="+ok.length);
+            var seen={};t.choices.forEach(function(c){if(seen[c.label])throw new Error("opzione doppia");seen[c.label]=1});
+          }else if(t.kind==="chain"){
+            t.steps.forEach(function(st){
+              if(!(st.answer>0&&st.answer<=360&&st.answer%1===0))throw new Error("step "+st.answer);
+              if(!st.q||!st.why||!st.hint)throw new Error("step incompleto");
+            });
+          }else{
+            if(!(t.answer>0&&t.answer<=360&&t.answer%1===0))throw new Error("risposta "+t.answer);
+          }
+        }catch(err){bad++;out.push("U"+(ui+1)+".s"+(ti+1)+": "+err.message)}
+      }
+    });
+  });
+  var uniq=[];out.forEach(function(x){if(uniq.indexOf(x)<0)uniq.push(x)});
+  $("#sgtest").classList.remove("hide");
+  $("#sgtest").textContent=(bad===0?"TUTTO OK — ":"ERRORI ")+n+" test, "+bad+" falliti\n"+uniq.slice(0,15).join("\n");
+}
+
+/* ---------------- avvio ---------------- */
+paintPath();
+if(location.search.indexOf("test=1")>=0)selftest();
+var dm=/unit=(\d)/.exec(location.search);
+if(dm)startUnit(Math.max(0,Math.min(UNITS.length-1,parseInt(dm[1],10)-1)));
+})();
+</script>
+
