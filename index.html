@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Due scuole, gli stessi angoli</title>
-<meta name="description" content="Due modi di imparare la geometria degli angoli: la palestra finlandese, dove scegli tu; il metodo di Singapore, dove si sale una scala. Stessi contenuti, architettura opposta.">
+<title>Le palestre di matematica</title>
+<meta name="description" content="Tre giochi interattivi di matematica per la scuola media: due sugli angoli (metodo finlandese e metodo di Singapore) e uno sulle potenze.">
 <meta name="theme-color" content="#0F1216">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Due scuole, gli stessi angoli">
-<meta property="og:description" content="La palestra finlandese e il metodo di Singapore, a confronto: due giochi per imparare gli angoli.">
+<meta property="og:title" content="Le palestre di matematica">
+<meta property="og:description" content="Angoli e potenze: tre modi di allenarsi, ognuno con la sua idea di come si impara.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%230F1216'/%3E%3Cpath d='M8 34 L40 34' stroke='%23E8EDE6' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L33 13' stroke='%23FFB020' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L36 26' stroke='%232A6FB0' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,6 +74,25 @@ h1 em{font-style:normal;background:linear-gradient(90deg,var(--fin-amber),var(--
 .sgp li span{background:#EDF3F9;color:var(--sg-blue)}
 .sgp .enter{color:var(--sg-blue)}
 
+/* etichette di sezione */
+.sech{font-family:var(--f-h);font-weight:700;font-size:15px;letter-spacing:-.01em;margin:34px 0 12px;
+  display:flex;align-items:center;gap:10px;color:var(--fg2)}
+.sech span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bg);
+  background:var(--fg);border-radius:99px;padding:3px 10px;font-weight:700}
+.sech:first-of-type{margin-top:30px}
+
+/* porta potenze */
+.pot{background:linear-gradient(150deg,#101728 0%,#080C18 65%,#12182B 100%);border-color:#233150;color:#E9EDF7}
+.pot:hover{box-shadow:0 20px 44px -28px var(--sg-blue)}
+.pot .kicker{color:#22D3EE}
+.pot h2{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:700;font-size:27px;letter-spacing:-.03em}
+.pot .desc{color:#A9B7D2;max-width:64ch}
+.pot li span{background:rgba(251,191,36,.14);color:#FBBF24}
+.pot .enter{color:#22D3EE}
+.pot sup{font-size:.62em;vertical-align:.5em}
+.pot ul{grid-template-columns:1fr}
+@media (min-width:761px){.pot ul{grid-template-columns:1fr 1fr;gap:8px 18px}.pot li:last-child{grid-column:span 2}}
+
 /* confronto */
 .compare{margin-top:44px;border-top:1px solid var(--edge);padding-top:26px}
 .compare h3{font-family:var(--f-h);font-weight:700;font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
@@ -103,12 +122,13 @@ footer a:hover{color:var(--fg)}
 </head>
 <body>
 <div class="wrap">
-  <p class="eyebrow">Angoli · geometria piana · seconda media</p>
-  <h1>Due scuole,<br><em>gli stessi angoli</em>.</h1>
-  <p class="intro">Stesso argomento, <b>architettura opposta</b>. Da una parte una palestra dove scegli tu l'attrezzo e l'errore non toglie niente;
-  dall'altra una scala dove si sale un gradino per volta e ogni idea passa prima dalle mani, poi dal disegno, poi dai numeri.
-  Provale tutte e due: si allenano cose diverse.</p>
+  <p class="eyebrow">Matematica · scuola media · per Fomyn</p>
+  <h1>Due argomenti,<br><em>tre palestre</em>.</h1>
+  <p class="intro">Sugli <b>angoli</b> ci sono due palestre costruite su idee opposte di come si impara: una dove scegli tu e l'errore non toglie niente,
+  una dove si sale un gradino per volta. Sulle <b>potenze</b> c'è il laboratorio: otto allenamenti liberi, con due dedicati ai punti che
+  nella verifica erano andati storti.</p>
 
+  <h3 class="sech"><span>Angoli</span> due metodi a confronto</h3>
   <div class="doors">
     <a class="door fin" href="finlandia.html">
       <svg class="art" viewBox="0 0 100 100" aria-hidden="true">
@@ -146,6 +166,26 @@ footer a:hover{color:var(--fg)}
       <div class="enter">Sali il primo gradino →</div>
     </a>
   </div>
+
+  <h3 class="sech"><span>Potenze</span> il laboratorio</h3>
+  <a class="door pot" href="potenze.html">
+    <svg class="art" viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="8" y="72" width="16" height="16" rx="2" fill="#22D3EE" opacity=".85"/>
+      <rect x="28" y="56" width="16" height="32" rx="2" fill="#22D3EE" opacity=".7"/>
+      <rect x="48" y="34" width="16" height="54" rx="2" fill="#F472B6" opacity=".75"/>
+      <rect x="68" y="6" width="16" height="82" rx="2" fill="#FBBF24" opacity=".8"/>
+    </svg>
+    <div class="kicker">Potenze · metodo finlandese</div>
+    <h2>Laboratorio<br>delle Potenze</h2>
+    <p class="desc">Otto allenamenti liberi: che cos'è una potenza, i casi speciali (1<sup>n</sup>, n<sup>0</sup>, 0<sup>0</sup>),
+    le proprietà, l'esponente mancante, l'ordine delle operazioni, la scala dei 10 e i raddoppi.</p>
+    <ul>
+      <li><span>★</span><div><b>L'ordine giusto</b> — l'espressione si risolve un pezzo alla volta, decidendo tu da dove cominciare.</div></li>
+      <li><span>★</span><div><b>La scala dei 10</b> — «la decima parte di 10<sup>20</sup>»: si abbassa l'esponente, non si tocca la base.</div></li>
+      <li><span>3</span><div>Ogni serie cambia numeri: le regole si fissano ripetendo, non memorizzando.</div></li>
+    </ul>
+    <div class="enter">Entra nel laboratorio →</div>
+  </a>
 
   <section class="compare">
     <h3>Che cosa cambia davvero</h3>
@@ -202,14 +242,17 @@ footer a:hover{color:var(--fg)}
     <p><b>Prima Singapore, poi la palestra.</b> Quando un argomento è nuovo o traballa, l'unità di Singapore costruisce l'immagine mentale:
     il modello a barre fa <i>vedere</i> perché «il triplo del supplementare» sono quattro unità. Dopo, la palestra finlandese serve a rendere
     quel ragionamento veloce e automatico.</p>
+    <p><b>Per le potenze</b> il laboratorio è già puntato dove serve: le due tessere con la stellina sono
+    l'ordine delle operazioni e le potenze di 10, cioè gli esercizi E5.b ed E7.b della verifica.</p>
     <p><b>Quindici minuti bastano.</b> Meglio poco e spesso che una maratona la domenica: i due giochi tengono il conto dei progressi
     ognuno per conto suo, sullo stesso dispositivo.</p>
   </section>
 
   <footer>
-    <span>Materiale didattico per Fomyn · seconda media</span>
+    <span>Materiale didattico per Fomyn</span>
     <a href="finlandia.html">Palestra finlandese</a>
     <a href="singapore.html">Metodo Singapore</a>
+    <a href="potenze.html">Laboratorio delle Potenze</a>
   </footer>
 </div>
 </body>

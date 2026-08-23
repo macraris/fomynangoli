@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Laboratorio delle Potenze: otto allenamenti interattivi su basi, esponenti, proprietà, ordine delle operazioni e potenze di 10.">
+<meta name="theme-color" content="#080C18">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%23080C18'/%3E%3Ctext x='10' y='34' font-family='monospace' font-size='24' font-weight='700' fill='%2322D3EE'%3E2%3C/text%3E%3Ctext x='26' y='22' font-family='monospace' font-size='15' font-weight='700' fill='%23FBBF24'%3En%3C/text%3E%3C/svg%3E">
+<title>Laboratorio delle Potenze</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Manrope:wght@400;600;800&display=swap">
+<style>
+:root{
+  --void:#080C18; --panel:#101728; --panel2:#172034; --line:#E9EDF7; --dim:#8695B6; --edge:#233150;
+  --cyan:#22D3EE; --magenta:#F472B6; --gold:#FBBF24; --lime:#4ADE80; --coral:#FB7185; --violet:#A78BFA;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:16px; --r-sm:11px;
+}
+*{box-sizing:border-box}
+html{background:var(--void)}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 500px at 15% -5%,rgba(34,211,238,.10),transparent 60%),
+    radial-gradient(700px 460px at 95% 8%,rgba(244,114,182,.09),transparent 62%),
+    var(--void);
+  color:var(--line);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2.5px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(233,237,247,.035) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(233,237,247,.035) 1px,transparent 1px);
+  background-size:46px 46px}
+.wrap{max-width:1120px;margin:0 auto;padding:16px 18px 46px;position:relative;z-index:1}
+
+/* potenze scritte inline */
+.pw{font-family:var(--f-mono);font-weight:700;white-space:nowrap}
+.pw sup{font-size:.60em;font-weight:700;vertical-align:.62em;margin-left:.5px}
+.pw.big{font-size:1.35em}
+
+/* ---------- barra alta ---------- */
+.top{display:flex;align-items:center;gap:14px;padding:4px 2px 16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand .mk{width:40px;height:40px;flex:0 0 auto}
+.brand h1{font-family:var(--f-mono);font-weight:700;font-size:19px;letter-spacing:-.02em;margin:0;line-height:1.05}
+.brand p{margin:3px 0 0;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.brand a{color:inherit;text-decoration:none;border-bottom:1px solid var(--edge)}
+.brand a:hover{color:var(--cyan);border-color:var(--cyan)}
+.spacer{flex:1}
+.xp{display:flex;align-items:center;gap:11px}
+.xp .lv{text-align:right}
+.xp .lv b{display:block;font-family:var(--f-mono);font-size:13px;letter-spacing:-.01em;line-height:1.1}
+.xp .lv span{font-size:10.5px;color:var(--dim);font-variant-numeric:tabular-nums;letter-spacing:.05em}
+.xp .ring{width:44px;height:44px}
+
+/* ---------- home ---------- */
+.hero{border:1px solid var(--edge);border-radius:var(--r);padding:22px;margin-bottom:16px;position:relative;overflow:hidden;
+  background:linear-gradient(140deg,#121B2E 0%,#0C1322 60%,#141D33 100%)}
+.hero h2{font-size:clamp(25px,4.6vw,38px);font-weight:800;line-height:1.05;margin:0;letter-spacing:-.025em;text-wrap:balance}
+.hero h2 em{font-style:normal;color:var(--cyan)}
+.hero p{margin:10px 0 0;max-width:60ch;color:#B9C6DE;font-size:15px}
+.hero .tower{position:absolute;right:16px;bottom:-10px;width:190px;height:150px;opacity:.5}
+@media (max-width:720px){.hero .tower{display:none}}
+
+.focus{display:flex;gap:10px;align-items:flex-start;border:1px solid #3A2E12;background:linear-gradient(180deg,#1C1708,#141105);
+  border-radius:var(--r-sm);padding:12px 14px;margin-bottom:16px}
+.focus b{color:var(--gold)}
+.focus .ic{flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:rgba(251,191,36,.14);display:grid;place-items:center;
+  color:var(--gold);font-family:var(--f-mono);font-weight:700;font-size:13px}
+.focus p{margin:0;font-size:13.5px;color:#D8CFB4;line-height:1.4}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+.mod{--mc:var(--cyan);position:relative;text-align:left;border:1px solid var(--edge);border-radius:var(--r);
+  background:linear-gradient(180deg,var(--panel),#0C1220);padding:15px 15px 13px;display:flex;flex-direction:column;gap:9px;
+  min-height:162px;transition:transform .18s cubic-bezier(.2,.8,.3,1),border-color .18s,box-shadow .18s;
+  animation:pop .45s cubic-bezier(.2,.8,.3,1) both}
+.mod:hover,.mod:focus-visible{transform:translateY(-3px);border-color:var(--mc);box-shadow:0 14px 30px -20px var(--mc)}
+.mod .ic{width:44px;height:44px}
+.mod h3{margin:0;font-size:17px;font-weight:800;line-height:1.15;letter-spacing:-.01em}
+.mod p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.35}
+.mod .ft{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.mod .go{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--mc);font-weight:700}
+.mod.key{border-color:#3A2E12;background:linear-gradient(180deg,#171326,#0D1220)}
+.mod .tag{position:absolute;top:12px;right:12px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:800;color:var(--gold);background:rgba(251,191,36,.13);border-radius:99px;padding:3px 8px}
+.mod.big{grid-column:span 2}
+@media (max-width:540px){.mod.big{grid-column:span 1}}
+.stars{display:flex;gap:3px}
+.stars i{width:12px;height:12px;display:block;background:#243352;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.stars i.on{background:var(--gold)}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.foot-note{margin:16px 2px 0;font-size:12px;color:#63739A;text-align:right}
+.foot-note button{color:#8695B6;text-decoration:underline;text-underline-offset:3px;font-size:12px}
+.foot-note button:hover{color:var(--cyan)}
+
+/* ---------- sessione ---------- */
+.hide{display:none!important}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.back{border:1px solid var(--edge);border-radius:99px;padding:7px 14px;font-size:12.5px;color:#B9C6DE}
+.back:hover{border-color:var(--line);color:var(--line)}
+.dots{display:flex;gap:5px;flex:1;justify-content:center}
+.dots i{width:24px;height:5px;border-radius:99px;background:#22304C;display:block;transition:.3s}
+.dots i.ok{background:var(--lime)}.dots i.ko{background:var(--coral)}
+.dots i.now{background:var(--line);transform:scaleY(1.7)}
+.modename{font-family:var(--f-mono);font-size:12px;letter-spacing:.04em;color:var(--dim)}
+
+.play{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:15px;align-items:start}
+@media (max-width:880px){.play{grid-template-columns:1fr}}
+.stage{border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,#0E1626,#0A0F1C);
+  padding:15px;position:relative;overflow:hidden;min-height:150px}
+.stage svg{width:100%;height:auto;display:block}
+.stage .cap{margin:9px 2px 0;font-size:12px;color:var(--dim);text-align:center;min-height:15px}
+.exprbox{font-family:var(--f-mono);font-size:clamp(17px,3.4vw,25px);font-weight:600;text-align:center;
+  line-height:1.9;letter-spacing:.01em;padding:8px 4px}
+.tok{display:inline-block;padding:2px 6px;border-radius:7px;transition:.15s;white-space:nowrap}
+.tok.hit{cursor:pointer;border:1.5px dashed #2E4066}
+.tok.hit:hover{background:rgba(34,211,238,.14);border-color:var(--cyan)}
+.tok.good{background:rgba(74,222,128,.18);border:1.5px solid var(--lime)}
+.tok.bad{background:rgba(251,113,133,.16);border:1.5px solid var(--coral)}
+.tok.done{color:var(--lime)}
+.tok.pale{color:#54648A}
+
+.panel{display:flex;flex-direction:column;gap:12px}
+.q{border:1px solid var(--edge);border-radius:var(--r);background:var(--panel);padding:15px}
+.q .tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:6px}
+.q h3{margin:0;font-size:18.5px;line-height:1.3;font-weight:800;text-wrap:balance}
+.q .sub{margin:8px 0 0;font-size:13.5px;color:#AEBBD5}
+
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:11px;border:1.5px solid var(--edge);border-radius:var(--r-sm);
+  background:#0D1524;padding:11px 13px;text-align:left;font-size:16px;font-weight:600;transition:.14s}
+.opt:hover:not(:disabled){border-color:var(--cyan);transform:translateX(2px)}
+.opt .k{width:25px;height:25px;flex:0 0 auto;border-radius:7px;background:#1A2540;color:var(--dim);
+  display:grid;place-items:center;font-size:12px;font-weight:800;font-family:var(--f-mono)}
+.opt.good{border-color:var(--lime);background:rgba(74,222,128,.10)}.opt.good .k{background:var(--lime);color:#04150C}
+.opt.bad{border-color:var(--coral);background:rgba(251,113,133,.10)}.opt.bad .k{background:var(--coral);color:#2A0912}
+.opt:disabled{cursor:default}
+
+/* display numerico / potenza */
+.slot{display:flex;gap:10px;align-items:stretch}
+.cell{flex:1;border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#0D1524;padding:9px 13px;min-height:60px;
+  display:flex;flex-direction:column;justify-content:center;cursor:pointer;transition:.14s}
+.cell:hover{border-color:#33517E}
+.cell.on{border-color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(34,211,238,.35)}
+.cell small{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:800}
+.cell b{font-family:var(--f-mono);font-size:27px;font-weight:700;line-height:1.1}
+.cell.on b{color:var(--cyan)}
+.disp{border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#0D1524;padding:9px 15px;min-height:60px;
+  display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:29px;font-weight:700;font-variant-numeric:tabular-nums}
+.disp .v{color:var(--cyan)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:100%}
+.pad button{border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#0D1524;padding:12px 0;font-size:19px;
+  font-weight:700;font-family:var(--f-mono);transition:.12s}
+.pad button:hover{border-color:var(--cyan);background:#122036}
+.pad button:active{transform:scale(.97)}
+.pad .ok{background:var(--lime);border-color:var(--lime);color:#04150C}
+.pad .ok:hover{background:#63e79a;border-color:#63e79a}
+.pad .del{color:var(--coral)}
+
+.fb{border-radius:var(--r-sm);padding:12px 14px;font-size:14px;display:none;animation:rise .28s cubic-bezier(.2,.8,.3,1)}
+.fb.on{display:block}
+.fb.good{background:rgba(74,222,128,.10);border:1.5px solid var(--lime)}
+.fb.soft{background:rgba(251,191,36,.09);border:1.5px solid var(--gold)}
+.fb b{display:block;font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.fb.good b{color:var(--lime)}.fb.soft b{color:var(--gold)}
+.fb .pwline{font-family:var(--f-mono);font-size:15px;margin-top:7px;color:#CBD7EE}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border-radius:99px;padding:11px 19px;font-weight:800;font-size:14.5px;transition:.15s;border:1.5px solid transparent}
+.btn.pri{background:var(--cyan);color:#04202A}
+.btn.pri:hover{background:#5ce0f5}
+.btn.gh{border-color:var(--edge);color:#B9C6DE}
+.btn.gh:hover{border-color:var(--line);color:var(--line)}
+.btn:disabled{opacity:.42;cursor:default}
+.shake{animation:sh .4s}
+@keyframes sh{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-4px)}}
+
+/* ---------- fine ---------- */
+.res{border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,var(--panel),#0B1120);
+  padding:26px;text-align:center;max-width:560px;margin:6px auto}
+.res h2{font-size:clamp(26px,5vw,38px);margin:0;font-weight:800;letter-spacing:-.02em}
+.res .score{font-family:var(--f-mono);font-size:58px;font-weight:700;color:var(--cyan);line-height:1;margin:10px 0 2px}
+.res .of{color:var(--dim);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.res .bigstars{display:flex;gap:10px;justify-content:center;margin:16px 0 4px}
+.res .bigstars i{width:36px;height:36px;display:block;background:#243352;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.res .bigstars i.on{background:var(--gold);animation:st .5s cubic-bezier(.2,1.6,.4,1) both}
+.res .bigstars i.on:nth-child(2){animation-delay:.12s}.res .bigstars i.on:nth-child(3){animation-delay:.24s}
+@keyframes st{from{transform:scale(.2) rotate(-35deg);opacity:0}to{transform:none;opacity:1}}
+.res p{color:#B9C6DE;font-size:15px;max-width:46ch;margin:12px auto 0}
+.res .learn{margin-top:16px;text-align:left;border-top:1px solid var(--edge);padding-top:14px}
+.res .learn h4{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.res .learn li{font-size:13.5px;color:#B9C6DE;margin:6px 0}
+
+/* ---------- SVG ---------- */
+.bk{fill:#16223A;stroke:#2B3D63;stroke-width:1.6}
+.bk.c{fill:rgba(34,211,238,.20);stroke:var(--cyan)}
+.bk.m{fill:rgba(244,114,182,.20);stroke:var(--magenta)}
+.bk.g{fill:rgba(251,191,36,.22);stroke:var(--gold)}
+.bk.l{fill:rgba(74,222,128,.20);stroke:var(--lime)}
+.bk.v{fill:rgba(167,139,250,.20);stroke:var(--violet)}
+.ln{stroke:#3A4E78;stroke-width:1.8;fill:none;stroke-linecap:round}
+.ln.c{stroke:var(--cyan)}.ln.g{stroke:var(--gold)}.ln.m{stroke:var(--magenta)}
+.tx{font-family:var(--f-mono);font-size:14px;font-weight:700;fill:var(--line);text-anchor:middle;dominant-baseline:middle}
+.tx.s{font-size:11.5px;font-weight:600;fill:var(--dim);font-family:var(--f-body)}
+.tx.c{fill:var(--cyan)}.tx.m{fill:var(--magenta)}.tx.g{fill:var(--gold)}.tx.l{fill:var(--lime)}
+.tick{stroke:#33456E;stroke-width:1.4}
+.hit10{cursor:pointer}
+.hit10 rect{transition:.15s}
+.hit10:hover rect{fill:rgba(34,211,238,.16);stroke:var(--cyan)}
+
+@media (max-width:620px){
+  .wrap{padding:12px 13px 34px}
+  .brand h1{font-size:16px}
+  .hero{padding:17px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:10px}
+  .mod{min-height:0;padding:13px;gap:8px}
+  .mod .ic{width:34px;height:34px}
+  .mod h3{font-size:15.5px}
+  .mod p{font-size:11.5px}
+  .modename{display:none}
+  .q h3{font-size:17px}
+  .exprbox{line-height:2.1}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+#ptest{white-space:pre-wrap;font-family:var(--f-mono);font-size:12px;padding:12px}
+</style>
+
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="mk" viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="6" y="30" width="12" height="12" rx="2" class="bk c"/>
+        <rect x="19" y="30" width="12" height="12" rx="2" class="bk c"/>
+        <rect x="6" y="17" width="12" height="12" rx="2" class="bk m"/>
+        <rect x="19" y="17" width="12" height="12" rx="2" class="bk m"/>
+        <rect x="32" y="17" width="10" height="25" rx="2" class="bk g"/>
+        <text x="37" y="12" class="tx g" font-size="12">n</text>
+      </svg>
+      <div>
+        <h1>Laboratorio delle Potenze</h1>
+        <p><a href="./">↩ Torna alle palestre</a></p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="xp">
+      <div class="lv">
+        <b id="lvName">Apprendista</b>
+        <span><i id="xpNow">0</i> / <i id="xpNext">120</i> XP</span>
+      </div>
+      <svg class="ring" viewBox="0 0 44 44" aria-hidden="true">
+        <circle cx="22" cy="22" r="18" fill="none" stroke="#22304C" stroke-width="5"/>
+        <circle id="ringFill" cx="22" cy="22" r="18" fill="none" stroke="#22D3EE" stroke-width="5"
+                stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="113.1"
+                transform="rotate(-90 22 22)" style="transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.3,1)"/>
+        <text id="ringTxt" x="22" y="23" text-anchor="middle" dominant-baseline="middle"
+              font-family="IBM Plex Mono,monospace" font-size="13" font-weight="700" fill="#E9EDF7">1</text>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <main id="home">
+    <section class="hero">
+      <svg class="tower" viewBox="0 0 190 150" aria-hidden="true">
+        <g>
+          <rect x="8" y="120" width="22" height="22" rx="3" class="bk c"/>
+          <rect x="36" y="98" width="22" height="44" rx="3" class="bk c"/>
+          <rect x="64" y="76" width="22" height="66" rx="3" class="bk m"/>
+          <rect x="92" y="42" width="22" height="100" rx="3" class="bk m"/>
+          <rect x="120" y="8" width="22" height="134" rx="3" class="bk g"/>
+          <path d="M8 120 L36 98 L64 76 L92 42 L120 8" class="ln g"/>
+        </g>
+      </svg>
+      <h2>Otto allenamenti per capire<br>che cosa fa davvero <em>un esponente</em>.</h2>
+      <p>Scegli tu da dove partire e quante volte ripetere. Sbagliare non toglie niente: arriva un indizio,
+      riprovi, e ogni risposta ti spiega il perché. Si va avanti quando <b>tu</b> senti che è entrata.</p>
+    </section>
+
+    <div class="focus">
+      <span class="ic">!</span>
+      <p><b>I due allenamenti che ti servono di più</b> sono contrassegnati con la stellina:
+      <b>L'ordine giusto</b> (era l'esercizio E5.b: dentro c'erano un esponente 0 e una divisione da fare prima della somma)
+      e <b>La scala dei 10</b> (era l'E7.b: «la decima parte di <span class="pw">10<sup>20</sup></span>» si risolve
+      abbassando l'esponente, non togliendo una cifra alla base).</p>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <p class="foot-note">I progressi restano su questo dispositivo. <button id="reset">Azzera i progressi</button></p>
+  </main>
+
+  <!-- ============ SESSIONE ============ -->
+  <main id="game" class="hide">
+    <div class="bar">
+      <button class="back" id="btnBack">← Esci</button>
+      <div class="dots" id="dots"></div>
+      <div class="modename" id="modeName"></div>
+    </div>
+    <div class="play">
+      <div class="stage">
+        <div id="fig"></div>
+        <div class="cap" id="figCap"></div>
+      </div>
+      <div class="panel">
+        <div class="q">
+          <span class="tag" id="qTag">Domanda</span>
+          <h3 id="qText"></h3>
+          <p class="sub hide" id="qSub"></p>
+        </div>
+        <div id="answer"></div>
+        <div class="fb" id="fb"></div>
+        <div class="row">
+          <button class="btn gh" id="btnHint">Dammi un indizio</button>
+          <button class="btn pri hide" id="btnNext">Continua →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ RISULTATO ============ -->
+  <main id="end" class="hide">
+    <div class="res">
+      <h2 id="endTitle"></h2>
+      <div class="score" id="endScore"></div>
+      <div class="of" id="endOf"></div>
+      <div class="bigstars" id="endStars"><i></i><i></i><i></i></div>
+      <p id="endMsg"></p>
+      <div class="learn" id="endLearn"></div>
+      <div class="row" style="justify-content:center;margin-top:18px">
+        <button class="btn pri" id="btnAgain">Ancora una serie</button>
+        <button class="btn gh" id="btnHome">Torna agli allenamenti</button>
+      </div>
+    </div>
+  </main>
+</div>
+<pre id="ptest" class="hide"></pre>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg";
+function $(s){return document.querySelector(s)}
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function R(n){return Math.round(n*100)/100}
+function board(w,h){return E("svg",{viewBox:"0 0 "+w+" "+h,width:"100%"})}
+function rect(s,x,y,w,h,c,r){return E("rect",{x:R(x),y:R(y),width:R(w),height:R(h),rx:r===undefined?3:r,"class":"bk "+(c||"")},s)}
+function txt(s,x,y,t,c){
+  var e=E("text",{x:R(x),y:R(y),"class":"tx "+(c||"")},s),str=String(t);
+  if(str.indexOf("^")<0){e.textContent=str;return e}
+  var re=/\^(-?\d+)/g,last=0,m,up=false,tsp;
+  while((m=re.exec(str))){
+    if(m.index>last){tsp=E("tspan",{dy:up?7:0},e);tsp.textContent=str.slice(last,m.index);up=false}
+    tsp=E("tspan",{dy:-7,"font-size":"0.68em"},e);tsp.textContent=m[1];up=true;
+    last=re.lastIndex;
+  }
+  if(last<str.length){tsp=E("tspan",{dy:up?7:0},e);tsp.textContent=str.slice(last)}
+  return e;
+}
+function line(s,x1,y1,x2,y2,c){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"ln "+(c||"")},s)}
+function path(s,d,c){return E("path",{d:d,"class":"ln "+(c||"")},s)}
+
+/* potenza scritta: 2⁵ */
+function pw(b,e,cls){return '<span class="pw '+(cls||"")+'">'+b+'<sup>'+e+'</sup></span>'}
+function val(b,e){var v=1;for(var i=0;i<e;i++)v*=b;return v}
+function fact(b,e){var a=[];for(var i=0;i<e;i++)a.push(b);return a.join(" × ")}
+
+/* ---------- griglia di blocchi: mostra un valore fino a ~120 ---------- */
+function blocks(s,n,x,y,cols,size,cls,gap){
+  cols=cols||10;size=size||14;gap=gap===undefined?3:gap;
+  for(var i=0;i<n;i++){
+    var c=i%cols,r=Math.floor(i/cols);
+    rect(s,x+c*(size+gap),y+r*(size+gap),size,size,cls||"c",2);
+  }
+  return {rows:Math.ceil(n/cols),w:Math.min(n,cols)*(size+gap)-gap,h:Math.ceil(n/cols)*(size+gap)-gap};
+}
+/* ---------- fattori: e gruppi da "base" blocchi ---------- */
+function groups(s,base,exp,x,y,cls){
+  var size=13,gap=3,gw=base*(size+gap)-gap,gapg=16,cur=x;
+  for(var g=0;g<exp;g++){
+    for(var i=0;i<base;i++)rect(s,cur+i*(size+gap),y,size,size,cls||"c",2);
+    if(g<exp-1)txt(s,cur+gw+gapg/2,y+size/2,"×","s");
+    cur+=gw+gapg;
+  }
+  return cur-gapg-x;
+}
+/* ---------- torre: colonne che crescono ---------- */
+function tower(s,vals,x,y,h,w,labels,cls){
+  var max=Math.max.apply(null,vals),gap=10,bw=w||26;
+  vals.forEach(function(v,i){
+    var bh=Math.max(6,h*Math.pow(v/max,.55));
+    rect(s,x+i*(bw+gap),y+h-bh,bw,bh,(cls&&cls[i])||"c",3);
+    if(labels&&labels[i]!==undefined)txt(s,x+i*(bw+gap)+bw/2,y+h+14,labels[i],"s");
+  });
+  return x+vals.length*(bw+gap)-gap;
+}
+/* ---------- scala delle potenze di 10 ---------- */
+var TEN=[["10<sup>0</sup>","uno"],["10<sup>1</sup>","dieci"],["10<sup>2</sup>","cento"],["10<sup>3</sup>","mille"],
+  ["10<sup>4</sup>","diecimila"],["10<sup>5</sup>","centomila"],["10<sup>6</sup>","milione"],["10<sup>7</sup>",""],
+  ["10<sup>8</sup>",""],["10<sup>9</sup>","miliardo"]];
+function scale10(s,x,y,w,from,to,marks,clickable){
+  var n=to-from,step=w/n;
+  line(s,x,y,x+w,y,"");
+  for(var i=0;i<=n;i++){
+    var e=from+i,cx=x+i*step;
+    line(s,cx,y-7,cx,y+7,"");
+    var m=marks&&marks[e];
+    if(clickable){
+      var g=E("g",{"class":"hit10","data-exp":String(e)},s);
+      E("rect",{x:R(cx-step/2+2),y:R(y-30),width:R(step-4),height:52,rx:6,fill:"rgba(233,237,247,.02)",
+        stroke:"#2B3D63","stroke-width":1.2},g);
+      var t=E("text",{x:R(cx),y:R(y-14),"class":"tx"},g);t.textContent="10";
+      var sup=E("tspan",{dy:"-6","font-size":"10"},t);sup.textContent=String(e);
+      var lab=E("text",{x:R(cx),y:R(y+22),"class":"tx s"},g);lab.textContent=m||"";
+    }else{
+      var t2=E("text",{x:R(cx),y:R(y-16),"class":"tx "+(m==="qui"?"g":"")},s);t2.textContent="10";
+      var sp=E("tspan",{dy:"-6","font-size":"10"},t2);sp.textContent=String(e);
+      if(m&&m!=="qui"){var l2=E("text",{x:R(cx),y:R(y+20),"class":"tx s"},s);l2.textContent=m}
+    }
+  }
+  return step;
+}
+/* ---------- albero delle divisioni (raddoppi) ---------- */
+function splitTree(s,levels,x,y,w,h){
+  var lh=h/levels;
+  for(var L=0;L<=levels;L++){
+    var n=Math.pow(2,L),bw=w/n,yy=y+L*lh;
+    for(var i=0;i<n;i++){
+      rect(s,x+i*bw+1.5,yy,bw-3,Math.min(16,lh-8),L===levels?"g":"c",2);
+      if(L>0&&L<=levels){
+        var px=x+Math.floor(i/2)*(bw*2)+bw,cx2=x+i*bw+bw/2;
+        line(s,px,yy-lh+16,cx2,yy,"");
+      }
+    }
+    txt(s,x-16,yy+8,String(n),"s");
+  }
+}
+
+/* ---------- utilità ---------- */
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function uniq(a){var o=[],s={};a.forEach(function(v){var k=String(v);if(!s[k]){s[k]=1;o.push(v)}});return o}
+function uch(list){
+  var seen={},out=[];
+  list.forEach(function(o){if(!seen[o.label]&&out.length<4){seen[o.label]=1;out.push(o)}});
+  return shuffle(out);
+}
+function opts(correct,wrongs,fmt){
+  var all=uniq([correct].concat(wrongs)).slice(0,4);
+  return shuffle(all.map(function(v){return{label:fmt?fmt(v):String(v),ok:String(v)===String(correct)}}));
+}
+
+/* ---------- progresso ---------- */
+var KEY="potenze-lab-v1",P={xp:0,stars:{}};
+try{var raw=localStorage.getItem(KEY);if(raw)P=JSON.parse(raw)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+var LV=[[0,"Apprendista"],[150,"Assistente"],[350,"Ricercatore"],[650,"Scienziato"],[1000,"Maestro"]];
+function levelInfo(){
+  var i=0;for(var k=0;k<LV.length;k++)if(P.xp>=LV[k][0])i=k;
+  var base=LV[i][0],next=(LV[i+1]||[base+600])[0];
+  return{i:i,name:LV[i][1],next:next,frac:Math.min(1,(P.xp-base)/(next-base))};
+}
+function paintXP(){
+  var L=levelInfo();
+  $("#lvName").textContent=L.name;$("#xpNow").textContent=P.xp;$("#xpNext").textContent=L.next;
+  $("#ringTxt").textContent=String(L.i+1);
+  $("#ringFill").setAttribute("stroke-dashoffset",String(113.1*(1-L.frac)));
+}
+
+window.PZ={$:$,E:E,R:R,board:board,rect:rect,txt:txt,line:line,path:path,pw:pw,val:val,fact:fact,
+  blocks:blocks,groups:groups,tower:tower,scale10:scale10,splitTree:splitTree,TEN:TEN,
+  rnd:rnd,pick:pick,shuffle:shuffle,uniq:uniq,opts:opts,uch:uch,P:P,save:save,levelInfo:levelInfo,paintXP:paintXP};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.PZ,rnd=Z.rnd,pick=Z.pick,shuffle=Z.shuffle,pw=Z.pw,val=Z.val,fact=Z.fact,opts=Z.opts;
+
+/* ============================================================
+   1. CHE COS'È UNA POTENZA  (E1, E2, T1)
+   ============================================================ */
+function m1(){
+  var mode=pick(["valore","scrittura","smaschera","valore"]);
+  var b=rnd(2,6),e=rnd(2,4);
+  if(b===6&&e>3)e=2;
+  var v=val(b,e);
+  if(mode==="valore"){
+    return{tag:"Che cos'è una potenza",text:"Quanto vale "+pw(b,e,"big")+"?",
+      sub:"Scrivi prima la moltiplicazione per esteso, se ti aiuta.",
+      cap:e+" fattori uguali a "+b+": ecco perché non è "+b+" × "+e+".",
+      w:440,h:120,
+      draw:function(s){
+        var wtot=Z.groups(s,b,e,20,40,"c");
+        Z.txt(s,20+wtot/2,22,fact(b,e)+" = "+v,"c");
+      },
+      kind:"number",answer:v,
+      hint:"L'esponente dice <b>quanti fattori</b>: "+fact(b,e)+".",
+      why:pw(b,e)+" = "+fact(b,e)+" = <b>"+v+"</b>. L'esponente conta i fattori, non moltiplica la base.",
+      note:"L'esponente <b>conta</b> i fattori: "+pw(b,e)+" ≠ "+b+" × "+e+"."};
+  }
+  if(mode==="scrittura"){
+    return{tag:"Che cos'è una potenza",text:"Quale scrittura vale davvero "+pw(b,e,"big")+"?",
+      sub:"Una sola è la moltiplicazione ripetuta giusta.",
+      cap:"La base si ripete, l'esponente dice quante volte.",
+      w:420,h:110,
+      draw:function(s){
+        Z.txt(s,210,30,"base "+b+"  →  si ripete","s");
+        Z.groups(s,b,e,60,52,"c");
+        Z.txt(s,210,96,"esponente "+e+"  →  "+e+" gruppi","s");
+      },
+      kind:"choice",
+      choices:Z.uch([
+        {label:fact(b,e),ok:true},
+        {label:b+" × "+e,ok:false},
+        {label:Array(e+1).join(b+" + ").slice(0,-3),ok:false},
+        {label:fact(e,b),ok:false},
+        {label:fact(b,e+1),ok:false},
+        {label:b+" + "+e,ok:false}]),
+      hint:"Che cosa si ripete: la base o l'esponente?",
+      why:pw(b,e)+" significa "+fact(b,e)+" = "+v+". Gli altri sono: una moltiplicazione ("+b+"×"+e+"), una somma, e la potenza scambiata.",
+      note:"Nella potenza si ripete la <b>base</b>, tante volte quanto dice l'esponente."};
+  }
+  var cands=[b*e,b+e,val(e,b),v+1].filter(function(x){return x!==v&&x>0});
+  var wrong=pick(cands);
+  return{tag:"Smaschera l'errore",text:"Un compagno ha scritto "+pw(b,e)+" = "+wrong+". Ha ragione?",
+    sub:"Se sbaglia, scegli il valore giusto.",
+    cap:"È l'errore più diffuso di tutto il capitolo.",
+    w:440,h:120,
+    draw:function(s){
+      Z.txt(s,220,24,fact(b,e),"c");
+      Z.groups(s,b,e,20,44,"c");
+      Z.txt(s,220,104,"conta i quadratini: sono "+v,"s");
+    },
+    kind:"choice",
+    choices:Z.uch([{label:"No: fa "+v,ok:true},{label:"Sì, è giusto",ok:false},
+      {label:"No: fa "+(b*e),ok:false},{label:"No: fa "+(b+e),ok:false},
+      {label:"No: fa "+(v+1),ok:false},{label:"No: fa "+(v*2),ok:false}]),
+    hint:"Prova a contare i fattori: "+fact(b,e)+".",
+    why:pw(b,e)+" = "+fact(b,e)+" = <b>"+v+"</b>, mentre "+b+" × "+e+" = "+(b*e)+". Sono due cose diverse.",
+    note:"Prima di rispondere, srotola la potenza in fattori."};
+}
+
+/* ============================================================
+   2. I CASI SPECIALI  (T2, T3, E1e-h, E4d-e)
+   ============================================================ */
+function m2(){
+  var kind=pick(["uno","zeroesp","primo","zerobase","zerozero","zeroesp"]);
+  if(kind==="uno"){
+    var e=rnd(3,9);
+    return{tag:"Casi speciali",text:"Quanto vale "+pw(1,e,"big")+"?",
+      sub:"Base 1: pensa a che cosa stai moltiplicando.",
+      cap:"1 × 1 × 1 … per quante volte vuoi: resta 1.",
+      w:420,h:110,
+      draw:function(s){
+        Z.txt(s,210,34,fact(1,e),"c");
+        Z.blocks(s,e,210-((e*17)-3)/2,54,14,14,"l");
+        Z.txt(s,210,96,"tutti uguali a 1","s");
+      },
+      kind:"number",answer:1,
+      hint:"Moltiplicare per 1 non cambia niente.",
+      why:pw(1,e)+" = "+fact(1,e)+" = <b>1</b>. Con base 1 il risultato è sempre 1.",
+      note:"<b>1 elevato a qualsiasi cosa fa 1.</b>"};
+  }
+  if(kind==="zeroesp"){
+    var b=rnd(2,9);
+    return{tag:"Casi speciali",text:"Quanto vale "+pw(b,0,"big")+"?",
+      sub:"È il caso che ti ha fatto sbagliare nell'esercizio E5.b.",
+      cap:"Si dimostra con una divisione, non si impara a memoria.",
+      w:460,h:130,
+      draw:function(s){
+        Z.txt(s,230,28,pw(b,3).replace(/<[^>]+>/g,"")+"  :  "+b+"³   ma anche   "+b+"³ : "+b+"³ = 1","s");
+        Z.rect(s,60,50,150,40,"c",8);Z.txt(s,135,70,b+"³ : "+b+"³","c");
+        Z.txt(s,230,70,"=","s");
+        Z.rect(s,250,50,150,40,"g",8);Z.txt(s,325,70,b+"³⁻³ = "+b+"⁰","g");
+        Z.txt(s,230,112,"un numero diviso sé stesso fa 1  →  "+b+"⁰ = 1","s");
+      },
+      kind:"number",answer:1,
+      hint:"Guarda "+pw(b,3)+" : "+pw(b,3)+": con la regola fa "+pw(b,0)+", ma un numero diviso sé stesso fa 1.",
+      why:pw(b,0)+" = <b>1</b>. Ogni base diversa da zero elevata a 0 dà 1: l'esponente 0 non dà 0.",
+      note:"<b>Esponente 0 → 1</b> (non zero!). È l'errore che ti è costato la E5.b."};
+  }
+  if(kind==="primo"){
+    var b2=rnd(3,12);
+    return{tag:"Casi speciali",text:"Quanto vale "+pw(b2,1,"big")+"?",
+      sub:"Un fattore solo.",
+      cap:"Esponente 1: il fattore compare una volta sola.",
+      w:400,h:100,
+      draw:function(s){Z.rect(s,150,34,100,40,"c",8);Z.txt(s,200,54,String(b2),"c");
+        Z.txt(s,200,88,"un solo fattore","s")},
+      kind:"number",answer:b2,
+      hint:"Se il fattore compare una volta sola, il risultato è il numero stesso.",
+      why:pw(b2,1)+" = <b>"+b2+"</b>. Attenzione a non confonderlo con "+pw(1,b2)+", che fa 1.",
+      note:"<b>Esponente 1 → il numero stesso.</b>"};
+  }
+  if(kind==="zerobase"){
+    var e3=rnd(2,5);
+    return{tag:"Casi speciali",text:"Quanto vale "+pw(0,e3,"big")+"?",
+      sub:"Base zero, esponente diverso da zero.",
+      cap:"Basta un solo fattore zero per azzerare tutto.",
+      w:420,h:100,
+      draw:function(s){Z.txt(s,210,40,fact(0,e3)+" = 0","m");
+        Z.txt(s,210,74,"se moltiplichi per zero, il prodotto è zero","s")},
+      kind:"number",answer:0,
+      hint:"Stai moltiplicando degli zeri fra loro.",
+      why:pw(0,e3)+" = "+fact(0,e3)+" = <b>0</b>. Attenzione: "+pw(0,0)+" invece non ha valore.",
+      note:"<b>Base 0 (con esponente ≠ 0) → 0.</b>"};
+  }
+  return{tag:"Casi speciali",text:"Quanto vale "+pw(0,0,"big")+"?",
+    sub:"Attenzione: questo è diverso da tutti gli altri.",
+    cap:"Due regole si contraddicono: nessuna delle due vince.",
+    w:460,h:120,
+    draw:function(s){
+      Z.rect(s,40,34,170,44,"c",8);Z.txt(s,125,50,"esponente 0","c");Z.txt(s,125,68,"vorrebbe 1","s");
+      Z.rect(s,250,34,170,44,"m",8);Z.txt(s,335,50,"base 0","m");Z.txt(s,335,68,"vorrebbe 0","s");
+      Z.txt(s,230,102,"le due regole litigano: non si assegna un valore","s");
+    },
+    kind:"choice",
+    choices:shuffle([
+      {label:"Non ha valore: è indeterminato",ok:true},
+      {label:"Vale 1, come tutte le potenze con esponente 0",ok:false},
+      {label:"Vale 0, come tutte le potenze con base 0",ok:false},
+      {label:"Vale 0 oppure 1, si sceglie",ok:false}]),
+    hint:"Chi dovrebbe vincere: la regola dell'esponente 0 o quella della base 0?",
+    why:pw(0,0)+" è una <b>forma indeterminata</b>: non le si assegna un valore. Tutte le altre basi con esponente 0 danno 1.",
+    note:"<b>"+pw(0,0)+" non ha valore</b>: è l'unica eccezione."};
+}
+
+/* ============================================================
+   3. STESSA BASE  (T4, E3a/b/f)
+   ============================================================ */
+function m3(){
+  var mode=pick(["molt","div","catena","trappola"]);
+  var b=pick([2,3,5,7,10]);
+  if(mode==="molt"){
+    var e1=rnd(2,5),e2=rnd(2,4);
+    return{tag:"Stessa base",text:"Scrivi come una sola potenza: "+pw(b,e1)+" × "+pw(b,e2),
+      sub:"Stessa base: si agisce sugli esponenti.",
+      cap:"I fattori si mettono in fila: "+e1+" + "+e2+" = "+(e1+e2)+".",
+      w:460,h:120,
+      draw:function(s){
+        var w1=Z.groups(s,b,e1,20,50,"c");
+        Z.txt(s,20+w1+8,60,"×","s");
+        Z.groups(s,b,e1+e2>7?0:e2,20+w1+22,50,"m");
+        Z.txt(s,230,26,e1+" fattori  +  "+e2+" fattori  =  "+(e1+e2)+" fattori","s");
+        Z.txt(s,230,104,b+"^"+e1+" × "+b+"^"+e2+" = "+b+"^"+(e1+e2),"c");
+      },
+      kind:"expo",answerB:b,answerE:e1+e2,
+      hint:"La base resta "+b+", gli esponenti si <b>sommano</b>.",
+      why:pw(b,e1)+" × "+pw(b,e2)+" = "+pw(b,e1+e2)+". Sommi gli esponenti perché metti in fila "+e1+" fattori e altri "+e2+".",
+      note:"Stessa base, moltiplicazione → <b>esponenti sommati</b>."};
+  }
+  if(mode==="div"){
+    var a=rnd(4,7),c=rnd(1,3);
+    return{tag:"Stessa base",text:"Scrivi come una sola potenza: "+pw(b,a)+" : "+pw(b,c),
+      sub:"Stessa base: si agisce sugli esponenti.",
+      cap:"Dividere toglie fattori: "+a+" − "+c+" = "+(a-c)+".",
+      w:460,h:120,
+      draw:function(s){
+        Z.txt(s,230,26,a+" fattori  −  "+c+" tolti  =  "+(a-c)+" rimasti","s");
+        var size=17,gap=4,x=230-(a*(size+gap)-gap)/2;
+        for(var i=0;i<a;i++)Z.rect(s,x+i*(size+gap),52,size,size,i<a-c?"c":"",3);
+        for(var j=a-c;j<a;j++){Z.line(s,x+j*(size+gap)+2,54,x+j*(size+gap)+size-2,52+size-2,"m")}
+        Z.txt(s,230,100,b+"^"+a+" : "+b+"^"+c+" = "+b+"^"+(a-c),"c");
+      },
+      kind:"expo",answerB:b,answerE:a-c,
+      hint:"La base resta "+b+", gli esponenti si <b>sottraggono</b>.",
+      why:pw(b,a)+" : "+pw(b,c)+" = "+pw(b,a-c)+". Ogni fattore al denominatore ne cancella uno al numeratore.",
+      note:"Stessa base, divisione → <b>esponenti sottratti</b>."};
+  }
+  if(mode==="catena"){
+    var x1=rnd(4,6),x2=rnd(2,3),x3=rnd(2,4),res=x1+x2-x3;
+    if(res<1){x3=2;res=x1+x2-x3}
+    return{tag:"Stessa base",text:"Scrivi come una sola potenza: "+pw(b,x1)+" × "+pw(b,x2)+" : "+pw(b,x3),
+      sub:"Si lavora sugli esponenti, da sinistra a destra.",
+      cap:x1+" + "+x2+" = "+(x1+x2)+", poi "+(x1+x2)+" − "+x3+" = "+res+".",
+      w:460,h:120,
+      draw:function(s){
+        Z.rect(s,30,40,120,44,"c",8);Z.txt(s,90,62,b+"^"+x1+" × "+b+"^"+x2,"c");
+        Z.txt(s,170,62,"→","s");
+        Z.rect(s,190,40,110,44,"m",8);Z.txt(s,245,62,b+"^"+(x1+x2),"m");
+        Z.txt(s,318,62,": "+b+"^"+x3+" →","s");
+        Z.rect(s,360,40,80,44,"l",8);Z.txt(s,400,62,b+"^"+res,"l");
+      },
+      kind:"expo",answerB:b,answerE:res,
+      hint:"Prima somma "+x1+" + "+x2+", poi togli "+x3+".",
+      why:pw(b,x1)+" × "+pw(b,x2)+" : "+pw(b,x3)+" = "+pw(b,x1+x2-x3)+" = "+pw(b,res)+".",
+      note:"Più operazioni sulla stessa base: <b>somma e sottrai gli esponenti in ordine</b>."};
+  }
+  var f1=rnd(2,4),f2=rnd(2,3);
+  return{tag:"Trappola",text:"È vero che "+pw(b,f1)+" × "+pw(b,f2)+" = "+pw(b*b,f1+f2)+"?",
+    sub:"Attenzione a che cosa cambia e che cosa resta.",
+    cap:"Nella moltiplicazione a base uguale, la base non si tocca.",
+    w:440,h:110,
+    draw:function(s){
+      Z.rect(s,30,36,170,46,"l",8);Z.txt(s,115,52,b+"^"+f1+" × "+b+"^"+f2,"l");Z.txt(s,115,70,"= "+b+"^"+(f1+f2),"s");
+      Z.rect(s,240,36,170,46,"m",8);Z.txt(s,325,52,"× le basi","m");Z.txt(s,325,70,"non si fa","s");
+    },
+    kind:"choice",
+    choices:shuffle([
+      {label:"No: fa "+pw(b,f1+f2)+", la base non cambia",ok:true},
+      {label:"Sì, è corretto",ok:false},
+      {label:"No: fa "+pw(b,f1*f2),ok:false},
+      {label:"No: fa "+pw(b*b,f1*f2),ok:false}]),
+    hint:"Con la stessa base si toccano solo gli <b>esponenti</b>.",
+    why:pw(b,f1)+" × "+pw(b,f2)+" = "+pw(b,f1+f2)+". Le basi si moltiplicano solo quando è l'<b>esponente</b> a essere uguale.",
+    note:"Base uguale → agisci sugli esponenti. Esponente uguale → agisci sulle basi."};
+}
+
+/* ============================================================
+   4. STESSO ESPONENTE E POTENZA DI POTENZA  (T5, T6, E3c/d/e)
+   ============================================================ */
+function m4(){
+  var mode=pick(["moltbasi","divbasi","potpot","potpot","trappola"]);
+  if(mode==="moltbasi"){
+    var a=rnd(2,5),b=rnd(2,4),e=rnd(2,3);
+    return{tag:"Stesso esponente",text:"Scrivi come una sola potenza: "+pw(a,e)+" × "+pw(b,e),
+      sub:"Qui l'esponente è lo stesso: si agisce sulle basi.",
+      cap:"L'esponente resta "+e+", le basi si moltiplicano.",
+      w:440,h:110,
+      draw:function(s){
+        Z.rect(s,40,38,150,44,"c",8);Z.txt(s,115,60,a+"^"+e+" × "+b+"^"+e,"c");
+        Z.txt(s,215,60,"=","s");
+        Z.rect(s,250,38,150,44,"l",8);Z.txt(s,325,60,"("+a+" × "+b+")^"+e,"l");
+      },
+      kind:"expo",answerB:a*b,answerE:e,
+      hint:"Moltiplica le basi ("+a+" × "+b+") e tieni l'esponente "+e+".",
+      why:pw(a,e)+" × "+pw(b,e)+" = "+pw(a*b,e)+". Con lo stesso esponente si opera sulle basi.",
+      note:"Stesso esponente, moltiplicazione → <b>basi moltiplicate</b>."};
+  }
+  if(mode==="divbasi"){
+    var q=pick([[12,3],[8,2],[10,5],[9,3],[20,4]]),e2=rnd(2,4);
+    return{tag:"Stesso esponente",text:"Scrivi come una sola potenza: "+pw(q[0],e2)+" : "+pw(q[1],e2),
+      sub:"Stesso esponente anche qui.",
+      cap:"L'esponente resta "+e2+", le basi si dividono.",
+      w:440,h:110,
+      draw:function(s){
+        Z.rect(s,40,38,150,44,"c",8);Z.txt(s,115,60,q[0]+"^"+e2+" : "+q[1]+"^"+e2,"c");
+        Z.txt(s,215,60,"=","s");
+        Z.rect(s,250,38,150,44,"l",8);Z.txt(s,325,60,"("+q[0]+" : "+q[1]+")^"+e2,"l");
+      },
+      kind:"expo",answerB:q[0]/q[1],answerE:e2,
+      hint:"Dividi le basi ("+q[0]+" : "+q[1]+") e tieni l'esponente "+e2+".",
+      why:pw(q[0],e2)+" : "+pw(q[1],e2)+" = "+pw(q[0]/q[1],e2)+".",
+      note:"Stesso esponente, divisione → <b>basi divise</b>."};
+  }
+  if(mode==="potpot"){
+    var bb=pick([2,3,4,10]),n=rnd(2,4),m=rnd(2,3);
+    return{tag:"Potenza di potenza",text:"Scrivi come una sola potenza: ("+pw(bb,n)+")<sup class='pw'>"+m+"</sup>",
+      sub:"Quanti fattori ci sono in tutto?",
+      cap:m+" gruppi da "+n+" fattori: "+n+" × "+m+" = "+(n*m)+".",
+      w:460,h:130,
+      draw:function(s){
+        for(var g=0;g<m;g++){
+          Z.rect(s,30+g*140,44,120,40,"c",8);
+          Z.txt(s,90+g*140,64,bb+"^"+n,"c");
+          if(g<m-1)Z.txt(s,158+g*140,64,"×","s");
+        }
+        Z.txt(s,230,26,m+" gruppi da "+n+" fattori","s");
+        Z.txt(s,230,108,"in tutto "+(n*m)+" fattori  →  "+bb+"^"+(n*m),"l");
+      },
+      kind:"expo",answerB:bb,answerE:n*m,
+      hint:"("+pw(bb,n)+")<sup>"+m+"</sup> vuol dire "+pw(bb,n)+" ripetuto "+m+" volte: gli esponenti si <b>moltiplicano</b>.",
+      why:"("+pw(bb,n)+")<sup>"+m+"</sup> = "+pw(bb,n*m)+", perché "+m+" gruppi da "+n+" fattori fanno "+(n*m)+" fattori.",
+      note:"Potenza di potenza → <b>esponenti moltiplicati</b>."};
+  }
+  var b4=pick([4,2,5]),n4=2,m4v=3;
+  return{tag:"Trappola",text:"Perché ("+pw(b4,n4)+")<sup class='pw'>"+m4v+"</sup> non è "+pw(b4,n4+m4v)+"?",
+    sub:"Conta i fattori e avrai la risposta.",
+    cap:"Sommare gli esponenti qui è l'errore classico.",
+    w:460,h:130,
+    draw:function(s){
+      for(var g=0;g<m4v;g++){
+        Z.rect(s,40+g*130,46,110,38,"c",8);
+        Z.txt(s,95+g*130,65,b4+" × "+b4,"c");
+      }
+      Z.txt(s,230,28,"3 gruppi da 2 fattori","s");
+      Z.txt(s,230,106,"= 6 fattori  →  "+b4+"^6,  non "+b4+"^5","l");
+    },
+    kind:"choice",
+    choices:shuffle([
+      {label:"Perché sono 3 gruppi da 2 fattori: in tutto 6, quindi "+pw(b4,6),ok:true},
+      {label:"Perché la base va moltiplicata per 3",ok:false},
+      {label:"Perché l'esponente esterno si somma solo se è pari",ok:false},
+      {label:"Non è vero: "+pw(b4,5)+" è corretto",ok:false}]),
+    hint:"("+pw(b4,2)+")³ = "+pw(b4,2)+" × "+pw(b4,2)+" × "+pw(b4,2)+".",
+    why:"("+pw(b4,2)+")³ = "+pw(b4,6)+": 3 gruppi da 2 fattori fanno 6 fattori. Gli esponenti si moltiplicano, non si sommano.",
+    note:"Nella potenza di potenza gli esponenti si <b>moltiplicano</b>."};
+}
+
+window.PZM1=m1;window.PZM2=m2;window.PZM3=m3;window.PZM4=m4;
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.PZ,rnd=Z.rnd,pick=Z.pick,shuffle=Z.shuffle,pw=Z.pw,val=Z.val,fact=Z.fact;
+
+/* ============================================================
+   5. L'ESPONENTE MANCANTE  (E4)
+   ============================================================ */
+function m5(){
+  var set=pick([[2,5],[2,6],[3,3],[5,3],[10,4],[4,3],[6,2],[7,2],[3,0],[9,1],[2,0],[8,1]]);
+  var b=set[0],n=set[1],v=val(b,n);
+  var seq=[];for(var i=1;i<=Math.max(n,1);i++)seq.push(val(b,i));
+  return{tag:"L'esponente mancante",text:"Trova <span class='pw'>n</span>: "+b+"<sup class='pw'>n</sup> = "+v,
+    sub:n===0?"Attenzione: questo è un caso speciale.":"Moltiplica la base per sé stessa contando i passi.",
+    cap:n===0?"Quale esponente dà 1?":(n===1?"Quante volte compare il fattore?":"Ogni gradino moltiplica per "+b+"."),
+    w:460,h:150,
+    draw:function(s){
+      if(n===0){Z.rect(s,150,50,160,46,"g",8);Z.txt(s,230,73,b+"^n = 1","g");
+        Z.txt(s,230,116,"solo un esponente dà 1 con base "+b,"s");return}
+      var lab=seq.map(function(v2,i2){return String(i2+1)});
+      Z.tower(s,seq,Math.max(20,230-(seq.length*36)/2),24,86,26,lab,seq.map(function(v2){return v2===v?"g":"c"}));
+      Z.txt(s,230,138,"gradino  →  esponente","s");
+    },
+    kind:"number",answer:n,
+    hint:n===0?"Ricorda: qualunque base (≠0) con esponente 0 dà 1.":
+         n===1?"Se il risultato è la base stessa, l'esponente è 1.":
+         "Conta i fattori: "+seq.slice(0,n).join(" → ")+".",
+    why:b+"<sup class='pw'>"+n+"</sup> = "+v+", quindi <b>n = "+n+"</b>."+
+        (n===0?" Esponente 0 → 1, sempre (con base diversa da zero).":n===1?" Esponente 1 → il numero stesso.":""),
+    note:n<=1?"Tieni distinti i due casi: <b>esponente 0 → 1</b>, <b>esponente 1 → la base</b>.":
+              "Per trovare l'esponente conta quante volte moltiplichi la base."};
+}
+
+/* ============================================================
+   6. ★ L'ORDINE GIUSTO  (E5 — la difficoltà di Fomyn)
+   ============================================================ */
+function m6(){
+  var which=pick(["E5b","E5b","E5a","mix"]);
+  if(which==="E5b"){
+    var b=pick([10,2,5]),d=rnd(2,3),v1=rnd(4,5);
+    var q1=pw(b,v1)+" : "+pw(b,v1-1);              /* = b^1 */
+    var A=pick([4,3]),B=A===4?2:3;                  /* 4²:2³ = 2 ; 3² : 3¹ ... */
+    var num=val(4,2),den=val(2,3),quot=num/den;     /* 16 : 8 = 2 */
+    var expr0="("+q1+")<sup class='pw'>0</sup> + "+pw(4,2)+" : "+pw(2,3);
+    return{tag:"★ L'ordine giusto",text:"Risolviamo insieme, un pezzo alla volta.",
+      sub:"È l'espressione che ti ha fatto inciampare nella verifica.",
+      cap:"Prima le parentesi, poi le potenze, poi × e :, infine + e −.",
+      w:0,h:0,expr:expr0,
+      kind:"moves",
+      moves:[
+        {q:"Da dove si comincia?",kind:"choice",
+         choices:shuffle([
+           {label:"Dalla parentesi: "+q1,ok:true},
+           {label:"Dalla somma, perché il + viene prima",ok:false},
+           {label:"Da "+pw(4,2)+", che è la potenza più grande",ok:false},
+           {label:"Da destra verso sinistra",ok:false}]),
+         why:"Si comincia sempre da <b>dentro le parentesi</b>. Il + è l'ultima cosa che si fa."},
+        {q:"Quanto fa "+q1+"? Scrivi l'<b>esponente</b> del risultato.",kind:"number",answer:1,
+         hint:"Stessa base: gli esponenti si sottraggono, "+v1+" − "+(v1-1)+".",
+         why:q1+" = "+pw(b,1)+", cioè "+b+".",
+         to:"("+pw(b,1)+")<sup class='pw'>0</sup> + "+pw(4,2)+" : "+pw(2,3)},
+        {q:"Adesso c'è ("+pw(b,1)+")<sup class='pw'>0</sup>. Quanto vale?",kind:"choice",
+         choices:shuffle([
+           {label:"1",ok:true},{label:"0",ok:false},{label:String(b),ok:false},{label:"non ha valore",ok:false}]),
+         why:"Qualsiasi numero (diverso da zero) elevato a <b>0</b> dà <b>1</b>. Questo è il punto che ti era costato l'esercizio.",
+         to:"1 + "+pw(4,2)+" : "+pw(2,3)},
+        {q:"Ora: 1 + "+pw(4,2)+" : "+pw(2,3)+". Che cosa si fa prima?",kind:"choice",
+         choices:shuffle([
+           {label:"Prima "+pw(4,2)+" : "+pw(2,3)+", poi la somma",ok:true},
+           {label:"Prima 1 + "+pw(4,2)+", poi la divisione",ok:false},
+           {label:"Si va da sinistra a destra: prima la somma",ok:false}]),
+         why:"La divisione ha la <b>precedenza</b> sull'addizione, anche se scritta dopo."},
+        {q:"Quanto fa "+pw(4,2)+" : "+pw(2,3)+"?",kind:"number",answer:quot,
+         hint:pw(4,2)+" = 16 e "+pw(2,3)+" = 8. Poi dividi.",
+         why:"16 : 8 = <b>2</b>. Attenzione: le proprietà non si applicano, basi ed esponenti sono diversi.",
+         to:"1 + 2"},
+        {q:"Risultato finale?",kind:"number",answer:1+quot,
+         hint:"Resta solo l'addizione.",why:"1 + 2 = <b>3</b>. Espressione chiusa."}
+      ],
+      hint:"Segui l'ordine: parentesi → potenze → × e : → + e −.",
+      why:"Il risultato è <b>3</b>.",
+      note:"<b>Esponente 0 → 1</b>, e la <b>divisione viene prima della somma</b>: erano le due trappole della E5.b."};
+  }
+  if(which==="E5a"){
+    return{tag:"★ L'ordine giusto",text:"Un'espressione con tre parentesi.",
+      sub:"Si apre dalla più interna: tonda, quadra, graffa.",
+      cap:"Ogni mossa toglie un pezzo e riscrive l'espressione.",
+      w:0,h:0,
+      expr:"{[("+pw(2,3)+" × "+pw(2,2)+") : "+pw(2,4)+" + "+pw(3,2)+"] × 5 − 5} : "+pw(5,2),
+      kind:"moves",
+      moves:[
+        {q:"Quale pezzo si calcola per primo?",kind:"choice",
+         choices:shuffle([
+           {label:"("+pw(2,3)+" × "+pw(2,2)+"), la tonda",ok:true},
+           {label:"× 5 − 5, la graffa",ok:false},
+           {label:": "+pw(5,2)+", la divisione finale",ok:false},
+           {label:pw(3,2)+", la potenza",ok:false}]),
+         why:"Si parte sempre dalla parentesi più <b>interna</b>: la tonda."},
+        {q:pw(2,3)+" × "+pw(2,2)+": scrivi l'<b>esponente</b> del risultato.",kind:"number",answer:5,
+         hint:"Stessa base: 3 + 2.",why:pw(2,3)+" × "+pw(2,2)+" = "+pw(2,5)+".",
+         to:"{["+pw(2,5)+" : "+pw(2,4)+" + "+pw(3,2)+"] × 5 − 5} : "+pw(5,2)},
+        {q:pw(2,5)+" : "+pw(2,4)+" quanto fa (come numero)?",kind:"number",answer:2,
+         hint:"Stessa base: 5 − 4 = 1, quindi "+pw(2,1)+".",why:pw(2,5)+" : "+pw(2,4)+" = "+pw(2,1)+" = <b>2</b>.",
+         to:"{[2 + "+pw(3,2)+"] × 5 − 5} : "+pw(5,2)},
+        {q:"Dentro la quadra: quanto fa 2 + "+pw(3,2)+"?",kind:"number",answer:11,
+         hint:"Prima la potenza "+pw(3,2)+" = 9, poi la somma.",why:"2 + 9 = <b>11</b>: la potenza si calcola prima dell'addizione.",
+         to:"{11 × 5 − 5} : "+pw(5,2)},
+        {q:"Nella graffa: 11 × 5 − 5 =",kind:"number",answer:50,
+         hint:"Prima la moltiplicazione, poi la sottrazione.",why:"55 − 5 = <b>50</b>.",
+         to:"50 : "+pw(5,2)},
+        {q:"Ultimo passo: 50 : "+pw(5,2)+" =",kind:"number",answer:2,
+         hint:pw(5,2)+" = 25.",why:"50 : 25 = <b>2</b>. Espressione chiusa."}
+      ],
+      hint:"Tonda → quadra → graffa, e dentro ognuna: potenze, poi × e :, poi + e −.",
+      why:"Il risultato è <b>2</b>.",
+      note:"Si apre sempre dalla parentesi <b>più interna</b>."};
+  }
+  var a=pick([5,6]),b2=pick([3,4]),c=pick([2,3]);
+  var pa=val(a,2),pb=val(b2,2),diff=pa-pb;
+  return{tag:"★ L'ordine giusto",text:"Attento all'esponente 0 e alle precedenze.",
+    sub:"Tre mosse e hai finito.",
+    cap:"Un esponente 0 vale 1 e non azzera niente.",
+    w:0,h:0,
+    expr:"("+pw(a,2)+" − "+pw(b2,2)+") × "+pw(c,0)+" + 4",
+    kind:"moves",
+    moves:[
+      {q:"Che cosa si calcola per primo?",kind:"choice",
+       choices:shuffle([
+         {label:"Le due potenze dentro la parentesi",ok:true},
+         {label:pw(c,0)+", perché è l'unica con esponente 0",ok:false},
+         {label:"L'addizione finale + 4",ok:false}]),
+       why:"Prima si apre la parentesi, e dentro si calcolano le potenze."},
+      {q:pw(a,2)+" − "+pw(b2,2)+" =",kind:"number",answer:diff,
+       hint:pw(a,2)+" = "+pa+" e "+pw(b2,2)+" = "+pb+".",
+       why:pa+" − "+pb+" = <b>"+diff+"</b>.",
+       to:diff+" × "+pw(c,0)+" + 4"},
+      {q:"Quanto vale "+pw(c,0)+"?",kind:"choice",
+       choices:shuffle([{label:"1",ok:true},{label:"0",ok:false},{label:String(c),ok:false}]),
+       why:"Esponente 0 → <b>1</b>. Moltiplicare per 1 non cambia il numero.",
+       to:diff+" × 1 + 4"},
+      {q:"Risultato finale?",kind:"number",answer:diff+4,
+       hint:"Prima la moltiplicazione, poi l'addizione.",why:diff+" × 1 = "+diff+", poi + 4 = <b>"+(diff+4)+"</b>."}
+    ],
+    hint:"Parentesi → potenze → × e : → + e −.",
+    why:"Il risultato è <b>"+(diff+4)+"</b>.",
+    note:"Una potenza con esponente 0 vale 1: <b>non</b> azzera il prodotto."};
+}
+
+/* ============================================================
+   7. ★ LA SCALA DEI 10  (E7 — la difficoltà di Fomyn)
+   ============================================================ */
+var NOMI={0:"uno",1:"dieci",2:"cento",3:"mille",4:"diecimila",5:"centomila",6:"milione",9:"miliardo"};
+function m7(){
+  var mode=pick(["decima","decima","volte","molt","zeri","scala","molecole"]);
+  if(mode==="decima"){
+    var e=pick([6,8,12,15,20,23]);
+    return{tag:"★ La scala dei 10",text:"Quanto vale la <b>decima parte</b> di "+pw(10,e,"big")+"?",
+      sub:"Scrivi l'esponente del risultato.",
+      cap:"«Decima parte» vuol dire diviso 10, e 10 è "+pw(10,1)+".",
+      w:470,h:120,
+      draw:function(s){
+        Z.rect(s,40,44,150,44,"c",8);Z.txt(s,115,66,"10^"+e,"c");
+        Z.txt(s,215,66,": 10","s");
+        Z.rect(s,250,44,150,44,"l",8);Z.txt(s,325,66,"10^"+(e-1),"l");
+        Z.txt(s,235,24,"dividere per 10 = scendere di UN gradino","s");
+        Z.txt(s,235,106,"la base resta 10: cambia solo l'esponente","s");
+      },
+      kind:"exp10",answer:e-1,
+      hint:pw(10,e)+" : "+pw(10,1)+" → gli esponenti si sottraggono: "+e+" − 1.",
+      why:pw(10,e)+" : "+pw(10,1)+" = "+pw(10,e-1)+". <b>Non</b> si toglie una cifra alla base (1<sup class='pw'>"+e+"</sup> sarebbe 1): si abbassa l'esponente di 1.",
+      note:"Diviso 10 → <b>esponente −1</b>. La base resta sempre 10."};
+  }
+  if(mode==="volte"){
+    var e2=pick([5,9,14,20,23]),k=pick([2,3,6]);
+    var nome=k===2?"cento":k===3?"mille":"un milione";
+    return{tag:"★ La scala dei 10",text:nome.charAt(0).toUpperCase()+nome.slice(1)+" volte "+pw(10,e2,"big")+" fa…",
+      sub:"Scrivi l'esponente del risultato.",
+      cap:nome+" = "+pw(10,k)+", quindi si sale di "+k+" gradini.",
+      w:470,h:120,
+      draw:function(s){
+        Z.rect(s,40,44,140,44,"c",8);Z.txt(s,110,66,"10^"+e2,"c");
+        Z.txt(s,205,66,"× 10^"+k,"g");
+        Z.rect(s,260,44,150,44,"l",8);Z.txt(s,335,66,"10^"+(e2+k),"l");
+        Z.txt(s,235,24,"moltiplicare per "+nome+" = salire di "+k+" gradini","s");
+      },
+      kind:"exp10",answer:e2+k,
+      hint:nome+" = "+pw(10,k)+": stessa base, esponenti da <b>sommare</b>.",
+      why:pw(10,e2)+" × "+pw(10,k)+" = "+pw(10,e2+k)+".",
+      note:"Moltiplicare per una potenza di 10 → <b>esponenti sommati</b>."};
+  }
+  if(mode==="molt"){
+    var x=rnd(2,9),y=rnd(2,9);
+    return{tag:"La scala dei 10",text:"Quanto fa "+pw(10,x)+" × "+pw(10,y)+"?",
+      sub:"Scrivi l'esponente del risultato.",
+      cap:"Stessa base 10: gli esponenti si sommano.",
+      w:440,h:110,
+      draw:function(s){
+        Z.txt(s,220,30,x+" zeri  +  "+y+" zeri  =  "+(x+y)+" zeri","s");
+        Z.rect(s,60,48,130,42,"c",8);Z.txt(s,125,69,"10^"+x,"c");
+        Z.txt(s,210,69,"×","s");
+        Z.rect(s,230,48,130,42,"m",8);Z.txt(s,295,69,"10^"+y,"m");
+      },
+      kind:"exp10",answer:x+y,
+      hint:"Somma gli esponenti: "+x+" + "+y+".",
+      why:pw(10,x)+" × "+pw(10,y)+" = "+pw(10,x+y)+".",
+      note:"Con la base 10 l'esponente conta gli <b>zeri</b>."};
+  }
+  if(mode==="zeri"){
+    var e3=rnd(3,9);
+    return{tag:"La scala dei 10",text:"Quanti zeri ha il numero "+pw(10,e3,"big")+" scritto per esteso?",
+      sub:"Scrivi il numero di zeri.",
+      cap:"Con la base 10 l'esponente dice quanti zeri seguono l'1.",
+      w:440,h:110,
+      draw:function(s){
+        var str="1"+Array(e3+1).join("0");
+        Z.txt(s,220,44,str,"c");
+        Z.txt(s,220,80,"1 seguito da "+e3+" zeri"+(NOMI[e3]?"  =  un "+NOMI[e3]:""),"s");
+      },
+      kind:"number",answer:e3,
+      hint:"L'esponente e il numero di zeri coincidono.",
+      why:pw(10,e3)+" = 1 seguito da <b>"+e3+" zeri</b>"+(NOMI[e3]?", cioè un "+NOMI[e3]:"")+".",
+      note:"Base 10: <b>esponente = numero di zeri</b>."};
+  }
+  if(mode==="scala"){
+    var start=rnd(1,4);
+    var ops=[["× 100",2],["× 1000",3],[": 10",-1],[": 100",-2]].filter(function(o){
+      var t=start+o[1];return t>=0&&t<=6});
+    var op=pick(ops),target=start+op[1];
+    return{tag:"★ La scala dei 10",text:"Parti da "+pw(10,start)+" e fai "+op[0]+". Dove arrivi?",
+      sub:"Tocca il gradino giusto sulla scala.",
+      cap:"Ogni gradino è un fattore 10.",
+      w:520,h:120,
+      draw:function(s){
+        var marks={};marks[start]="partenza";
+        Z.scale10(s,50,70,420,0,6,marks,true);
+      },
+      kind:"pickExp",answer:target,
+      hint:op[0]+" vuol dire "+(op[1]>0?"salire di "+op[1]:"scendere di "+(-op[1]))+" "+(Math.abs(op[1])===1?"gradino":"gradini")+".",
+      why:pw(10,start)+" "+op[0]+" = "+pw(10,target)+".",
+      note:"Moltiplicare o dividere per 10 sposta di <b>un gradino</b>."};
+  }
+  return{tag:"★ La scala dei 10",text:"In 3 millilitri d'acqua ci sono circa "+pw(10,23,"big")+" molecole. Quante ce ne sono in 3 litri?",
+    sub:"1 litro = 1000 millilitri. Scrivi l'esponente del risultato.",
+    cap:"3 litri sono 1000 volte 3 millilitri, e 1000 = "+pw(10,3)+".",
+    w:470,h:130,
+    draw:function(s){
+      Z.rect(s,30,50,130,44,"c",8);Z.txt(s,95,72,"3 ml","c");
+      Z.txt(s,180,72,"× 1000","g");
+      Z.rect(s,240,50,130,44,"l",8);Z.txt(s,305,72,"3 litri","l");
+      Z.txt(s,235,28,"10^23 molecole   →   10^23 × 10^3","s");
+      Z.txt(s,235,116,"gli esponenti si sommano","s");
+    },
+    kind:"exp10",answer:26,
+    hint:"1000 = "+pw(10,3)+", quindi "+pw(10,23)+" × "+pw(10,3)+".",
+    why:pw(10,23)+" × "+pw(10,3)+" = "+pw(10,26)+" molecole.",
+    note:"Nei problemi reali: traduci «mille volte» in <b>"+pw(10,3)+"</b> e somma gli esponenti."};
+}
+
+/* ============================================================
+   8. RADDOPPI  (E6)
+   ============================================================ */
+function m8(){
+  var mode=pick(["pezzi","potenza","valore","storia"]);
+  var n=rnd(3,5);
+  if(mode==="pezzi"){
+    return{tag:"Raddoppi",text:"Un bastoncino viene diviso a metà "+n+" volte di seguito. Quanti pezzi ci sono alla fine?",
+      sub:"Ogni divisione raddoppia il numero dei pezzi.",
+      cap:"1 → 2 → 4 → 8 …: ogni riga è il doppio della precedente.",
+      w:460,h:150,
+      draw:function(s){Z.splitTree(s,n,60,20,360,120)},
+      kind:"number",answer:val(2,n),
+      hint:"Raddoppia "+n+" volte partendo da 1: "+Array.apply(null,Array(n)).map(function(_,i){return val(2,i+1)}).join(", ")+".",
+      why:"Dopo "+n+" divisioni i pezzi sono "+pw(2,n)+" = <b>"+val(2,n)+"</b>.",
+      note:"Raddoppio ripetuto → potenza di <b>2</b>, non moltiplicazione per 2."};
+  }
+  if(mode==="potenza"){
+    var k=pick([8,10,12]);
+    return{tag:"Raddoppi",text:"Scrivi con una potenza il numero di pezzi dopo <b>"+k+"</b> divisioni.",
+      sub:"Non serve calcolare il valore: basta la potenza.",
+      cap:"Il numero di divisioni diventa l'esponente.",
+      w:460,h:150,
+      draw:function(s){Z.splitTree(s,4,60,20,360,110);Z.txt(s,240,142,"… e così via, "+k+" volte","s")},
+      kind:"expo",answerB:2,answerE:k,
+      hint:"Ogni divisione moltiplica per 2: dopo "+k+" divisioni è 2 moltiplicato "+k+" volte.",
+      why:"Dopo "+k+" divisioni i pezzi sono "+pw(2,k)+".",
+      note:"«Raddoppia ogni volta» → la base è <b>2</b> e l'esponente conta i passi."};
+  }
+  if(mode==="valore"){
+    return{tag:"Raddoppi",text:"Quanto vale "+pw(2,10,"big")+"?",
+      sub:"C'è una scorciatoia comoda da ricordare.",
+      cap:pw(2,10)+" = "+pw(2,5)+" × "+pw(2,5)+" = 32 × 32.",
+      w:440,h:120,
+      draw:function(s){
+        Z.rect(s,50,42,140,44,"c",8);Z.txt(s,120,64,"2^5 = 32","c");
+        Z.txt(s,215,64,"×","s");
+        Z.rect(s,240,42,140,44,"c",8);Z.txt(s,310,64,"2^5 = 32","c");
+        Z.txt(s,215,104,"32 × 32 = 1024","l");
+      },
+      kind:"number",answer:1024,
+      hint:pw(2,10)+" = "+pw(2,5)+" × "+pw(2,5)+" = 32 × 32.",
+      why:pw(2,10)+" = <b>1024</b>. Vale la pena impararlo a memoria: è il «mille» dell'informatica.",
+      note:pw(2,10)+" = <b>1024</b>."};
+  }
+  var giorni=rnd(4,6);
+  return{tag:"Raddoppi",text:"Una pianta acquatica raddoppia ogni giorno. Il primo giorno copre 1 m². Quanto copre dopo "+giorni+" giorni?",
+    sub:"Scrivi il numero di metri quadrati.",
+    cap:"Dopo "+giorni+" giorni: "+pw(2,giorni)+" m².",
+    w:460,h:140,
+    draw:function(s){
+      var vals=[];for(var i=0;i<=giorni;i++)vals.push(val(2,i));
+      var labs=vals.map(function(_,i){return String(i)});
+      Z.tower(s,vals,Math.max(20,230-(vals.length*34)/2),20,90,24,labs,vals.map(function(_,i){return i===giorni?"g":"c"}));
+      Z.txt(s,230,132,"giorni","s");
+    },
+    kind:"number",answer:val(2,giorni),
+    hint:"Raddoppia "+giorni+" volte partendo da 1.",
+    why:"Dopo "+giorni+" giorni copre "+pw(2,giorni)+" = <b>"+val(2,giorni)+" m²</b>.",
+    note:"La crescita per raddoppio è <b>esponenziale</b>: parte piano, poi esplode."};
+}
+
+window.PZM5=m5;window.PZM6=m6;window.PZM7=m7;window.PZM8=m8;
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.PZ,$=Z.$;
+var MODS=[
+  {id:"base",name:"Che cos'è una potenza",desc:"Fattori ripetuti: mai confonderla con × o +.",color:"var(--cyan)",n:6,make:window.PZM1,
+   icon:'<rect x="6" y="26" width="12" height="12" rx="2" class="bk c"/><rect x="20" y="26" width="12" height="12" rx="2" class="bk c"/><rect x="34" y="26" width="12" height="12" rx="2" class="bk c"/><text x="24" y="16" class="tx c" font-size="13">b<tspan font-size="9" dy="-4">n</tspan></text>'},
+  {id:"casi",name:"I casi speciali",desc:"1ⁿ, n¹, n⁰ e la sorpresa di 0⁰.",color:"var(--magenta)",n:6,make:window.PZM2,
+   icon:'<circle cx="24" cy="24" r="16" fill="none" stroke="#F472B6" stroke-width="2"/><text x="24" y="26" class="tx m" font-size="15">n<tspan font-size="11" dy="-5">0</tspan></text>'},
+  {id:"stessabase",name:"Stessa base",desc:"Esponenti che si sommano e si sottraggono.",color:"var(--lime)",n:6,make:window.PZM3,
+   icon:'<rect x="5" y="18" width="16" height="16" rx="3" class="bk l"/><rect x="27" y="18" width="16" height="16" rx="3" class="bk l"/><text x="13" y="27" class="tx l" font-size="12">2<tspan font-size="8" dy="-4">a</tspan></text><text x="35" y="27" class="tx l" font-size="12">2<tspan font-size="8" dy="-4">b</tspan></text>'},
+  {id:"stessoesp",name:"Stesso esponente",desc:"Basi che si moltiplicano, e la potenza di potenza.",color:"var(--violet)",n:6,make:window.PZM4,
+   icon:'<rect x="7" y="14" width="34" height="20" rx="4" fill="none" stroke="#A78BFA" stroke-width="2"/><text x="24" y="25" class="tx" fill="#A78BFA" font-size="13">(a<tspan font-size="9" dy="-4">n</tspan><tspan dy="4">)</tspan><tspan font-size="9" dy="-4">m</tspan></text>'},
+  {id:"trova",name:"L'esponente mancante",desc:"Quante volte hai moltiplicato la base?",color:"var(--cyan)",n:6,make:window.PZM5,
+   icon:'<rect x="8" y="30" width="9" height="10" rx="2" class="bk c"/><rect x="20" y="22" width="9" height="18" rx="2" class="bk c"/><rect x="32" y="10" width="9" height="30" rx="2" class="bk g"/><text x="36" y="7" class="tx g" font-size="10">n?</text>'},
+  {id:"ordine",name:"★ L'ordine giusto",desc:"Espressioni un pezzo alla volta: era la E5.b.",color:"var(--gold)",n:4,key:true,make:window.PZM6,
+   icon:'<text x="9" y="15" class="tx g" font-size="11">1</text><rect x="17" y="7" width="26" height="9" rx="2" class="bk g"/>'+
+        '<text x="9" y="29" class="tx g" font-size="11">2</text><rect x="17" y="21" width="19" height="9" rx="2" class="bk c"/>'+
+        '<text x="9" y="43" class="tx g" font-size="11">3</text><rect x="17" y="35" width="12" height="9" rx="2" class="bk m"/>'},
+  {id:"scala",name:"★ La scala dei 10",desc:"Decima parte, mille volte: era la E7.b.",color:"var(--gold)",n:6,key:true,make:window.PZM7,
+   icon:'<line x1="6" y1="30" x2="42" y2="30" class="ln g"/><line x1="12" y1="25" x2="12" y2="35" class="ln g"/><line x1="24" y1="25" x2="24" y2="35" class="ln g"/><line x1="36" y1="25" x2="36" y2="35" class="ln g"/><text x="24" y="14" class="tx g" font-size="12">10<tspan font-size="8" dy="-4">n</tspan></text>'},
+  {id:"raddoppi",name:"Raddoppi",desc:"Il bastoncino, la pianta, 2¹⁰ = 1024.",color:"var(--magenta)",n:6,make:window.PZM8,
+   icon:'<rect x="18" y="8" width="12" height="7" rx="2" class="bk m"/><rect x="8" y="21" width="12" height="7" rx="2" class="bk m"/><rect x="28" y="21" width="12" height="7" rx="2" class="bk m"/><rect x="4" y="34" width="9" height="7" rx="2" class="bk m"/><rect x="15" y="34" width="9" height="7" rx="2" class="bk m"/><rect x="26" y="34" width="9" height="7" rx="2" class="bk m"/><rect x="37" y="34" width="8" height="7" rx="2" class="bk m"/>'}
+];
+var ALL=[window.PZM1,window.PZM2,window.PZM3,window.PZM4,window.PZM5,window.PZM6,window.PZM7,window.PZM8];
+var PARTITA={id:"partita",name:"La partita",desc:"Otto domande da tutti gli allenamenti, come in verifica.",
+  color:"var(--gold)",n:8,big:true,make:function(){return Z.pick(ALL)()},
+  icon:'<circle cx="24" cy="24" r="16" fill="none" stroke="#FBBF24" stroke-width="2"/><path d="M24 8 L24 15 M24 33 L24 40 M8 24 L15 24 M33 24 L40 24" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="5" fill="#FBBF24"/>'};
+
+var S={m:null,i:0,task:null,tries:0,mv:0,typed:"",field:"e",lock:false,score:0,notes:[],expr:""};
+
+/* ---------------- home ---------------- */
+function starsHTML(k){var h="";for(var i=0;i<3;i++)h+='<i class="'+(i<k?"on":"")+'"></i>';return h}
+function paintHome(){
+  var g=$("#grid");g.innerHTML="";
+  MODS.concat([PARTITA]).forEach(function(m,i){
+    var b=document.createElement("button");
+    b.className="mod"+(m.big?" big":"")+(m.key?" key":"");
+    b.style.setProperty("--mc",m.color);
+    b.style.animationDelay=(i*40)+"ms";
+    b.innerHTML=(m.key?'<span class="tag">da rinforzare</span>':"")+
+      '<svg class="ic" viewBox="0 0 48 48" aria-hidden="true">'+m.icon+'</svg>'+
+      '<h3>'+m.name+'</h3><p>'+m.desc+'</p>'+
+      '<div class="ft"><span class="stars">'+starsHTML(Z.P.stars[m.id]||0)+'</span>'+
+      '<span class="go">'+m.n+' domande →</span></div>';
+    b.addEventListener("click",function(){start(m)});
+    g.appendChild(b);
+  });
+  Z.paintXP();
+}
+function show(id){["home","game","end"].forEach(function(s){$("#"+s).classList.toggle("hide",s!==id)});
+  window.scrollTo({top:0,behavior:"smooth"})}
+
+/* ---------------- sessione ---------------- */
+function start(m){
+  S={m:m,i:0,task:null,tries:0,mv:0,typed:"",field:"e",lock:false,score:0,notes:[],expr:""};
+  $("#modeName").textContent=m.name;
+  var d=$("#dots");d.innerHTML="";
+  for(var k=0;k<m.n;k++)d.appendChild(document.createElement("i"));
+  show("game");next();
+}
+function next(){
+  if(S.i>=S.m.n)return finish();
+  S.task=S.m.make();S.tries=0;S.mv=0;S.typed="";S.field="e";S.lock=false;
+  var t=S.task;
+  S.expr=t.expr||"";
+  var dots=$("#dots").children;
+  for(var k=0;k<dots.length;k++)dots[k].classList.toggle("now",k===S.i);
+  $("#qTag").textContent=t.tag;
+  $("#qText").innerHTML=t.text;
+  var sub=$("#qSub");
+  if(t.sub){sub.innerHTML=t.sub;sub.classList.remove("hide")}else sub.classList.add("hide");
+  $("#figCap").innerHTML=t.cap||"";
+  $("#fb").className="fb";$("#fb").innerHTML="";
+  $("#btnNext").classList.add("hide");
+  $("#btnHint").classList.remove("hide");$("#btnHint").disabled=false;
+  drawFig();renderInput();
+}
+function drawFig(){
+  var t=S.task,host=$("#fig");host.innerHTML="";
+  if(t.kind==="moves"){
+    var d=document.createElement("div");d.className="exprbox";d.innerHTML=S.expr;
+    host.appendChild(d);return;
+  }
+  if(!t.draw)return;
+  var s=Z.board(t.w||440,t.h||120);
+  try{t.draw(s)}catch(e){}
+  host.appendChild(s);
+  if(t.kind==="pickExp")bindPick();
+}
+function bindPick(){
+  $("#fig").querySelectorAll("[data-exp]").forEach(function(el){
+    el.addEventListener("click",function(){
+      if(S.lock)return;
+      judge(parseInt(el.getAttribute("data-exp"),10)===S.task.answer);
+    });
+  });
+}
+
+/* ---------------- input ---------------- */
+function keypad(){
+  var pad=document.createElement("div");pad.className="pad";
+  ["1","2","3","4","5","6","7","8","9","←","0","✓"].forEach(function(k){
+    var b=document.createElement("button");b.textContent=k;
+    if(k==="✓")b.className="ok";if(k==="←")b.className="del";
+    b.addEventListener("click",function(){typeKey(k)});
+    pad.appendChild(b);
+  });
+  return pad;
+}
+function renderInput(){
+  var t=S.task,box=$("#answer");box.innerHTML="";
+  var kind=t.kind,mv=null;
+  if(kind==="moves"){mv=t.moves[S.mv];kind=mv.kind;
+    var h=document.createElement("div");h.className="q";
+    h.innerHTML='<span class="tag">mossa '+(S.mv+1)+' di '+t.moves.length+'</span><h3 style="font-size:17px">'+mv.q+'</h3>';
+    box.appendChild(h);
+  }
+  if(kind==="choice"){
+    var list=(mv||t).choices;
+    var g=document.createElement("div");g.className="opts";
+    list.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";
+      b.innerHTML='<span class="k">'+"ABCD"[i]+'</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(S.lock||b.disabled)return;
+        b.classList.add(c.ok?"good":"bad");
+        if(!c.ok)b.disabled=true;
+        judge(c.ok);
+      });
+      g.appendChild(b);
+    });
+    box.appendChild(g);
+  }else if(kind==="expo"){
+    var slot=document.createElement("div");slot.className="slot";
+    slot.innerHTML='<div class="cell" data-f="b"><small>base</small><b id="cb">–</b></div>'+
+                   '<div class="cell on" data-f="e"><small>esponente</small><b id="ce">–</b></div>';
+    box.appendChild(slot);box.appendChild(keypad());
+    S.field="b";S.typed="";
+    slot.querySelectorAll(".cell").forEach(function(c){
+      c.addEventListener("click",function(){
+        if(S.lock)return;
+        S.field=c.getAttribute("data-f");S.typed="";
+        slot.querySelectorAll(".cell").forEach(function(x){x.classList.toggle("on",x===c)});
+      });
+    });
+    slot.querySelector('[data-f="b"]').classList.add("on");
+    slot.querySelector('[data-f="e"]').classList.remove("on");
+  }else{
+    var d=document.createElement("div");d.className="disp";
+    d.innerHTML=(kind==="exp10")?'<span>10</span><sup style="font-size:.6em" class="v" id="dv">?</sup>'
+                                 :'<span class="v" id="dv">–</span>';
+    box.appendChild(d);box.appendChild(keypad());
+  }
+}
+function typeKey(k){
+  if(S.lock)return;
+  var t=S.task,kind=(t.kind==="moves")?t.moves[S.mv].kind:t.kind;
+  if(k==="←"){S.typed=S.typed.slice(0,-1);paint();return}
+  if(k==="✓"){
+    if(kind==="expo"){
+      var cb=$("#cb").textContent,ce=$("#ce").textContent;
+      if(cb==="–"||ce==="–")return;
+      judge(parseInt(cb,10)===t.answerB&&parseInt(ce,10)===t.answerE);
+      return;
+    }
+    if(!S.typed)return;
+    var v=parseInt(S.typed,10);
+    var target=(t.kind==="moves")?t.moves[S.mv].answer:t.answer;
+    S.typed="";paint();
+    judge(v===target);
+    return;
+  }
+  if(S.typed.length<4)S.typed+=k;
+  paint();
+}
+function paint(){
+  var t=S.task,kind=(t.kind==="moves")?t.moves[S.mv].kind:t.kind;
+  if(kind==="expo"){
+    var el=$(S.field==="b"?"#cb":"#ce");if(el)el.textContent=S.typed||"–";
+  }else{var d=$("#dv");if(d)d.textContent=S.typed||(kind==="exp10"?"?":"–")}
+}
+
+/* ---------------- valutazione ---------------- */
+function fb(cls,title,body,extra){
+  var f=$("#fb");f.className="fb on "+cls;
+  f.innerHTML="<b>"+title+"</b>"+body+(extra?'<div class="pwline">'+extra+"</div>":"");
+}
+function shake(){var st=document.querySelector(".stage");st.classList.remove("shake");void st.offsetWidth;st.classList.add("shake")}
+function dotSet(cls){var d=$("#dots").children[S.i];if(!d)return;d.classList.remove("now");d.classList.add(cls)}
+
+function judge(ok){
+  var t=S.task;S.tries++;
+  if(t.kind==="moves"){
+    var mv=t.moves[S.mv];
+    if(ok){
+      if(mv.to){S.expr=mv.to;drawFig()}
+      if(S.mv<t.moves.length-1){
+        S.mv++;S.tries=0;
+        fb("good","Mossa giusta",mv.why);
+        renderInput();return;
+      }
+      close(true,mv.why);return;
+    }
+    if(S.tries<2){fb("soft","Non ancora",mv.hint||t.hint);shake();return}
+    if(mv.kind==="choice"){document.querySelectorAll(".opt").forEach(function(b,i){
+      if(mv.choices[i].ok)b.classList.add("good");b.disabled=true})}
+    fb("soft","Guardiamola insieme",(mv.answer!==undefined?"La risposta è <b>"+mv.answer+"</b>. ":"")+mv.why);
+    if(mv.to){S.expr=mv.to;drawFig()}
+    if(S.mv<t.moves.length-1){
+      S.mv++;S.tries=0;if(t.note&&S.notes.indexOf(t.note)<0)S.notes.push(t.note);
+      setTimeout(function(){renderInput()},80);return;
+    }
+    close(false);return;
+  }
+  if(ok){close(true,t.why);return}
+  if(S.tries<2){fb("soft","Non ancora",t.hint);shake();return}
+  if(t.kind==="choice"){document.querySelectorAll(".opt").forEach(function(b,i){
+    if(t.choices[i].ok)b.classList.add("good");b.disabled=true})}
+  var sol="";
+  if(t.kind==="expo")sol="La risposta è "+Z.pw(t.answerB,t.answerE)+". ";
+  else if(t.kind==="exp10")sol="La risposta è "+Z.pw(10,t.answer)+". ";
+  else if(t.kind==="number")sol="La risposta è <b>"+t.answer+"</b>. ";
+  else if(t.kind==="pickExp")sol="Era "+Z.pw(10,t.answer)+". ";
+  fb("soft","Impariamo questa",sol+t.why);
+  close(false);
+}
+function close(good,why){
+  var t=S.task;S.lock=true;
+  if(good){
+    var pts=S.tries<=1?10:5;
+    Z.P.xp+=pts;Z.save();Z.paintXP();
+    S.score+=S.tries<=1?1:0.5;
+    dotSet(S.tries<=1?"ok":"ko");
+    fb("good",S.tries<=1?"Esatto!":"Giusto, al secondo colpo",(why||t.why||""),
+      '<b style="color:var(--gold)">+'+pts+" XP</b>");
+  }else{
+    dotSet("ko");
+    if(t.note&&S.notes.indexOf(t.note)<0)S.notes.push(t.note);
+  }
+  document.querySelectorAll(".opt").forEach(function(b){b.disabled=true});
+  var pd=document.querySelector(".pad");if(pd)pd.querySelectorAll("button").forEach(function(b){b.disabled=true});
+  $("#btnHint").classList.add("hide");
+  var n=$("#btnNext");n.classList.remove("hide");
+  n.textContent=(S.i===S.m.n-1)?"Vedi il risultato →":"Continua →";
+  S.i++;
+}
+
+/* ---------------- fine ---------------- */
+function finish(){
+  var frac=S.score/S.m.n,stars=frac>=.9?3:frac>=.7?2:frac>=.5?1:0;
+  if(stars>(Z.P.stars[S.m.id]||0))Z.P.stars[S.m.id]=stars;
+  if(stars===3)Z.P.xp+=20;
+  Z.save();Z.paintXP();
+  $("#endTitle").textContent=(S.score===S.m.n)?"Perfetto":stars===3?"Quasi perfetto":stars===2?"Ci siamo":stars===1?"Buon lavoro":"Riproviamo";
+  $("#endScore").textContent=Math.round(S.score*10)/10;
+  $("#endOf").textContent="su "+S.m.n+" · "+S.m.name;
+  var st=$("#endStars").children;
+  for(var i=0;i<3;i++)st[i].className=i<stars?"on":"";
+  $("#endMsg").textContent=
+    stars===3?"Serie chiusa alla grande: +20 XP di bonus. Puoi passare a un altro allenamento.":
+    stars===2?"Manca poco: quasi tutte al primo colpo. Rifai la serie, i numeri cambiano ogni volta.":
+    stars===1?"Il metodo c'è, serve ripetizione. Rifai la serie con calma, leggendo gli indizi.":
+    "Nessun problema: è così che si impara. Rifai la serie e leggi ogni spiegazione fino in fondo.";
+  var learn=$("#endLearn");
+  learn.innerHTML='<h4>Da tenere a mente</h4><ul>'+
+    (S.notes.length?S.notes.map(function(x){return"<li>"+x+"</li>"}).join("")
+      :"<li>Non hai lasciato niente indietro: cambia allenamento per non abituarti a un solo tipo di domanda.</li>")+"</ul>";
+  show("end");
+}
+
+/* ---------------- eventi ---------------- */
+$("#btnNext").addEventListener("click",next);
+$("#btnBack").addEventListener("click",function(){paintHome();show("home")});
+$("#btnHome").addEventListener("click",function(){paintHome();show("home")});
+$("#btnAgain").addEventListener("click",function(){start(S.m)});
+$("#btnHint").addEventListener("click",function(){
+  var t=S.task,h=(t.kind==="moves")?(t.moves[S.mv].hint||t.hint):t.hint;
+  fb("soft","Indizio",h);$("#btnHint").disabled=true;
+});
+$("#reset").addEventListener("click",function(){
+  Z.P.xp=0;Z.P.stars={};Z.save();paintHome();this.textContent="Fatto: si riparte da zero";
+});
+document.addEventListener("keydown",function(e){
+  if($("#game").classList.contains("hide"))return;
+  var t=S.task;if(!t)return;
+  var kind=(t.kind==="moves")?t.moves[S.mv].kind:t.kind;
+  if(kind==="choice"){if(e.key==="Enter"&&!$("#btnNext").classList.contains("hide"))next();return}
+  if(/^[0-9]$/.test(e.key))typeKey(e.key);
+  else if(e.key==="Backspace")typeKey("←");
+  else if(e.key==="Enter"){if(!$("#btnNext").classList.contains("hide"))next();else typeKey("✓")}
+});
+
+/* ---------------- collaudo ---------------- */
+function selftest(){
+  var out=[],n=0,bad=0;
+  MODS.concat([PARTITA]).forEach(function(m,mi){
+    for(var k=0;k<40;k++){
+      n++;
+      try{
+        var t=m.make();
+        if(!t.text||!t.why||!t.hint)throw new Error("testo mancante");
+        if(t.draw){var s=Z.board(t.w||440,t.h||120);t.draw(s)}
+        if(t.kind==="choice"){
+          var ok=t.choices.filter(function(c){return c.ok});
+          if(ok.length!==1)throw new Error("corrette="+ok.length);
+          var seen={};t.choices.forEach(function(c){if(seen[c.label])throw new Error("opzione doppia");seen[c.label]=1});
+        }else if(t.kind==="expo"){
+          if(!(t.answerB>0&&t.answerB%1===0))throw new Error("base "+t.answerB);
+          if(!(t.answerE>=0&&t.answerE%1===0))throw new Error("esp "+t.answerE);
+        }else if(t.kind==="moves"){
+          if(!t.expr)throw new Error("expr mancante");
+          t.moves.forEach(function(mv){
+            if(!mv.q||!mv.why)throw new Error("mossa incompleta");
+            if(mv.kind==="choice"){
+              var o2=mv.choices.filter(function(c){return c.ok});
+              if(o2.length!==1)throw new Error("mossa corrette="+o2.length);
+            }else if(!(mv.answer>=0&&mv.answer%1===0))throw new Error("mossa answer "+mv.answer);
+          });
+        }else if(t.kind==="pickExp"){
+          if(!(t.answer>=0&&t.answer<=6))throw new Error("pick "+t.answer);
+        }else{
+          if(!(t.answer>=0&&t.answer%1===0&&isFinite(t.answer)))throw new Error("answer "+t.answer);
+        }
+      }catch(err){bad++;out.push("["+m.id+"] "+err.message)}
+    }
+  });
+  var u=[];out.forEach(function(x){if(u.indexOf(x)<0)u.push(x)});
+  $("#ptest").classList.remove("hide");
+  $("#ptest").textContent=(bad===0?"TUTTO OK — ":"ERRORI ")+n+" test, "+bad+" falliti\n"+u.slice(0,15).join("\n");
+}
+
+/* ---------------- avvio ---------------- */
+paintHome();
+if(location.search.indexOf("test=1")>=0)selftest();
+var dm=/mod=(\d+)/.exec(location.search);
+if(dm)start(MODS.concat([PARTITA])[Math.max(0,Math.min(8,parseInt(dm[1],10)))]);
+})();
+</script>
+
