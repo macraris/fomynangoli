@@ -1,0 +1,2372 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Officina dei Numeri: otto banchi di lavoro interattivi sui numeri naturali e le quattro operazioni, con problemi, espressioni ed enigmi.">
+<meta name="theme-color" content="#1E1712">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%231E1712'/%3E%3Cpath d='M6 33h36' stroke='%23E8703F' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M13 28v10M24 28v10M35 28v10' stroke='%23F0B429' stroke-width='3' stroke-linecap='round'/%3E%3Ctext x='24' y='21' text-anchor='middle' font-family='Verdana,sans-serif' font-size='14' font-weight='700' fill='%233FB9A5'%3E123%3C/text%3E%3C/svg%3E">
+<title>Officina dei Numeri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Karla:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ink:#1E1712; --wood:#271F18; --panel:#2E251D; --panel2:#392E24;
+  --edge:#4C3B2D; --edge2:#634C39; --cream:#F7EFE3; --dim:#C2AD96; --dim2:#8C7A66;
+  --rame:#E8703F; --ottone:#F0B429; --verderame:#3FB9A5; --verde:#8CC96A; --indaco:#93A9EB; --rosso:#EF6D6D;
+  --f-num:"Bricolage Grotesque",system-ui,"Segoe UI",sans-serif;
+  --f-body:"Karla",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:15px; --r-sm:11px;
+}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(820px 460px at 12% -6%,rgba(232,112,63,.13),transparent 62%),
+    radial-gradient(680px 420px at 92% 4%,rgba(63,185,165,.09),transparent 60%),
+    var(--ink);
+  color:var(--cream);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2.5px solid var(--ottone);outline-offset:3px;border-radius:6px}
+.hatch{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(rgba(247,239,227,.055) 1px,transparent 1px);
+  background-size:22px 22px}
+.wrap{max-width:960px;margin:0 auto;padding:16px 18px 48px;position:relative;z-index:1}
+.nm{font-family:var(--f-num);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- barra alta ---------- */
+.top{display:flex;align-items:center;gap:14px;padding:4px 2px 16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand .mk{width:42px;height:42px;flex:0 0 auto}
+.brand h1{font-family:var(--f-num);font-weight:800;font-size:21px;letter-spacing:-.015em;margin:0;line-height:1.05}
+.brand p{margin:3px 0 0;font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim2)}
+.brand a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--edge)}
+.brand a:hover{color:var(--rame);border-color:var(--rame)}
+.spacer{flex:1}
+.xp{display:flex;align-items:center;gap:11px}
+.xp .lv{text-align:right}
+.xp .lv b{display:block;font-family:var(--f-num);font-size:13.5px;font-weight:700;line-height:1.15}
+.xp .lv span{font-size:11px;color:var(--dim2);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.xp .lv span i{font-style:normal}
+.xp .ring{width:46px;height:46px;flex:0 0 auto}
+
+/* ---------- home ---------- */
+.hero{border:1px solid var(--edge);border-radius:var(--r);padding:22px 24px;margin-bottom:14px;position:relative;overflow:hidden;
+  background:linear-gradient(146deg,#33281F 0%,#241C16 58%,#2E241B 100%)}
+.hero h2{font-family:var(--f-num);font-size:clamp(25px,4.8vw,37px);font-weight:800;line-height:1.07;margin:0;letter-spacing:-.022em;text-wrap:balance;max-width:19ch}
+.hero h2 em{font-style:normal;color:var(--rame)}
+.hero p{margin:11px 0 0;max-width:56ch;color:#DCCDB9;font-size:15px}
+.hero .belt{position:absolute;right:-4px;bottom:-6px;width:224px;height:128px;opacity:.5}
+@media (max-width:820px){.hero .belt{display:none}}
+
+.focus{display:flex;gap:11px;align-items:flex-start;border:1px solid #5A4318;border-radius:var(--r-sm);
+  background:linear-gradient(180deg,#332711,#241B0C);padding:12px 14px;margin-bottom:16px}
+.focus .ic{flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:rgba(240,180,41,.16);display:grid;place-items:center;
+  color:var(--ottone);font-family:var(--f-num);font-weight:800;font-size:14px}
+.focus p{margin:0;font-size:13.5px;color:#E0CFAE;line-height:1.45}
+.focus b{color:var(--ottone)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:12px}
+.mod{--mc:var(--rame);position:relative;display:grid;grid-template-columns:54px minmax(0,1fr);gap:13px;align-items:stretch;
+  text-align:left;border:1px solid var(--edge);border-radius:var(--r);overflow:hidden;min-height:154px;
+  background:linear-gradient(180deg,var(--panel),#251D16);padding:14px 15px 12px 15px;
+  transition:transform .18s cubic-bezier(.2,.8,.3,1),border-color .18s,box-shadow .18s;
+  animation:pop .45s cubic-bezier(.2,.8,.3,1) both}
+.mod::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--mc)}
+.mod:hover,.mod:focus-visible{transform:translateY(-3px);border-color:var(--mc);box-shadow:0 16px 30px -22px var(--mc)}
+.mod .rail{display:flex;flex-direction:column;align-items:center;gap:9px;padding-top:1px}
+.mod .idx{font-family:var(--f-num);font-size:20px;font-weight:800;color:var(--mc);line-height:1;letter-spacing:-.02em}
+.mod .ic{width:42px;height:42px;display:block}
+.mod .bd{display:flex;flex-direction:column;gap:6px;min-width:0}
+.mod h3{margin:0;font-family:var(--f-num);font-size:18px;font-weight:800;line-height:1.15;letter-spacing:-.012em}
+.mod p{margin:0;font-size:12.7px;color:var(--dim);line-height:1.38}
+.mod .ft{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:9px}
+.mod .go{font-family:var(--f-num);font-size:11.5px;font-weight:700;letter-spacing:.03em;color:var(--mc)}
+.mod.key{border-color:#5A4318;background:linear-gradient(180deg,#332818,#241C14)}
+.mod .tag{align-self:flex-start;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;color:var(--ottone);background:rgba(240,180,41,.14);border-radius:99px;padding:3px 9px;margin-bottom:1px}
+.mod.big{grid-column:span 2}
+@media (max-width:660px){.mod.big{grid-column:span 1}}
+.stars{display:flex;gap:3px}
+.stars i{width:12px;height:12px;display:block;background:#4A3A2C;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.stars i.on{background:var(--ottone)}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.foot-note{margin:16px 2px 0;font-size:12.5px;color:var(--dim2);text-align:right}
+.foot-note button{color:var(--dim);text-decoration:underline;text-underline-offset:3px;font-size:12.5px}
+.foot-note button:hover{color:var(--rame)}
+
+/* ---------- sessione ---------- */
+.hide{display:none!important}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.back{border:1px solid var(--edge);border-radius:99px;padding:7px 15px;font-size:12.5px;color:var(--dim)}
+.back:hover{border-color:var(--cream);color:var(--cream)}
+.dots{display:flex;gap:5px;flex:1;justify-content:center;flex-wrap:wrap}
+.dots i{width:26px;height:5px;border-radius:99px;background:#4A3A2C;display:block;transition:.3s}
+.dots i.ok{background:var(--verde)}.dots i.ko{background:var(--rosso)}
+.dots i.now{background:var(--cream);transform:scaleY(1.7)}
+.modename{font-family:var(--f-num);font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--dim2)}
+
+.play{display:flex;flex-direction:column;gap:13px;max-width:820px;margin:0 auto}
+.bench{border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,#2B2219,#211A14);
+  padding:16px 15px 12px;position:relative;overflow:hidden}
+.bench::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,var(--rame),var(--ottone) 46%,var(--verderame))}
+.bench svg{width:100%;height:auto;display:block;max-width:540px;margin:0 auto}
+.bench .cap{margin:10px 4px 0;font-size:12.3px;color:var(--dim2);text-align:center;min-height:15px;line-height:1.4}
+.exprbox{font-family:var(--f-num);font-size:clamp(17px,3.6vw,25px);font-weight:700;text-align:center;
+  line-height:1.8;letter-spacing:.005em;padding:8px 2px;overflow-wrap:break-word}
+
+.qcard{border:1px solid var(--edge);border-radius:var(--r);background:var(--panel);padding:15px 16px}
+.qcard .tag{font-family:var(--f-num);font-size:10.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--rame);display:block;margin-bottom:6px}
+.qcard h3{margin:0;font-family:var(--f-num);font-size:19px;line-height:1.28;font-weight:700;text-wrap:balance}
+.qcard .sub{margin:8px 0 0;font-size:13.6px;color:#D6C6B1;line-height:1.45}
+.mvcard{border:1px dashed var(--edge2);border-radius:var(--r-sm);background:#2A211A;padding:11px 13px;margin-bottom:9px}
+.mvcard .tag{color:var(--verderame);margin-bottom:5px}
+.mvcard h3{font-size:16.5px}
+
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:11px;border:1.5px solid var(--edge);border-radius:var(--r-sm);
+  background:#2A211A;padding:11px 13px;text-align:left;font-size:15.5px;font-weight:500;transition:.14s;line-height:1.35}
+.opt:hover:not(:disabled){border-color:var(--rame);transform:translateX(2px)}
+.opt .k{width:25px;height:25px;flex:0 0 auto;border-radius:7px;background:#3D2F24;color:var(--dim);
+  display:grid;place-items:center;font-size:12px;font-weight:800;font-family:var(--f-num)}
+.opt.good{border-color:var(--verde);background:rgba(140,201,106,.11)}.opt.good .k{background:var(--verde);color:#16260C}
+.opt.bad{border-color:var(--rosso);background:rgba(239,109,109,.10)}.opt.bad .k{background:var(--rosso);color:#2C0A0A}
+.opt:disabled{cursor:default}
+
+.disp{border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#2A211A;padding:9px 16px;min-height:62px;
+  display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--f-num);font-size:30px;font-weight:800;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.disp .v{color:var(--ottone)}
+.disp .un{font-size:17px;color:var(--dim2);font-weight:700}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}
+.pad button{border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#2A211A;padding:12px 0;font-size:19px;
+  font-weight:700;font-family:var(--f-num);transition:.12s}
+.pad button:hover:not(:disabled){border-color:var(--rame);background:#372A20}
+.pad button:active{transform:scale(.97)}
+.pad .ok{background:var(--verde);border-color:var(--verde);color:#16260C}
+.pad .ok:hover:not(:disabled){background:#a2da82;border-color:#a2da82}
+.pad .del{color:var(--rame)}
+.pad .wide{grid-column:1 / -1}
+.pad button:disabled{opacity:.4;cursor:default}
+
+.fb{border-radius:var(--r-sm);padding:12px 14px;font-size:14.2px;display:none;animation:rise .28s cubic-bezier(.2,.8,.3,1);line-height:1.5}
+.fb.on{display:block}
+.fb.good{background:rgba(140,201,106,.10);border:1.5px solid var(--verde)}
+.fb.soft{background:rgba(240,180,41,.09);border:1.5px solid var(--ottone)}
+.fb b.h{display:block;font-family:var(--f-num);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;font-weight:800}
+.fb.good b.h{color:var(--verde)}.fb.soft b.h{color:var(--ottone)}
+.fb .xpline{font-family:var(--f-num);font-size:13.5px;font-weight:800;margin-top:7px;color:var(--ottone)}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border-radius:99px;padding:11px 20px;font-weight:700;font-size:14.5px;transition:.15s;border:1.5px solid transparent;font-family:var(--f-num)}
+.btn.pri{background:var(--rame);color:#2A0D04}
+.btn.pri:hover{background:#f18a5f}
+.btn.gh{border-color:var(--edge);color:var(--dim)}
+.btn.gh:hover{border-color:var(--cream);color:var(--cream)}
+.btn:disabled{opacity:.42;cursor:default}
+.shake{animation:sh .4s}
+@keyframes sh{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-4px)}}
+
+/* ---------- fine ---------- */
+.res{border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,var(--panel),#241C15);
+  padding:26px 24px;text-align:center;max-width:580px;margin:6px auto}
+.res h2{font-family:var(--f-num);font-size:clamp(26px,5vw,38px);margin:0;font-weight:800;letter-spacing:-.02em}
+.res .score{font-family:var(--f-num);font-size:60px;font-weight:800;color:var(--rame);line-height:1;margin:10px 0 2px;font-variant-numeric:tabular-nums}
+.res .of{color:var(--dim2);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
+.res .bigstars{display:flex;gap:10px;justify-content:center;margin:16px 0 4px}
+.res .bigstars i{width:36px;height:36px;display:block;background:#4A3A2C;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.res .bigstars i.on{background:var(--ottone);animation:st .5s cubic-bezier(.2,1.6,.4,1) both}
+.res .bigstars i.on:nth-child(2){animation-delay:.12s}.res .bigstars i.on:nth-child(3){animation-delay:.24s}
+@keyframes st{from{transform:scale(.2) rotate(-35deg);opacity:0}to{transform:none;opacity:1}}
+.res p{color:#DCCDB9;font-size:15px;max-width:46ch;margin:12px auto 0}
+.res .learn{margin-top:18px;text-align:left;border-top:1px solid var(--edge);padding-top:14px}
+.res .learn h4{font-family:var(--f-num);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin:0 0 8px;font-weight:800}
+.res .learn ul{margin:0;padding-left:18px}
+.res .learn li{font-size:13.6px;color:#DCCDB9;margin:7px 0;line-height:1.45}
+
+/* ---------- SVG ---------- */
+.bx{fill:#3A2D23;stroke:var(--edge2);stroke-width:1.6}
+.bx.r{fill:rgba(232,112,63,.22);stroke:var(--rame)}
+.bx.o{fill:rgba(240,180,41,.22);stroke:var(--ottone)}
+.bx.v{fill:rgba(63,185,165,.20);stroke:var(--verderame)}
+.bx.g{fill:rgba(140,201,106,.20);stroke:var(--verde)}
+.bx.i{fill:rgba(147,169,235,.20);stroke:var(--indaco)}
+.bx.no{fill:rgba(239,109,109,.16);stroke:var(--rosso)}
+.bx.off{fill:#2A211A;stroke:var(--edge)}
+.ln{stroke:#6B5340;stroke-width:1.8;fill:none;stroke-linecap:round}
+.ln.r{stroke:var(--rame)}.ln.o{stroke:var(--ottone)}.ln.v{stroke:var(--verderame)}.ln.g{stroke:var(--verde)}.ln.i{stroke:var(--indaco)}
+.ln.th{stroke-width:2.6}
+.ln.dash{stroke-dasharray:4 4}
+.tx{font-family:var(--f-num);font-size:14px;font-weight:700;fill:var(--cream);text-anchor:middle;dominant-baseline:middle}
+.tx.s{font-size:11px;font-weight:500;fill:var(--dim2);font-family:var(--f-body)}
+.tx.b{font-size:17px;font-weight:800}
+.tx.r{fill:var(--rame)}.tx.o{fill:var(--ottone)}.tx.v{fill:var(--verderame)}.tx.g{fill:var(--verde)}.tx.i{fill:var(--indaco)}.tx.no{fill:var(--rosso)}
+.tx.l{text-anchor:start}.tx.e{text-anchor:end}
+.hit{cursor:pointer}
+.hit rect,.hit circle,.hit path{transition:.15s}
+.hit:hover rect,.hit:hover path{fill:rgba(240,180,41,.24);stroke:var(--ottone)}
+.hit:hover circle{fill:var(--ottone)}
+
+@media (max-width:620px){
+  .wrap{padding:12px 13px 34px}
+  .brand h1{font-size:17px}
+  .brand .mk{width:36px;height:36px}
+  .xp .ring{width:40px;height:40px}
+  .hero{padding:17px 16px}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .mod{min-height:0;padding:12px 13px;grid-template-columns:44px minmax(0,1fr);gap:11px}
+  .mod .ic{width:34px;height:34px}
+  .mod .idx{font-size:17px}
+  .mod h3{font-size:16.5px}
+  .modename{display:none}
+  .spacer{display:none}
+  .xp{margin-left:auto}
+  .top{gap:10px;padding-bottom:14px}
+  .qcard h3{font-size:17.5px}
+  .bench{padding:14px 11px 10px}
+  .opt{font-size:14.6px;padding:10px 11px}
+  .disp{font-size:26px}
+  .dots i{width:20px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+#ntest{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:12px;padding:12px;color:var(--cream)}
+</style>
+
+<div class="hatch" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="mk" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="15" cy="15" r="8.5" fill="none" class="ln r th"/>
+        <circle cx="15" cy="15" r="2.6" fill="#E8703F"/>
+        <path d="M15 3.5v3M15 23.5v3M3.5 15h3M23.5 15h3M7 7l2 2M21 21l2 2M23 7l-2 2M9 21l-2 2" class="ln r"/>
+        <path d="M5 37h38" class="ln o th"/>
+        <path d="M12 32v10M24 32v10M36 32v10" class="ln o"/>
+        <rect x="30" y="8" width="14" height="14" rx="3" class="bx v"/>
+        <text x="37" y="15.5" class="tx v" font-size="10">N</text>
+      </svg>
+      <div>
+        <h1>Officina dei Numeri</h1>
+        <p><a href="./">Torna alle palestre</a></p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="xp">
+      <div class="lv">
+        <b id="lvName">Apprendista</b>
+        <span><i id="xpNow">0</i> / <i id="xpNext">150</i> XP</span>
+      </div>
+      <svg class="ring" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="18.5" fill="none" stroke="#4A3A2C" stroke-width="5"/>
+        <circle id="ringFill" cx="23" cy="23" r="18.5" fill="none" stroke="#E8703F" stroke-width="5"
+                stroke-linecap="round" stroke-dasharray="116.2" stroke-dashoffset="116.2"
+                transform="rotate(-90 23 23)" style="transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.3,1)"/>
+        <text id="ringTxt" x="23" y="24" text-anchor="middle" dominant-baseline="middle"
+              font-family="Bricolage Grotesque,system-ui,sans-serif" font-size="14" font-weight="800" fill="#F7EFE3">1</text>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <main id="home">
+    <section class="hero">
+      <svg class="belt" viewBox="0 0 224 128" aria-hidden="true">
+        <path d="M10 92h204" class="ln o th"/>
+        <path d="M10 92l10-10M42 92l10-10M74 92l10-10M106 92l10-10M138 92l10-10M170 92l10-10M202 92l10-10" class="ln o"/>
+        <rect x="20" y="62" width="26" height="26" rx="4" class="bx r"/>
+        <rect x="62" y="52" width="26" height="36" rx="4" class="bx o"/>
+        <rect x="104" y="40" width="26" height="48" rx="4" class="bx v"/>
+        <rect x="146" y="26" width="26" height="62" rx="4" class="bx g"/>
+        <text x="33" y="76" class="tx r" font-size="13">1</text>
+        <text x="75" y="71" class="tx o" font-size="13">2</text>
+        <text x="117" y="65" class="tx v" font-size="13">3</text>
+        <text x="159" y="58" class="tx g" font-size="13">4</text>
+        <circle cx="196" cy="106" r="12" fill="none" class="ln r"/>
+        <circle cx="196" cy="106" r="3.4" fill="#E8703F"/>
+      </svg>
+      <h2>Otto banchi di lavoro per<br><em>i numeri naturali</em> e le quattro operazioni.</h2>
+      <p>Scegli tu da dove partire, Fomyn, e quante volte ripetere. Sbagliare non toglie niente:
+      arriva un indizio, riprovi, e ogni risposta ti spiega il perché. Si va avanti quando <b>tu</b> senti che è entrata.</p>
+    </section>
+
+    <div class="focus">
+      <span class="ic">!</span>
+      <p><b>Tre banchi valgono doppio</b>, sono quelli con la stellina: <b>Le regole d'oro</b> (le proprietà e i casi con 0 e 1,
+      compreso il famoso «diviso zero»), <b>L'ordine giusto</b> (le espressioni si smontano un pezzo alla volta)
+      e <b>Il banco dei problemi</b> (leggere il testo, scegliere l'operazione, controllare il resto).</p>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <p class="foot-note">I progressi restano su questo dispositivo. <button id="reset">Azzera i progressi</button></p>
+  </main>
+
+  <!-- ============ SESSIONE ============ -->
+  <main id="game" class="hide">
+    <div class="bar">
+      <button class="back" id="btnBack">Esci</button>
+      <div class="dots" id="dots"></div>
+      <div class="modename" id="modeName"></div>
+    </div>
+    <div class="play">
+      <div class="bench">
+        <div id="fig"></div>
+        <div class="cap" id="figCap"></div>
+      </div>
+      <div class="qcard">
+        <span class="tag" id="qTag">Domanda</span>
+        <h3 id="qText"></h3>
+        <p class="sub hide" id="qSub"></p>
+      </div>
+      <div id="answer"></div>
+      <div class="fb" id="fb"></div>
+      <div class="row">
+        <button class="btn gh" id="btnHint">Dammi un indizio</button>
+        <button class="btn pri hide" id="btnNext">Continua</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ RISULTATO ============ -->
+  <main id="end" class="hide">
+    <div class="res">
+      <h2 id="endTitle"></h2>
+      <div class="score" id="endScore"></div>
+      <div class="of" id="endOf"></div>
+      <div class="bigstars" id="endStars"><i></i><i></i><i></i></div>
+      <p id="endMsg"></p>
+      <div class="learn" id="endLearn"></div>
+      <div class="row" style="justify-content:center;margin-top:18px">
+        <button class="btn pri" id="btnAgain">Ancora una serie</button>
+        <button class="btn gh" id="btnHome">Torna ai banchi</button>
+      </div>
+    </div>
+  </main>
+</div>
+<pre id="ntest" class="hide"></pre>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg";
+function $(s){return document.querySelector(s)}
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function R(n){return Math.round(n*100)/100}
+function board(w,h){return E("svg",{viewBox:"0 0 "+w+" "+h,width:"100%"})}
+function rect(s,x,y,w,h,c,r){return E("rect",{x:R(x),y:R(y),width:R(w),height:R(h),rx:(r===undefined?4:r),"class":"bx "+(c||"")},s)}
+function txt(s,x,y,t,c){var e=E("text",{x:R(x),y:R(y),"class":"tx "+(c||"")},s);e.textContent=String(t);return e}
+function line(s,x1,y1,x2,y2,c){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"ln "+(c||"")},s)}
+function path(s,d,c){return E("path",{d:d,"class":"ln "+(c||"")},s)}
+function circ(s,cx,cy,r,f){var e=E("circle",{cx:R(cx),cy:R(cy),r:R(r)},s);e.setAttribute("fill",f||"#F0B429");return e}
+function g(s,a){return E("g",a||{},s)}
+
+/* ---------- numeri ---------- */
+var NB=" ";
+function fmt(n){
+  var neg=n<0;n=Math.abs(n);
+  var s=String(n),o="";
+  while(s.length>3){o=NB+s.slice(-3)+o;s=s.slice(0,-3)}
+  return (neg?"-":"")+s+o;
+}
+function eur(c){ /* c = centesimi */
+  var e=Math.floor(c/100),r=c%100;
+  return "€"+NB+fmt(e)+(r?(","+(r<10?"0":"")+r):"");
+}
+function dec(x){ /* numero con virgola all'italiana */
+  var s=String(Math.round(x*100)/100);
+  return s.replace(".",",");
+}
+
+/* ---------- utilità ---------- */
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function uniq(a){var o=[],s={};a.forEach(function(v){var k=String(v);if(!s[k]){s[k]=1;o.push(v)}});return o}
+/* opzioni numeriche: la prima è la corretta */
+function opts(correct,wrongs,fmtf){
+  var all=uniq([correct].concat(wrongs)).slice(0,4);
+  return shuffle(all.map(function(v){return{label:fmtf?fmtf(v):String(v),ok:String(v)===String(correct)}}));
+}
+/* opzioni testuali: {label,ok} già pronti, deduplicate per label */
+function uch(list){
+  var seen={},out=[];
+  list.forEach(function(o){if(!seen[o.label]&&out.length<4){seen[o.label]=1;out.push(o)}});
+  return shuffle(out);
+}
+/* sacchetto: pesca senza rimpiazzo, si ricarica quando è vuoto */
+function bag(list){
+  var b=[];
+  return function(){
+    if(!b.length)b=shuffle(list.slice());
+    var f=b.pop();
+    return (typeof f==="function")?f():f;
+  };
+}
+function vf(isTrue,whyT){
+  return uch([{label:"Vero",ok:isTrue===true},{label:"Falso",ok:isTrue===false}]);
+}
+
+/* ---------- retta orientata ---------- */
+function rail(s,x,y,w,c){
+  path(s,"M"+R(x)+" "+R(y)+"H"+R(x+w),c||"");
+  path(s,"M"+R(x+w-8)+" "+R(y-5)+"L"+R(x+w)+" "+R(y)+"L"+R(x+w-8)+" "+R(y+5),c||"");
+}
+function tick(s,cx,y,h,c){line(s,cx,y-h,cx,y+h,c||"")}
+/* punti su una retta: pts = [{v,label,cls,hidden}] con posizione già calcolata px */
+function marks(s,y,pts){
+  pts.forEach(function(p){
+    tick(s,p.x,y,p.h===undefined?6:p.h,p.cls||"");
+    if(p.dot)circ(s,p.x,y,3.2,p.dotc||"#F0B429");
+    if(p.label!==undefined&&p.label!==null)txt(s,p.x,y+(p.below===false?-16:18),p.label,p.tcls||"");
+  });
+}
+/* bandierina */
+function flag(s,x,y,label,cls,tcls){
+  var w=26,h=22;
+  path(s,"M"+R(x)+" "+R(y)+"V"+R(y+34),cls||"");
+  var p=E("path",{d:"M"+R(x)+" "+R(y+6)+"h"+w+"l-6 "+(h/2)+"l6 "+(h/2)+"h"+(-w)+"z","class":"bx "+(cls||"")},s);
+  if(label!==null&&label!==undefined)txt(s,x+11,y+6+h/2,label,tcls||"");
+  return p;
+}
+
+/* ---------- calcolo in colonna ---------- */
+/* rows: [{d:"1234",op:"+"},{d:"0567"},{d:"1801",res:true}]  hidden: [[riga,col],...] */
+function column(s,x,y,rows,hidden,target){
+  var cw=30,ch=32,n=rows[0].d.length,W=cw*n;
+  rows.forEach(function(r,i){
+    var yy=y+i*ch;
+    for(var k=0;k<n;k++){
+      var isH=hidden.some(function(h){return h[0]===i&&h[1]===k});
+      var cx=x+k*cw+cw/2;
+      if(isH){
+        var isT=(target&&target[0]===i&&target[1]===k);
+        rect(s,cx-12,yy-13,24,26,isT?"o":"off",4);
+        txt(s,cx,yy,isT?"?":"",isT?"o":"");
+      }else{
+        txt(s,cx,yy,r.d.charAt(k),r.res?"g":"");
+      }
+    }
+    if(r.op)txt(s,x-16,yy,r.op,"r");
+    if(r.res)line(s,x-4,yy-16,x+W+4,yy-16,"o");
+  });
+  return {w:W,h:rows.length*ch};
+}
+
+/* ---------- quadrato magico ---------- */
+function msquare(s,x,y,vals,hid,target){
+  var c=48;
+  for(var i=0;i<3;i++)for(var j=0;j<3;j++){
+    var isH=hid.some(function(h){return h[0]===i&&h[1]===j});
+    var isT=(target[0]===i&&target[1]===j);
+    rect(s,x+j*c,y+i*c,c,c,isH?(isT?"o":"off"):"",3);
+    txt(s,x+j*c+c/2,y+i*c+c/2,isH?(isT?"?":""):fmt(vals[i][j]),isT?"o":"");
+  }
+  return {w:3*c,h:3*c};
+}
+
+/* ---------- tabella prezzi ---------- */
+function pricetable(s,x,y,rows,head){
+  var cw=[132,86,86],rh=30,W=cw[0]+cw[1]+cw[2];
+  rect(s,x,y,W,rh,"r",4);
+  txt(s,x+cw[0]/2,y+rh/2,head[0],"");
+  txt(s,x+cw[0]+cw[1]/2,y+rh/2,head[1],"");
+  txt(s,x+cw[0]+cw[1]+cw[2]/2,y+rh/2,head[2],"");
+  rows.forEach(function(r,i){
+    var yy=y+rh+i*rh;
+    rect(s,x,yy,W,rh,r.hl?"o":"off",4);
+    txt(s,x+cw[0]/2,yy+rh/2,r[0],r.hl?"o":"");
+    txt(s,x+cw[0]+cw[1]/2,yy+rh/2,r[1],r.hl?"o":"");
+    txt(s,x+cw[0]+cw[1]+cw[2]/2,yy+rh/2,r[2],r.hl?"o":"");
+  });
+  return {w:W,h:rh*(rows.length+1)};
+}
+
+/* ---------- tabella del valore posizionale ---------- */
+var POS=[["u","unità"],["da","decine"],["h","centinaia"],["uk","unità di migliaia"],["dak","decine di migliaia"],
+         ["hk","centinaia di migliaia"],["uM","unità di milioni"],["daM","decine di milioni"],["hM","centinaia di milioni"]];
+function posTable(s,x,y,digits,hlIndex,mode){
+  var c=32,n=digits.length,W=n*c;
+  for(var k=0;k<n;k++){
+    var posIdx=n-1-k,hl=(posIdx===hlIndex);
+    rect(s,x+k*c,y,c,38,hl?"o":"off",4);
+    txt(s,x+k*c+c/2,y+19,digits.charAt(k),hl?"o":"");
+    if(mode==="names")txt(s,x+k*c+c/2,y+50,POS[posIdx][0],hl?"o":"s");
+    else if(mode!=="none")txt(s,x+k*c+c/2,y+50,String(posIdx+1),hl?"o":"s");
+  }
+  return {w:W,h:60};
+}
+
+/* ---------- progresso ---------- */
+var KEY="naturali-lab-v1",P={xp:0,stars:{}};
+try{var raw=localStorage.getItem(KEY);if(raw){var q=JSON.parse(raw);if(q&&typeof q==="object"){P.xp=q.xp||0;P.stars=q.stars||{}}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+var LV=[[0,"Apprendista"],[150,"Aiutante"],[350,"Meccanico"],[650,"Capo banco"],[1000,"Maestro d'officina"]];
+function levelInfo(){
+  var i=0;for(var k=0;k<LV.length;k++)if(P.xp>=LV[k][0])i=k;
+  var base=LV[i][0],next=(LV[i+1]||[base+600])[0];
+  return{i:i,name:LV[i][1],next:next,frac:Math.min(1,(P.xp-base)/(next-base))};
+}
+function paintXP(){
+  var L=levelInfo();
+  $("#lvName").textContent=L.name;$("#xpNow").textContent=P.xp;$("#xpNext").textContent=L.next;
+  $("#ringTxt").textContent=String(L.i+1);
+  $("#ringFill").setAttribute("stroke-dashoffset",String(116.2*(1-L.frac)));
+}
+
+window.NL={$:$,E:E,R:R,board:board,rect:rect,txt:txt,line:line,path:path,circ:circ,g:g,
+  fmt:fmt,eur:eur,dec:dec,NB:NB,
+  rnd:rnd,pick:pick,shuffle:shuffle,uniq:uniq,opts:opts,uch:uch,bag:bag,vf:vf,
+  rail:rail,tick:tick,marks:marks,flag:flag,column:column,msquare:msquare,pricetable:pricetable,posTable:posTable,POS:POS,
+  P:P,save:save,levelInfo:levelInfo,paintXP:paintXP};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.NL;
+var rnd=Z.rnd,pick=Z.pick,shuffle=Z.shuffle,uch=Z.uch,opts=Z.opts,fmt=Z.fmt,bag=Z.bag;
+
+/* ============================================================
+   1. LA SQUADRA DI N — l'insieme, precedente e successivo, ordine
+   ============================================================ */
+var NONNAT=[
+  {l:"3/2",p:"3/2 = 1,5: non è intero, quindi non è naturale."},
+  {l:"0,5",p:"0,5 è mezzo: sta fra 0 e 1, dove di naturali non ce ne sono."},
+  {l:"4,6 periodico",p:"4,6 periodico ha infinite cifre dopo la virgola: non è naturale."},
+  {l:"7/4",p:"7/4 = 1,75: non è intero."},
+  {l:"2,75",p:"2,75 ha la virgola: non è naturale."},
+  {l:"1,5",p:"1,5 sta fra 1 e 2: non è naturale."},
+  {l:"9/2",p:"9/2 = 4,5: non è intero."}
+];
+var NAT=["0","12","57","712","100"+Z.NB+"781","2"+Z.NB+"026","1"+Z.NB+"000"+Z.NB+"000"];
+
+function crates(t,list,hl){
+  return function(s){
+    Z.txt(s,32,18,"N",'v');
+    Z.txt(s,32,36,"entra?","s");
+    list.forEach(function(o,i){
+      var x=78+(i%2)*196,y=8+Math.floor(i/2)*56;
+      Z.rect(s,x,y,182,44,(hl&&hl(o))||"off",6);
+      Z.txt(s,x+91,y+22,o.l,"");
+    });
+    Z.path(s,"M64 40h6M64 96h6","o");
+  };
+}
+function m1_natura(){
+  var mode=pick(["out","in","out"]);
+  var list,ok;
+  if(mode==="out"){
+    ok=pick(NONNAT);
+    list=shuffle([{l:ok.l,ok:true,p:ok.p}].concat(shuffle(NAT.slice()).slice(0,3).map(function(v){return{l:v,ok:false}})));
+    return{tag:"L'insieme N",text:"Quale di questi <b>non</b> è un numero naturale?",
+      sub:"I naturali sono 0, 1, 2, 3, 4… : interi e senza virgola.",
+      cap:"Al cancello di N passano solo gli interi da 0 in su.",
+      w:460,h:126,draw:crates(null,list),
+      kind:"choice",choices:list.map(function(o){return{label:o.l,ok:!!o.ok}}),
+      hint:"Cerca la virgola o la frazione che non torna intera.",
+      why:ok.p+" Gli altri tre sono naturali a tutti gli effetti.",
+      note:"Sono naturali <b>solo</b> gli interi da 0 in su: niente virgole, niente frazioni che non danno un intero."};
+  }
+  var okv=pick(NAT);
+  var wrongs=shuffle(NONNAT.slice()).slice(0,3);
+  list=shuffle([{l:okv,ok:true}].concat(wrongs.map(function(o){return{l:o.l,ok:false}})));
+  return{tag:"L'insieme N",text:"Quale di questi <b>è</b> un numero naturale?",
+    sub:"I naturali sono 0, 1, 2, 3, 4… : interi e senza virgola.",
+    cap:"Al cancello di N passano solo gli interi da 0 in su.",
+    w:460,h:126,draw:crates(null,list),
+    kind:"choice",choices:list.map(function(o){return{label:o.l,ok:!!o.ok}}),
+    hint:"Uno solo è intero: gli altri hanno la virgola o sono frazioni.",
+    why:"<b>"+okv+"</b> è intero e non negativo, quindi sta in N. "+wrongs[0].p,
+    note:"Sono naturali <b>solo</b> gli interi da 0 in su: niente virgole, niente frazioni che non danno un intero."};
+}
+function m1_quanti(){
+  return{tag:"L'insieme N",text:"Quanti sono i numeri naturali?",
+    sub:"Prova a pensare all'ultimo: c'è sempre quello dopo.",
+    cap:"La freccia non finisce mai: dopo ogni numero ce n'è un altro.",
+    w:460,h:96,draw:function(s){
+      Z.rail(s,40,50,380,"o");
+      [0,1,2,3,4,5].forEach(function(v,i){Z.tick(s,60+i*52,50,7,"o");Z.txt(s,60+i*52,70,v,"")});
+      Z.txt(s,392,70,"...","o");
+      Z.txt(s,230,20,"N = { 0, 1, 2, 3, 4, 5, ... }","v");
+    },
+    kind:"choice",choices:uch([{label:"Infiniti",ok:true},{label:"Dieci",ok:false},{label:"Tanti, ma si contano",ok:false},{label:"Nessuno: sono solo un elenco",ok:false}]),
+    hint:"Se ne trovassi l'ultimo, potresti sempre aggiungere 1: quindi?",
+    why:"I naturali sono <b>infiniti</b>: qualunque numero prendi, il suo successivo esiste. Tutti insieme formano l'insieme <b>N</b>.",
+    note:"I numeri naturali sono <b>infiniti</b> e formano l'insieme <b>N</b>."};
+}
+function m1_primo(){
+  return{tag:"L'insieme N",text:"Qual è il <b>primo</b> numero naturale?",
+    sub:"Il punto da cui parte la retta.",
+    cap:"La retta dei naturali comincia qui e va solo verso destra.",
+    w:460,h:96,draw:function(s){
+      Z.rail(s,60,50,340,"o");
+      [0,1,2,3,4,5].forEach(function(v,i){Z.tick(s,80+i*56,50,7,i===0?"r":"o");Z.txt(s,80+i*56,70,v,i===0?"r":"")});
+      Z.circ(s,80,50,4.2,"#E8703F");
+      Z.txt(s,80,24,"inizio","s");
+    },
+    kind:"number",answer:0,
+    hint:"Attenzione: non è 1. Prima dell'1 c'è ancora un naturale.",
+    why:"Il primo numero naturale è <b>0</b>: è il punto di partenza della retta.",
+    note:"Il primo naturale è <b>0</b>, non 1."};
+}
+function m1_succprec(){
+  var kind=pick(["succ","prec","prec0","succ"]);
+  if(kind==="prec0"){
+    return{tag:"Precedente e successivo",text:"Qual è il <b>precedente</b> di 0 in N?",
+      sub:"Ricorda dove comincia la retta dei naturali.",
+      cap:"A sinistra dello 0, in N, non c'è più niente.",
+      w:460,h:110,draw:function(s){
+        Z.rect(s,180,32,100,46,"r",8);Z.txt(s,230,55,"0","b r");
+        Z.rect(s,40,32,100,46,"no",8);Z.txt(s,90,55,"?","no");
+        Z.path(s,"M172 55h-24","no");Z.txt(s,160,34,"-1","s");
+        Z.rect(s,320,32,100,46,"off",8);Z.txt(s,370,55,"1","");
+        Z.path(s,"M292 55h20","g");Z.txt(s,304,34,"+1","s");
+      },
+      kind:"choice",choices:uch([{label:"Non esiste: 0 non ha precedente in N",ok:true},{label:"-1",ok:false},{label:"0",ok:false},{label:"1",ok:false}]),
+      hint:"−1 esiste, ma non è un numero naturale.",
+      why:"Ogni naturale ha un precedente <b>tranne lo 0</b>: prima di 0 in N non c'è nulla. (−1 esiste, ma non appartiene a N.)",
+      note:"Ogni naturale ha un precedente e un successivo, <b>tranne lo 0</b> che non ha precedente."};
+  }
+  var n=pick([rnd(2,9)*1000,rnd(2,9)*1000+rnd(1,9)*100,rnd(11,99)*100,rnd(1000,9999),rnd(10,99)*1000]);
+  if(kind==="succ"){
+    return{tag:"Precedente e successivo",text:"Qual è il <b>successivo</b> di "+fmt(n)+"?",
+      sub:"Il successivo si trova aggiungendo 1.",
+      cap:"successivo = numero + 1",
+      w:460,h:110,draw:function(s){
+        Z.rect(s,60,32,150,46,"o",8);Z.txt(s,135,55,fmt(n),"b o");
+        Z.rect(s,270,32,150,46,"off",8);Z.txt(s,345,55,"?","");
+        Z.path(s,"M216 55h48","g");Z.txt(s,240,36,"+1","g");
+        Z.txt(s,135,92,"numero","s");Z.txt(s,345,92,"successivo","s");
+      },
+      kind:"number",answer:n+1,
+      hint:"Somma 1 e sta' attento ai riporti: "+fmt(n)+" + 1.",
+      why:fmt(n)+" + 1 = <b>"+fmt(n+1)+"</b>.",
+      note:"Il <b>successivo</b> si ottiene con +1, il <b>precedente</b> con −1."};
+  }
+  return{tag:"Precedente e successivo",text:"Qual è il <b>precedente</b> di "+fmt(n)+"?",
+    sub:"Il precedente si trova togliendo 1.",
+    cap:"precedente = numero − 1",
+    w:460,h:110,draw:function(s){
+      Z.rect(s,270,32,150,46,"o",8);Z.txt(s,345,55,fmt(n),"b o");
+      Z.rect(s,60,32,150,46,"off",8);Z.txt(s,135,55,"?","");
+      Z.path(s,"M264 55h-48","r");Z.txt(s,240,36,"-1","r");
+      Z.txt(s,345,92,"numero","s");Z.txt(s,135,92,"precedente","s");
+    },
+    kind:"number",answer:n-1,
+    hint:"Togli 1 e sta' attento ai prestiti: "+fmt(n)+" − 1.",
+    why:fmt(n)+" − 1 = <b>"+fmt(n-1)+"</b>.",
+    note:"Il <b>successivo</b> si ottiene con +1, il <b>precedente</b> con −1."};
+}
+function m1_inmezzo(){
+  var a=rnd(5,60),b=a+1;
+  return{tag:"L'insieme N",text:"Fra "+a+" e "+b+" c'è un altro numero naturale.",
+    sub:"Vero o falso?",
+    cap:"Fra due naturali consecutivi non c'è spazio.",
+    w:460,h:100,draw:function(s){
+      Z.rail(s,60,54,340,"o");
+      Z.tick(s,140,54,8,"o");Z.txt(s,140,74,a,"");
+      Z.tick(s,300,54,8,"o");Z.txt(s,300,74,b,"");
+      Z.txt(s,220,32,"?","no");Z.path(s,"M220 44v6","no");
+    },
+    kind:"choice",choices:Z.vf(false),
+    hint:"Prova a nominarlo: "+a+",5 non è naturale.",
+    why:"<b>Falso.</b> "+a+" e "+b+" sono consecutivi: fra loro non c'è nessun naturale ("+a+",5 ha la virgola, quindi non conta).",
+    note:"Fra due naturali consecutivi non c'è nessun altro naturale."};
+}
+function m1_ordina(){
+  var base=rnd(2,9),c=[
+    base*100000+rnd(0,9)*10000+rnd(100,999),
+    base*10000+rnd(0,9)*1000+rnd(100,999),
+    base*100000+rnd(0,9)*10000+rnd(100,999),
+    base*1000+rnd(100,999)
+  ];
+  c=Z.uniq(c);
+  var guard=0;
+  while(c.length<4&&guard++<200){c.push(rnd(1000,999999));c=Z.uniq(c)}
+  c=c.slice(0,4);
+  var cres=c.slice().sort(function(a,b){return a-b});
+  var up=pick([true,false]);
+  var pos=pick([0,1,2,3]);
+  var ordName=["primo","secondo","terzo","quarto"][pos];
+  var want=up?cres[pos]:cres[3-pos];
+  return{tag:"Ordinare",text:"Metti questi numeri in ordine "+(up?"crescente":"decrescente")+": quale finisce al <b>"+ordName+"</b> posto?",
+    sub:up?"Crescente vuol dire dal più piccolo al più grande.":"Decrescente vuol dire dal più grande al più piccolo.",
+    cap:"Prima conta le cifre, poi confronta da sinistra.",
+    w:460,h:126,draw:function(s){
+      c.forEach(function(v,i){
+        var x=30+(i%2)*212,y=10+Math.floor(i/2)*56;
+        Z.rect(s,x,y,196,44,"off",6);
+        Z.txt(s,x+98,y+22,fmt(v),"");
+      });
+    },
+    kind:"choice",choices:shuffle(c.map(function(v){return{label:fmt(v),ok:v===want}})),
+    hint:"Il numero con più cifre è il più grande. A parità di cifre, guarda la prima da sinistra.",
+    why:"In ordine "+(up?"crescente":"decrescente")+": "+(up?cres:cres.slice().reverse()).map(fmt).join(up?" &lt; ":" &gt; ")+
+        ". Al "+ordName+" posto c'è <b>"+fmt(want)+"</b>.",
+    note:"Per confrontare due numeri conta prima le <b>cifre</b>; se sono tante uguali, confronta da sinistra."};
+}
+window.NLM1=bag([m1_natura,m1_natura,m1_quanti,m1_primo,m1_succprec,m1_succprec,m1_inmezzo,m1_ordina,m1_ordina]);
+
+/* ============================================================
+   2. IL BINARIO GRADUATO — retta orientata, INVALSI, romani
+   ============================================================ */
+var NOMI=["Lucia","Gabriel","Federica","Nadia","Karim","Sofia","Marco","Amina","Diego","Yasmin"];
+function m2_invalsi(){
+  var sets=[[0,1,2,4,5,11],[0,1,3,4,8,10],[0,2,3,6,7,12],[0,1,2,5,6,9]];
+  var v=pick(sets),max=v[v.length-1];
+  var nomi=shuffle(NOMI.slice()).slice(0,3);
+  var right=rnd(0,2);
+  var X=70,W=340;
+  function px(val){return X+W*val/max}
+  var nn=v.length;
+  var rows=[];
+  for(var i=0;i<3;i++){
+    if(i===right)rows.push({name:nomi[i],pos:v.map(px),ok:true});
+    else if((i-right+3)%3===1)rows.push({name:nomi[i],pos:v.map(function(_,k){return X+W*0.46*k/(nn-1)}),ok:false});
+    else rows.push({name:nomi[i],pos:v.map(function(val,k){return X+W*(0.45*val/max+0.55*k/(nn-1))}),ok:false});
+  }
+  var okrow=rows[right];
+  return{tag:"Retta graduata",text:"Chi ha posizionato i numeri in modo <b>corretto</b>?",
+    sub:"I numeri da sistemare erano: "+v.join("  ")+".",
+    cap:"Su una retta graduata le distanze devono essere proporzionali.",
+    w:460,h:172,draw:function(s){
+      rows.forEach(function(r,i){
+        var y=32+i*50;
+        Z.txt(s,8,y,r.name,"s l");
+        Z.rail(s,X-14,y,W+40,"");
+        v.forEach(function(val,k){
+          Z.tick(s,r.pos[k],y,5,"o");
+          Z.txt(s,r.pos[k],y-14,val,"o");
+        });
+      });
+    },
+    kind:"choice",choices:shuffle(rows.map(function(r){return{label:r.name,ok:r.ok}}).concat([{label:"Nessuno dei tre",ok:false}])),
+    hint:"Guarda il salto da "+v[v.length-2]+" a "+max+": deve essere molto più lungo di quello da 0 a 1.",
+    why:"È <b>"+okrow.name+"</b>: solo lì le distanze sono proporzionate. Da "+v[v.length-2]+" a "+max+" ci sono "+(max-v[v.length-2])+
+        " unità, quindi quel salto dev'essere "+(max-v[v.length-2])+" volte quello da 0 a 1. Negli altri due i numeri sono in ordine, ma le distanze sono sbagliate.",
+    note:"Su una retta <b>graduata</b> non basta l'ordine: le distanze devono essere proporzionali ai numeri."};
+}
+function m2_bandierine(){
+  var start=rnd(1,4),n=9;
+  var vals=[];for(var i=0;i<n;i++)vals.push(start+i);
+  var shown=shuffle([0,1,2,3,4,5,6,7,8]).slice(0,3).sort(function(a,b){return a-b});
+  var tgt;do{tgt=rnd(0,n-1)}while(shown.indexOf(tgt)>=0);
+  return{tag:"Gocce di pioggia",text:"La pioggia ha cancellato i numeri sulle bandierine. Che numero c'era su quella <b>arancione</b>?",
+    sub:"Le bandierine sono in fila, una per ogni numero, senza salti.",
+    cap:"Passo costante: da una bandierina alla successiva si aggiunge 1.",
+    w:460,h:120,draw:function(s){
+      Z.rail(s,24,30,412,"o");
+      for(var i=0;i<n;i++){
+        var x=36+i*46,isT=(i===tgt),isS=shown.indexOf(i)>=0;
+        Z.tick(s,x,30,4,"o");
+        Z.flag(s,x,36,isS?String(vals[i]):(isT?"?":""),isT?"o":(isS?"v":"off"),isT?"o":"");
+      }
+    },
+    kind:"number",answer:vals[tgt],
+    hint:"Parti da una bandierina scritta e conta di 1 in 1 fino a quella arancione.",
+    why:"Le bandierine seguono i naturali uno dopo l'altro: quella arancione è la "+(tgt+1)+"ª, quindi vale <b>"+vals[tgt]+"</b>.",
+    note:"Su una retta graduata il <b>passo</b> è sempre lo stesso: si conta di quanto vale ogni intervallo."};
+}
+var ROM=[["I",1],["V",5],["X",10],["XI",11],["XV",15],["XX",20],["L",50],["LX",60],["C",100],["D",500],["M",1000]];
+function m2_romani(){
+  var mode=pick(["leggi","scrivi","retta"]);
+  if(mode==="leggi"){
+    var r=pick(ROM.filter(function(x){return x[1]>=5}));
+    return{tag:"Numeri romani",text:"Quanto vale il numero romano <b>"+r[0]+"</b>?",
+      sub:"Ti serve per leggere date, capitoli e orologi.",
+      cap:"I = 1   V = 5   X = 10   L = 50   C = 100   D = 500   M = 1000",
+      w:460,h:110,draw:function(s){
+        var L=[["I",1],["V",5],["X",10],["L",50],["C",100],["M",1000]];
+        L.forEach(function(p,i){
+          var x=22+i*72;
+          Z.rect(s,x,20,64,40,p[0]===r[0].charAt(0)?"o":"off",6);
+          Z.txt(s,x+32,34,p[0],p[0]===r[0].charAt(0)?"o":"v");
+          Z.txt(s,x+32,50,p[1],"s");
+        });
+        Z.txt(s,230,88,r[0]+"  =  ?","o");
+      },
+      kind:"number",answer:r[1],
+      hint:"Le lettere si sommano da sinistra, salvo quando una minore precede una maggiore (allora si sottrae).",
+      why:"<b>"+r[0]+" = "+r[1]+"</b>.",
+      note:"Nei romani: <b>V=5, X=10, L=50, C=100, D=500, M=1000</b>."};
+  }
+  if(mode==="scrivi"){
+    var r2=pick(ROM.filter(function(x){return x[1]>=10}));
+    var wrongs=shuffle(ROM.filter(function(x){return x[1]!==r2[1]})).slice(0,3);
+    return{tag:"Numeri romani",text:"Come si scrive <b>"+r2[1]+"</b> in numeri romani?",
+      sub:"Occhio a non confondere L con C.",
+      cap:"I = 1   V = 5   X = 10   L = 50   C = 100   D = 500   M = 1000",
+      w:460,h:88,draw:function(s){
+        var L=[["I",1],["V",5],["X",10],["L",50],["C",100],["D",500],["M",1000]];
+        L.forEach(function(p,i){
+          var x=14+i*64;
+          Z.rect(s,x,18,58,40,"off",6);
+          Z.txt(s,x+29,32,p[0],"v");
+          Z.txt(s,x+29,48,p[1],"s");
+        });
+      },
+      kind:"choice",choices:shuffle([{label:r2[0],ok:true}].concat(wrongs.map(function(w){return{label:w[0],ok:false}}))),
+      hint:"50 è L, 100 è C, 1000 è M.",
+      why:"<b>"+r2[1]+" = "+r2[0]+"</b>.",
+      note:"Nei romani: <b>V=5, X=10, L=50, C=100, D=500, M=1000</b>."};
+  }
+  var base=pick([[["V",5],["?",6],["?",7],["XI",11]],[["X",10],["?",11],["?",12],["XV",15]],[["?",50],["LX",60],["?",70],["C",100]]]);
+  var idx=[];base.forEach(function(p,i){if(p[0]==="?")idx.push(i)});
+  var t=pick(idx);
+  return{tag:"Numeri romani",text:"Sulla retta manca un numero: quanto vale la tacca <b>arancione</b>?",
+    sub:"Scrivi il valore in cifre nostre, non in romane.",
+    cap:"La retta è graduata: le tacche sono in ordine crescente.",
+    w:460,h:110,draw:function(s){
+      var min=base[0][1],max=base[base.length-1][1];
+      Z.rail(s,50,58,370,"o");
+      base.forEach(function(p,i){
+        var x=64+340*(p[1]-min)/(max-min);
+        var isT=(i===t);
+        Z.tick(s,x,58,8,isT?"o":"");
+        Z.txt(s,x,36,isT?"?":(p[0]==="?"?"":p[0]),isT?"o":"v");
+        if(isT)Z.circ(s,x,58,4,"#F0B429");
+      });
+    },
+    kind:"number",answer:base[t][1],
+    hint:"Leggi le due tacche vicine e conta le unità in mezzo.",
+    why:"La tacca arancione vale <b>"+base[t][1]+"</b>: la retta è graduata, quindi ogni tacca sale di uno.",
+    note:"Anche con i numeri romani la retta resta <b>graduata</b>: le distanze rispettano i valori."};
+}
+function m2_passo(){
+  var step=pick([2,5,10,25,50,100]),start=pick([0,step*rnd(1,4)]);
+  var n=7,tgt=rnd(2,6);
+  return{tag:"Il passo della retta",text:"Su questa retta ogni tacca vale <b>"+step+"</b>. Che numero sta sulla tacca arancione?",
+    sub:"Guarda i due numeri già scritti per capire quanto vale un passo.",
+    cap:"Un passo = "+step+" unità.",
+    w:460,h:110,draw:function(s){
+      Z.rail(s,30,56,400,"o");
+      for(var i=0;i<n;i++){
+        var x=48+i*62,v=start+i*step,isT=(i===tgt);
+        Z.tick(s,x,56,isT?9:6,isT?"o":"");
+        if(isT){Z.txt(s,x,78,"?","o");Z.circ(s,x,56,4,"#F0B429")}
+        else if(i<2||i===n-1)Z.txt(s,x,78,fmt(v),"");
+      }
+      Z.path(s,"M48 34h62","g");Z.txt(s,79,24,"+"+step,"g");
+    },
+    kind:"number",answer:start+tgt*step,
+    hint:"Dalla prima tacca fai "+tgt+" passi da "+step+": "+tgt+" × "+step+" = "+(tgt*step)+".",
+    why:"Partendo da "+fmt(start)+" fai "+tgt+" passi da "+step+": "+fmt(start)+" + "+tgt+" × "+step+" = <b>"+fmt(start+tgt*step)+"</b>.",
+    note:"Su una retta graduata il passo può valere più di 1: controlla sempre <b>quanto vale un intervallo</b>."};
+}
+function m2_posiziona(){
+  var max=pick([10,20,20,50]),step=max/10;
+  var v=rnd(1,9)*step;
+  if(v===0)v=step;
+  return{tag:"Posiziona il numero",text:"Clicca sulla retta la tacca dove va <b>"+v+"</b>.",
+    sub:"Le tacche sono numerate solo all'inizio e alla fine: contale.",
+    cap:"Clicca direttamente sulla figura qui sopra.",
+    w:460,h:120,draw:function(s){
+      Z.rail(s,30,62,406,"o");
+      for(var i=0;i<=10;i++){
+        var x=48+i*38,val=i*step;
+        var gg=Z.g(s,{"class":"hit","data-v":String(val)});
+        Z.E("rect",{x:Z.R(x-17),y:36,width:34,height:52,rx:6,fill:"rgba(247,239,227,.03)",stroke:"#4C3B2D","stroke-width":1.1},gg);
+        Z.line(gg,x,54,x,70,"");
+        if(i===0||i===10)Z.txt(gg,x,80,val,"");
+      }
+      Z.txt(s,230,20,"dove va "+v+"?","o");
+    },
+    kind:"pick",answer:v,
+    hint:"Da 0 a "+max+" ci sono 10 intervalli: ognuno vale "+step+".",
+    why:"Ogni intervallo vale "+step+", quindi <b>"+v+"</b> sta dopo "+(v/step)+" intervalli.",
+    note:"Per posizionare un numero conta <b>quanti intervalli</b> ci sono e quanto vale ciascuno."};
+}
+window.NLM2=bag([m2_invalsi,m2_invalsi,m2_bandierine,m2_romani,m2_romani,m2_passo,m2_passo,m2_posiziona]);
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.NL;
+var rnd=Z.rnd,pick=Z.pick,shuffle=Z.shuffle,uch=Z.uch,fmt=Z.fmt,bag=Z.bag,dec=Z.dec;
+
+/* ============================================================
+   3. IL PESO DELLE CIFRE — valore posizionale e numeri grandi
+   ============================================================ */
+var POSNAMI=[[0,"unità"],[1,"decine"],[2,"centinaia"],[3,"unità di migliaia"],[4,"decine di migliaia"],
+             [5,"centinaia di migliaia"],[6,"unità di milioni"],[7,"decine di milioni"],[8,"centinaia di milioni"]];
+function bigNum(nd){
+  var s=String(rnd(1,9));
+  for(var i=1;i<nd;i++)s+=String(rnd(0,9));
+  return s;
+}
+function m3_cifra(){
+  var nd=pick([6,7,8,9]),d=bigNum(nd);
+  var p=rnd(1,nd-1),nome=POSNAMI[p][1];
+  return{tag:"Valore posizionale",text:"Nel numero <span class='nm'>"+fmt(parseInt(d,10))+"</span>, qual è la cifra delle <b>"+nome+"</b>?",
+    sub:"Conta le posizioni partendo da destra: la prima è quella delle unità.",
+    cap:"Sotto ogni casella c'è il numero della posizione, contato da destra.",
+    w:460,h:96,draw:function(s){
+      var w=nd*32;
+      Z.posTable(s,(460-w)/2,18,d,-1,"count");
+    },
+    kind:"number",answer:parseInt(d.charAt(nd-1-p),10),
+    hint:"Le "+nome+" stanno nella posizione numero "+(p+1)+" partendo da destra.",
+    why:"Contando da destra, la posizione "+(p+1)+" è quella delle "+nome+": la cifra è <b>"+d.charAt(nd-1-p)+"</b>.",
+    note:"Il valore di una cifra dipende dal <b>posto</b> che occupa: unità, decine, centinaia, migliaia…"};
+}
+function m3_valore(){
+  var nd=pick([6,7,8]),d=bigNum(nd);
+  var p=rnd(2,nd-1),c=parseInt(d.charAt(nd-1-p),10);
+  if(c===0){d=d.substring(0,nd-1-p)+String(rnd(1,9))+d.substring(nd-p);c=parseInt(d.charAt(nd-1-p),10)}
+  var val=c*Math.pow(10,p);
+  var wr=[c*Math.pow(10,p-1),c*Math.pow(10,p+1),c];
+  return{tag:"Valore posizionale",text:"Nel numero <span class='nm'>"+fmt(parseInt(d,10))+"</span>, quanto <b>vale</b> la cifra "+c+" evidenziata?",
+    sub:"Non basta dire «"+c+"»: conta il posto in cui si trova.",
+    cap:"La casella arancione è quella da valutare.",
+    w:460,h:96,draw:function(s){
+      var w=nd*32;
+      Z.posTable(s,(460-w)/2,18,d,p,"count");
+    },
+    kind:"choice",choices:Z.opts(val,wr,fmt),
+    hint:"È nella posizione "+(p+1)+" da destra: vale "+c+" × "+fmt(Math.pow(10,p))+".",
+    why:"La cifra "+c+" occupa il posto delle "+POSNAMI[p][1]+", quindi vale "+c+" × "+fmt(Math.pow(10,p))+" = <b>"+fmt(val)+"</b>.",
+    note:"Il valore di una cifra = cifra × valore del suo posto (1, 10, 100, 1000…)."};
+}
+function bigPhrase(){
+  var t=pick(["dec","mil","decmil","centmigl","migl","mld"]);
+  if(t==="dec"){var a=rnd(11,999),b=rnd(1,9);return{ph:dec(a+b/10)+" milioni",val:a*1000000+b*100000}}
+  if(t==="mil"){var m=rnd(12,999);return{ph:m+" milioni",val:m*1000000}}
+  if(t==="decmil"){var n=rnd(2,99);return{ph:n+" decine di milioni",val:n*10000000}}
+  if(t==="centmigl"){var q=rnd(2,99);return{ph:q+" centinaia di migliaia",val:q*100000}}
+  if(t==="migl"){var r=rnd(12,999);return{ph:r+" migliaia",val:r*1000}}
+  var g=rnd(2,9);return{ph:g+" miliardi",val:g*1000000000};
+}
+function m3_scrivi(){
+  var o=bigPhrase();
+  var wr=[o.val*10,Math.round(o.val/10),o.val*100];
+  wr=wr.filter(function(v){return v!==o.val&&v>0&&v%1===0});
+  return{tag:"Numeri grandi",text:"Scrivi in cifre: <b>"+o.ph+"</b>.",
+    sub:"Attenzione a quanti zeri servono davvero.",
+    cap:"1 migliaio = 1 000   ·   1 milione = 1 000 000   ·   1 miliardo = 1 000 000 000",
+    w:460,h:104,draw:function(s){
+      var L=[["migliaio","1 000"],["milione","1 000 000"],["miliardo","1 000 000 000"]];
+      L.forEach(function(p,i){
+        Z.rect(s,20+i*146,16,132,52,i===0?"v":(i===1?"o":"r"),6);
+        Z.txt(s,86+i*146,34,p[0],i===0?"v":(i===1?"o":"r"));
+        Z.txt(s,86+i*146,54,p[1],"s");
+      });
+      Z.txt(s,230,88,o.ph+"  =  ?","");
+    },
+    kind:"choice",choices:Z.opts(o.val,wr,fmt),
+    hint:"Scrivi prima il numero «pieno» e poi aggiungi gli zeri del moltiplicatore.",
+    why:"<b>"+o.ph+" = "+fmt(o.val)+"</b>.",
+    note:"«Decine di milioni» vuol dire × 10 000 000, «centinaia di migliaia» × 100 000: conta gli zeri."};
+}
+var GIOC=["Duarte","Kovac","Elmasri","Sorensen","Bianchi","Adeyemi","Ferraro","Nakamura","Oduya","Mancini"];
+function m3_compensi(){
+  var names=shuffle(GIOC.slice()).slice(0,4);
+  var vals=[];
+  for(var gi=0;gi<200&&vals.length<4;gi++){
+    var o=bigPhrase();
+    if(o.val<1000000||o.val>999000000)continue;
+    if(!vals.some(function(x){return x.val===o.val||x.ph===o.ph}))vals.push(o);
+  }
+  if(vals.length<4)vals=[{ph:"101 milioni",val:101000000},{ph:"22 decine di milioni",val:220000000},
+                         {ph:"48,5 milioni",val:48500000},{ph:"73 centinaia di migliaia",val:7300000}];
+  var sorted=vals.slice().sort(function(a,b){return b.val-a.val});
+  var posi=pick([0,0,1,3]);
+  var nome=["primo","secondo","terzo","ultimo"][posi===3?3:posi];
+  var want=sorted[posi];
+  return{tag:"Numeri grandi",text:"Questi sono gli ingaggi di una stagione. Chi sta al <b>"+nome+"</b> posto in ordine decrescente?",
+    sub:"Decrescente vuol dire dal più alto al più basso: prima riscrivi tutto in cifre.",
+    cap:"Gli importi sono scritti in modi diversi apposta.",
+    w:460,h:132,draw:function(s){
+      vals.forEach(function(o,i){
+        var y=8+i*31;
+        Z.rect(s,24,y,412,27,"off",5);
+        Z.txt(s,36,y+14,names[i],"l v");
+        Z.txt(s,424,y+14,o.ph,"e");
+      });
+    },
+    kind:"choice",choices:shuffle(vals.map(function(o,i){return{label:names[i],ok:o.val===want.val}})),
+    hint:"Trasforma tutto in cifre: «decine di milioni» sono × 10 000 000.",
+    why:"In cifre: "+vals.map(function(o,i){return names[i]+" "+fmt(o.val)}).join(", ")+
+        ". Al "+nome+" posto c'è <b>"+names[vals.indexOf(want)]+"</b> con "+fmt(want.val)+".",
+    note:"Prima di confrontare numeri grandi <b>riscrivili tutti in cifre</b>: solo così l'ordine è sicuro."};
+}
+window.NLM3=bag([m3_cifra,m3_cifra,m3_valore,m3_valore,m3_scrivi,m3_scrivi,m3_compensi,m3_compensi]);
+
+/* ============================================================
+   4. LE PAROLE DEL CALCOLO — i nomi dei termini
+   ============================================================ */
+var OPS={
+  add:{seg:"+",nome:"addizione",res:"somma",t1:"addendo",t2:"addendo",
+       f:function(a,b){return a+b}},
+  sot:{seg:"−",nome:"sottrazione",res:"differenza",t1:"minuendo",t2:"sottraendo",
+       f:function(a,b){return a-b}},
+  mol:{seg:"×",nome:"moltiplicazione",res:"prodotto",t1:"fattore",t2:"fattore",
+       f:function(a,b){return a*b}},
+  div:{seg:":",nome:"divisione",res:"quoziente",t1:"dividendo",t2:"divisore",
+       f:function(a,b){return a/b}}
+};
+var OPKEYS=["add","sot","mol","div"];
+function opNums(k){
+  if(k==="add")return[rnd(12,89),rnd(11,79)];
+  if(k==="sot")return[rnd(60,199),rnd(11,49)];
+  if(k==="mol")return[rnd(3,19),rnd(3,15)];
+  var b=rnd(3,12),q=rnd(3,15);return[b*q,b];
+}
+function drawOp(s,a,b,op,labels,x,y){
+  var W=[64,34,64,34,74],cx=x;
+  var parts=[String(a),op.seg,String(b),"=",String(op.f(a,b))];
+  var cls=["v","","v","","g"];
+  parts.forEach(function(p,i){
+    if(i%2===0)Z.rect(s,cx,y,W[i],40,i===4?"g":"off",6);
+    Z.txt(s,cx+W[i]/2,y+20,p,cls[i]);
+    if(labels&&i%2===0)Z.txt(s,cx+W[i]/2,y+54,labels[i/2],"s");
+    cx+=W[i]+6;
+  });
+  return cx-x;
+}
+function m4_nome(){
+  var k=pick(OPKEYS),o=OPS[k];
+  var other=pick(OPKEYS.filter(function(x){return x!==k})),oo=OPS[other];
+  var ab=opNums(other);
+  var mode=pick(["res","term"]);
+  if(mode==="res"){
+    return{tag:"I nomi",text:"Come si chiama il <b>risultato</b> della "+o.nome+"?",
+      sub:"Nell'esempio qui sopra trovi i nomi della "+oo.nome+".",
+      cap:"Ogni operazione ha i suoi nomi: impararli serve a capire i testi dei problemi.",
+      w:460,h:106,draw:function(s){drawOp(s,ab[0],ab[1],oo,[oo.t1,oo.t2,oo.res],83,22)},
+      kind:"choice",choices:uch([{label:o.res,ok:true},{label:OPS[other].res,ok:false}].concat(
+        shuffle(OPKEYS.filter(function(x){return x!==k&&x!==other}).map(function(x){return{label:OPS[x].res,ok:false}})))),
+      hint:"somma / differenza / prodotto / quoziente: uno solo appartiene alla "+o.nome+".",
+      why:"Il risultato della "+o.nome+" si chiama <b>"+o.res+"</b>. I suoi termini sono "+o.t1+" e "+o.t2+".",
+      note:"somma = risultato dell'addizione · differenza = della sottrazione · prodotto = della moltiplicazione · quoziente = della divisione."};
+  }
+  var which=pick([1,2]),wantName=(which===1?o.t1:o.t2);
+  var nums=opNums(k);
+  var all=Z.uniq([o.t1,o.t2,OPS[other].t1,OPS[other].t2,"quoziente","somma"]).filter(function(x){return x!==wantName});
+  return{tag:"I nomi",text:"Nell'operazione qui sopra, come si chiama il numero <b>"+(which===1?"a sinistra del segno":"a destra del segno")+" "+o.seg+"</b>?",
+    sub:"È una "+o.nome+".",
+    cap:"I due numeri di un'operazione hanno nomi propri.",
+    w:460,h:106,draw:function(s){
+      drawOp(s,nums[0],nums[1],o,null,83,22);
+      var ax=83+(which===1?32:142);
+      Z.txt(s,ax,80,"questo","o");
+      Z.path(s,"M"+ax+" 70v-6","o");
+    },
+    kind:"choice",choices:shuffle([{label:wantName,ok:true}].concat(shuffle(all).slice(0,3).map(function(x){return{label:x,ok:false}}))),
+    hint:"Nella "+o.nome+" i termini si chiamano "+o.t1+" e "+o.t2+".",
+    why:"Nella "+o.nome+" il primo numero è il <b>"+o.t1+"</b> e il secondo è il <b>"+o.t2+"</b>: qui la risposta è <b>"+wantName+"</b>.",
+    note:"Divisione: <b>dividendo : divisore = quoziente</b>. Sottrazione: <b>minuendo − sottraendo = differenza</b>."};
+}
+function m4_clicca(){
+  var k=pick(["div","div","sot","mol","add"]),o=OPS[k];
+  var nums=opNums(k);
+  var role=pick([1,2]);
+  var wantName=(role===1?o.t1:o.t2);
+  if(k==="mol")role=pick([1,2]),wantName=(role===1?"primo fattore":"secondo fattore");
+  if(k==="add")role=1,wantName="primo addendo";
+  return{tag:"Trova il termine",text:"Clicca il <b>"+wantName+"</b> nell'operazione qui sopra.",
+    sub:k==="div"?"Il divisore è il numero che sta <b>dopo</b> il segno «:».":"Guarda bene la posizione: il primo e il secondo termine hanno nomi diversi.",
+    cap:"Clicca direttamente sul numero giusto.",
+    w:460,h:96,draw:function(s){
+      var parts=[{v:nums[0],r:1},{v:o.seg,r:0},{v:nums[1],r:2},{v:"=",r:0},{v:o.f(nums[0],nums[1]),r:3}];
+      var W=[70,34,70,34,80],cx=(460-(70+34+70+34+80+24))/2;
+      parts.forEach(function(p,i){
+        if(p.r>0){
+          var gg=Z.g(s,{"class":"hit","data-v":String(p.r)});
+          Z.rect(gg,cx,24,W[i],44,"off",6);
+          Z.txt(gg,cx+W[i]/2,46,p.v,"");
+        }else Z.txt(s,cx+W[i]/2,46,p.v,"r");
+        cx+=W[i]+6;
+      });
+    },
+    kind:"pick",answer:role,
+    hint:k==="div"?"Dividendo : divisore = quoziente. Il divisore è il secondo.":"I due termini si chiamano "+o.t1+" e "+o.t2+".",
+    why:"Nella "+o.nome+" "+nums[0]+" "+o.seg+" "+nums[1]+" = "+o.f(nums[0],nums[1])+", il <b>"+wantName+"</b> è <b>"+(role===1?nums[0]:nums[1])+"</b>.",
+    note:"Nella divisione il <b>divisore</b> è il numero che sta dopo il segno «:» (è quello che divide)."};
+}
+function m4_operazione(){
+  var k=pick(OPKEYS),o=OPS[k];
+  var nums=opNums(k);
+  var testi={add:"la somma di "+nums[0]+" e "+nums[1],
+             sot:"la differenza fra "+nums[0]+" e "+nums[1],
+             mol:"il prodotto di "+nums[0]+" e "+nums[1],
+             div:"il quoziente fra "+nums[0]+" e "+nums[1]};
+  var ask=pick(["quale","quanto"]);
+  if(ask==="quale"){
+    return{tag:"Quale operazione",text:"«"+testi[k].charAt(0).toUpperCase()+testi[k].slice(1)+"»: quale calcolo devi scrivere?",
+      sub:"La parola del testo ti dice l'operazione.",
+      cap:"Le quattro operazioni e i loro segni.",
+      w:460,h:94,draw:function(s){
+        var L=[["addizione","+"],["sottrazione","-"],["moltiplicazione","×"],["divisione",":"]];
+        L.forEach(function(p,i){
+          var x=18+i*108;
+          Z.rect(s,x,18,100,52,"off",6);
+          Z.txt(s,x+50,36,p[0],"v");
+          Z.txt(s,x+50,58,p[1],"s");
+        });
+      },
+      kind:"choice",choices:shuffle(OPKEYS.map(function(x){return{label:nums[0]+" "+OPS[x].seg+" "+nums[1],ok:x===k}})),
+      hint:"«"+o.res+"» è il risultato della "+o.nome+".",
+      why:"«"+o.res+"» è il risultato della "+o.nome+", quindi si scrive <b>"+nums[0]+" "+o.seg+" "+nums[1]+"</b> = "+o.f(nums[0],nums[1])+".",
+      note:"Le parole del testo indicano l'operazione: somma → +, differenza → −, prodotto → ×, quoziente → :"};
+  }
+  return{tag:"Quale operazione",text:"Quanto vale <b>"+testi[k]+"</b>?",
+    sub:"Prima scegli l'operazione, poi calcola.",
+    cap:"Le quattro operazioni e i loro segni.",
+    w:460,h:94,draw:function(s){
+      var L=[["addizione","+"],["sottrazione","-"],["moltiplicazione","×"],["divisione",":"]];
+      L.forEach(function(p,i){
+        var x=18+i*108;
+        Z.rect(s,x,18,100,52,"off",6);
+        Z.txt(s,x+50,36,p[0],"v");
+        Z.txt(s,x+50,58,p[1],"s");
+      });
+    },
+    kind:"number",answer:o.f(nums[0],nums[1]),
+    hint:"«"+o.res+"» vuol dire "+o.nome+": scrivi "+nums[0]+" "+o.seg+" "+nums[1]+".",
+    why:"«"+o.res+"» è il risultato della "+o.nome+": "+nums[0]+" "+o.seg+" "+nums[1]+" = <b>"+o.f(nums[0],nums[1])+"</b>.",
+    note:"Le parole del testo indicano l'operazione: somma → +, differenza → −, prodotto → ×, quoziente → :"};
+}
+function m4_frase(){
+  var k=pick(OPKEYS),o=OPS[k];
+  var mode=pick(["res","op"]);
+  if(mode==="res"){
+    return{tag:"Completa la frase",text:"La <b>"+o.res.toUpperCase()+"</b> è il risultato dell'operazione di…",
+      sub:"Completa come nell'esercizio del quaderno.",
+      cap:"Ogni operazione ha un risultato con un nome preciso.",
+      w:460,h:96,draw:function(s){
+        OPKEYS.forEach(function(x,i){
+          var y=8+Math.floor(i/2)*44,px=24+(i%2)*212;
+          Z.rect(s,px,y,196,36,"off",6);
+          Z.txt(s,px+70,y+18,OPS[x].nome,"v");
+          Z.txt(s,px+170,y+18,OPS[x].seg,"o");
+        });
+      },
+      kind:"choice",choices:shuffle(OPKEYS.map(function(x){return{label:OPS[x].nome,ok:x===k}})),
+      hint:"Chiediti: che segno usi per ottenere una "+o.res+"?",
+      why:"La <b>"+o.res+"</b> è il risultato dell'<b>"+o.nome+"</b>.",
+      note:"somma = risultato dell'addizione · differenza = della sottrazione · prodotto = della moltiplicazione · quoziente = della divisione."};
+  }
+  return{tag:"Completa la frase",text:"I termini della <b>"+o.nome+"</b> si chiamano…",
+    sub:"Sono i due numeri su cui lavori, non il risultato.",
+    cap:"Ogni operazione ha due termini e un risultato.",
+    w:460,h:96,draw:function(s){
+      OPKEYS.forEach(function(x,i){
+        var y=8+Math.floor(i/2)*44,px=24+(i%2)*212;
+        Z.rect(s,px,y,196,36,OPS[x].nome===o.nome?"o":"off",6);
+        Z.txt(s,px+98,y+18,OPS[x].nome,OPS[x].nome===o.nome?"o":"v");
+      });
+    },
+    kind:"choice",choices:uch([{label:o.t1+" e "+o.t2,ok:true}].concat(
+      shuffle(OPKEYS.filter(function(x){return x!==k})).map(function(x){return{label:OPS[x].t1+" e "+OPS[x].t2,ok:false}}))),
+    hint:"Nella divisione sono dividendo e divisore; nella sottrazione minuendo e sottraendo.",
+    why:"I termini della "+o.nome+" si chiamano <b>"+o.t1+" e "+o.t2+"</b>; il risultato è la/il "+o.res+".",
+    note:"Divisione: <b>dividendo : divisore = quoziente</b>. Sottrazione: <b>minuendo − sottraendo = differenza</b>."};
+}
+window.NLM4=bag([m4_nome,m4_nome,m4_clicca,m4_clicca,m4_operazione,m4_operazione,m4_frase,m4_frase]);
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.NL;
+var rnd=Z.rnd,pick=Z.pick,shuffle=Z.shuffle,uch=Z.uch,fmt=Z.fmt,bag=Z.bag;
+
+/* ============================================================
+   5. LE REGOLE D'ORO — proprietà, trappole, casi con 0 e 1
+   ============================================================ */
+var PROP=["commutativa","associativa","distributiva","invariantiva"];
+function propChoices(ok){
+  return shuffle(PROP.map(function(p){return{label:"Proprietà "+p,ok:p===ok}}));
+}
+function eqFig(str,sub2){
+  return function(s){
+    Z.rect(s,10,26,440,52,"off",8);
+    var e=Z.txt(s,230,52,str,"b o"),L=String(str).length;
+    e.setAttribute("font-size",String(L>44?11.5:L>36?13.5:L>28?15:17.5));
+    if(sub2)Z.txt(s,230,96,sub2,"s");
+  };
+}
+function m5_quale(){
+  var t=pick(["comm","comm","asso","asso","dist","invS","invD"]);
+  var a,b,c,k,str,ok,why,note;
+  if(t==="comm"){
+    a=rnd(12,89);b=rnd(11,79);
+    var seg=pick(["+","×"]);
+    str=a+" "+seg+" "+b+" = "+b+" "+seg+" "+a;ok="commutativa";
+    why="Cambiando l'<b>ordine</b> dei termini il risultato non cambia: è la proprietà <b>commutativa</b>, valida per addizione e moltiplicazione (non per sottrazione e divisione).";
+    note="<b>Commutativa</b>: a + b = b + a e a × b = b × a. Non vale per − e : .";
+  }else if(t==="asso"){
+    a=rnd(4,25);b=rnd(3,19);c=rnd(2,12);
+    var seg2=pick(["+","×"]);
+    str="("+a+" "+seg2+" "+b+") "+seg2+" "+c+" = "+a+" "+seg2+" ("+b+" "+seg2+" "+c+")";ok="associativa";
+    why="Cambiano solo le <b>parentesi</b>, cioè il raggruppamento: è la proprietà <b>associativa</b>, valida per addizione e moltiplicazione.";
+    note="<b>Associativa</b>: (a + b) + c = a + (b + c). Cambia il raggruppamento, non l'ordine.";
+  }else if(t==="dist"){
+    a=rnd(3,9);b=rnd(10,40);c=rnd(2,9);
+    str=a+" × ("+b+" + "+c+") = "+a+" × "+b+" + "+a+" × "+c;ok="distributiva";
+    why="Il fattore "+a+" viene <b>distribuito</b> su ciascun termine della parentesi: è la proprietà <b>distributiva</b> della moltiplicazione rispetto ad addizione e sottrazione.";
+    note="<b>Distributiva</b>: a × (b + c) = a × b + a × c. Attenzione: <b>non</b> funziona con la divisione a : (b + c).";
+  }else if(t==="invS"){
+    a=rnd(40,180);b=rnd(11,39);k=pick([1,2,5,10]);
+    str=a+" − "+b+" = "+(a+k)+" − "+(b+k);ok="invariantiva";
+    why="A tutti e due i termini è stato aggiunto <b>"+k+"</b>: la differenza non cambia. È la proprietà <b>invariantiva</b> della sottrazione.";
+    note="<b>Invariantiva della sottrazione</b>: se aggiungi (o togli) lo stesso numero a minuendo e sottraendo, la differenza resta uguale.";
+  }else{
+    b=rnd(2,9);var q=rnd(3,12);a=b*q;k=pick([2,5,10]);
+    str=(a*k)+" : "+(b*k)+" = "+a+" : "+b;ok="invariantiva";
+    why="Dividendo e divisore sono stati <b>divisi entrambi</b> per "+k+": il quoziente non cambia ("+a+" : "+b+" = "+q+"). È la proprietà <b>invariantiva</b> della divisione.";
+    note="<b>Invariantiva della divisione</b>: se moltiplichi (o dividi) dividendo e divisore per lo stesso numero, il quoziente resta uguale.";
+  }
+  return{tag:"Le proprietà",text:"Quale proprietà è stata usata?",
+    sub:"Guarda che cosa è cambiato passando da sinistra a destra.",
+    cap:"Confronta il lato sinistro e il lato destro: che cosa è cambiato?",
+    w:460,h:112,draw:eqFig(str),
+    kind:"choice",choices:propChoices(ok),
+    hint:"Commutativa: cambia l'ordine. Associativa: cambiano le parentesi. Distributiva: un fattore si spalma su una somma. Invariantiva: cambiano tutti e due i termini, ma il risultato no.",
+    why:why,note:note};
+}
+function m5_scorciatoia(){
+  var t=pick(["mol","invS","invD","dist"]);
+  if(t==="mol"){
+    var m=pick([25,50,20,5]),partner=(m===25?4:m===50?2:m===20?5:2),other=rnd(11,39);
+    var tot=m*partner*other;
+    return{tag:"Calcolo veloce",text:"Calcola a mente: <b>"+m+" × "+other+" × "+partner+"</b>",
+      sub:"Riordina i fattori per trovarne due comodi.",
+      cap:"Commutativa e associativa insieme: puoi spostare e raggruppare i fattori come ti conviene.",
+      w:460,h:112,draw:eqFig(m+" × "+other+" × "+partner,"prima "+m+" × "+partner+" = "+(m*partner)),
+      kind:"number",answer:tot,
+      hint:m+" × "+partner+" = "+(m*partner)+": fai prima quello, poi moltiplica per "+other+".",
+      why:"Riordinando: ("+m+" × "+partner+") × "+other+" = "+(m*partner)+" × "+other+" = <b>"+fmt(tot)+"</b>. Ordine e raggruppamento non cambiano il prodotto.",
+      note:"Nel prodotto puoi <b>riordinare e raggruppare</b> i fattori: cerca sempre le coppie che fanno 10, 100, 1000."};
+  }
+  if(t==="invS"){
+    var a=rnd(6,18)*10+rnd(1,9),b=rnd(2,5)*10+rnd(1,9);
+    if(b>=a)b=rnd(11,39);
+    var k=10-(b%10);if(k===10)k=0;
+    if(k===0){b=b+rnd(1,9);k=10-(b%10);if(k===10)k=1}
+    return{tag:"Calcolo veloce",text:"Calcola <b>"+a+" − "+b+"</b> usando la proprietà invariantiva.",
+      sub:"Aggiungi "+k+" a tutti e due i termini: il sottraendo diventa una decina tonda.",
+      cap:"Invariantiva: aggiungo lo stesso numero a minuendo e sottraendo, la differenza non cambia.",
+      w:460,h:112,draw:eqFig(a+" − "+b+"  =  "+(a+k)+" − "+(b+k),"ho aggiunto "+k+" a tutti e due"),
+      kind:"number",answer:a-b,
+      hint:(a+k)+" − "+(b+k)+" si fa a mente in un attimo.",
+      why:a+" − "+b+" = "+(a+k)+" − "+(b+k)+" = <b>"+(a-b)+"</b>. La differenza non cambia perché ho aggiunto "+k+" a tutti e due i termini.",
+      note:"<b>Invariantiva della sottrazione</b>: se aggiungi (o togli) lo stesso numero a minuendo e sottraendo, la differenza resta uguale."};
+  }
+  if(t==="invD"){
+    var q2=rnd(3,9),d=pick([20,40,50,80,60,25]),A=d*q2;
+    var kk=(d%10===0)?10:5;
+    return{tag:"Calcolo veloce",text:"Calcola <b>"+fmt(A)+" : "+d+"</b> usando la proprietà invariantiva.",
+      sub:"Dividi tutti e due i termini per "+kk+": i numeri diventano piccoli.",
+      cap:"Invariantiva: divido (o moltiplico) dividendo e divisore per lo stesso numero, il quoziente non cambia.",
+      w:460,h:112,draw:eqFig(fmt(A)+" : "+d+"  =  "+(A/kk)+" : "+(d/kk),"ho diviso tutti e due per "+kk),
+      kind:"number",answer:q2,
+      hint:(A/kk)+" : "+(d/kk)+" è la stessa divisione, ma più facile.",
+      why:fmt(A)+" : "+d+" = "+(A/kk)+" : "+(d/kk)+" = <b>"+q2+"</b>. Il quoziente non cambia perché ho diviso tutti e due i termini per "+kk+".",
+      note:"<b>Invariantiva della divisione</b>: se moltiplichi (o dividi) dividendo e divisore per lo stesso numero, il quoziente resta uguale."};
+  }
+  var f=rnd(3,9),cen=pick([100,200,300]),res=rnd(2,9);
+  var num=cen+res;
+  return{tag:"Calcolo veloce",text:"Calcola a mente: <b>"+f+" × "+num+"</b>",
+    sub:"Spezza "+num+" in "+cen+" + "+res+" e distribuisci il fattore.",
+    cap:"Distributiva: a × (b + c) = a × b + a × c",
+    w:460,h:112,draw:eqFig(f+" × ("+cen+" + "+res+")",f+" × "+cen+"  +  "+f+" × "+res),
+    kind:"number",answer:f*num,
+    hint:f+" × "+cen+" = "+(f*cen)+" e "+f+" × "+res+" = "+(f*res)+": poi somma.",
+    why:f+" × "+num+" = "+f+" × "+cen+" + "+f+" × "+res+" = "+fmt(f*cen)+" + "+(f*res)+" = <b>"+fmt(f*num)+"</b>.",
+    note:"<b>Distributiva</b>: a × (b + c) = a × b + a × c. Serve per moltiplicare a mente."};
+}
+function m5_vf(){
+  var lib=[];
+  var a=rnd(12,48),b=a*2;
+  lib.push({str:a+" : "+b+" = "+b+" : "+a,ok:false,
+    why:a+" : "+b+" non è uguale a "+b+" : "+a+" (che fa 2). La <b>divisione non è commutativa</b>: cambiare l'ordine cambia tutto.",
+    note:"La <b>divisione non è commutativa</b>: a : b è diverso da b : a."});
+  var x=rnd(20,40),y=rnd(8,16),z=rnd(3,7);
+  lib.push({str:"("+x+" − "+y+") − "+z+" = "+x+" − ("+y+" − "+z+")",ok:false,
+    why:"A sinistra "+(x-y)+" − "+z+" = "+(x-y-z)+", a destra "+x+" − "+(y-z)+" = "+(x-(y-z))+". La <b>sottrazione non è associativa</b>: le parentesi contano.",
+    note:"La <b>sottrazione non è associativa</b>: (a − b) − c è diverso da a − (b − c)."});
+  var d1,d2,D;
+  if(rnd(0,2)===0){d1=6;d2=3;D=36}
+  else{d1=rnd(2,6);d2=rnd(2,6);while(d2===d1)d2=rnd(2,6);D=d1*d2*(d1+d2)}
+  lib.push({str:D+" : ("+d1+" + "+d2+") = "+D+" : "+d1+" + "+D+" : "+d2,ok:false,
+    why:"A sinistra "+D+" : "+(d1+d2)+" = "+(D/(d1+d2))+"; a destra "+(D/d1)+" + "+(D/d2)+" = "+(D/d1+D/d2)+". La <b>distributiva non vale</b> quando la somma sta al posto del divisore: prima si somma dentro la parentesi.",
+    note:"La distributiva <b>non</b> vale per a : (b + c): prima si somma dentro la parentesi, poi si divide."});
+  var g=rnd(4,9),p1=rnd(2,6),p2=rnd(5,9),p3=rnd(2,4),p4=rnd(1,3);
+  var inner=p1+p2-p3-p4;
+  if(inner>0){
+    lib.push({str:g+" × ("+p1+" + "+p2+" − "+p3+" − "+p4+") = "+g+"×"+p1+" + "+g+"×"+p2+" − "+g+"×"+p3+" − "+g+"×"+p4,ok:true,
+      why:"A sinistra "+g+" × "+inner+" = "+(g*inner)+"; a destra "+(g*p1)+" + "+(g*p2)+" − "+(g*p3)+" − "+(g*p4)+" = "+(g*inner)+". La <b>distributiva</b> vale anche con più addendi e sottrazioni.",
+      note:"<b>Distributiva</b>: il fattore si distribuisce su tutti i termini della parentesi, anche quando ci sono dei meno."});
+  }
+  var u=rnd(15,60),v=rnd(15,60);
+  lib.push({str:u+" + "+v+" = "+v+" + "+u,ok:true,
+    why:"L'addizione è <b>commutativa</b>: "+u+" + "+v+" = "+(u+v)+" da tutte e due le parti.",
+    note:"<b>Commutativa</b>: vale per + e ×, non per − e : ."});
+  var w1=rnd(30,90),w2=rnd(5,25);
+  lib.push({str:w1+" − "+w2+" = "+w2+" − "+w1,ok:false,
+    why:w1+" − "+w2+" = "+(w1-w2)+", mentre "+w2+" − "+w1+" in N non si può nemmeno fare. La <b>sottrazione non è commutativa</b>.",
+    note:"La <b>sottrazione non è commutativa</b>: l'ordine dei termini conta."});
+  var m1=rnd(2,9),m2=rnd(2,9),m3=rnd(2,9);
+  lib.push({str:"("+m1+" × "+m2+") × "+m3+" = "+m1+" × ("+m2+" × "+m3+")",ok:true,
+    why:"Tutte e due danno "+(m1*m2*m3)+": la moltiplicazione è <b>associativa</b>.",
+    note:"<b>Associativa</b>: vale per + e ×; puoi raggruppare come ti conviene."});
+  var n3=rnd(2,4),nm=n3*rnd(1,3),n2=rnd(2,5)*n3,n1=n2*nm;
+  lib.push({str:n1+" : ("+n2+" : "+n3+") = ("+n1+" : "+n2+") : "+n3,ok:false,
+    why:"A sinistra "+n1+" : "+(n2/n3)+" = "+(n1/(n2/n3))+"; a destra "+(n1/n2)+" : "+n3+" = "+(n1/n2/n3)+". La <b>divisione non è associativa</b>: le parentesi cambiano il risultato.",
+    note:"La <b>divisione non è associativa</b>: le parentesi cambiano il risultato."});
+  var o=pick(lib);
+  return{tag:"Vero o falso",text:"Questa uguaglianza è vera?",
+    sub:"Non fidarti dell'aspetto: se serve, calcola tutti e due i lati.",
+    cap:"Le proprietà valgono solo dove valgono: qui si smaschera l'abuso.",
+    w:460,h:112,draw:eqFig(o.str),
+    kind:"choice",choices:Z.vf(o.ok),
+    hint:"Calcola il valore di sinistra e quello di destra e confrontali.",
+    why:(o.ok?"<b>Vero.</b> ":"<b>Falso.</b> ")+o.why,
+    note:o.note};
+}
+function m5_zerouno(){
+  var t=pick(["div0","div0","zerozero","zerodiv","per0","per1","piu0","div1","nn"]);
+  var n=rnd(12,199);
+  if(t==="div0"){
+    return{tag:"Zero e uno",text:"Quanto fa <b>"+n+" : 0</b> ?",
+      sub:"Prova a chiederti: quale numero moltiplicato per 0 dà "+n+"?",
+      cap:"Nessun numero moltiplicato per 0 può dare un risultato diverso da 0.",
+      w:460,h:112,draw:eqFig(n+" : 0  =  ?"),
+      kind:"choice",choices:uch([{label:"È impossibile",ok:true},{label:"0",ok:false},{label:String(n),ok:false},{label:"1",ok:false}]),
+      hint:"La divisione è la prova al contrario della moltiplicazione: cerchi un numero che per 0 dia "+n+".",
+      why:"Dividere per zero è <b>impossibile</b>: nessun numero moltiplicato per 0 può dare "+n+", perché ogni prodotto per 0 fa 0.",
+      note:"<b>n : 0 è impossibile</b> (con n diverso da 0); <b>0 : 0 è indeterminato</b>."};
+  }
+  if(t==="zerozero"){
+    return{tag:"Zero e uno",text:"Quanto fa <b>0 : 0</b> ?",
+      sub:"Attenzione: non è lo stesso caso di "+n+" : 0.",
+      cap:"Qui i numeri che funzionerebbero sono troppi, non zero.",
+      w:460,h:112,draw:eqFig("0 : 0  =  ?"),
+      kind:"choice",choices:uch([{label:"È indeterminato",ok:true},{label:"0",ok:false},{label:"1",ok:false},{label:"È impossibile",ok:false}]),
+      hint:"Qualunque numero moltiplicato per 0 dà 0: quale scegli?",
+      why:"0 : 0 è <b>indeterminato</b>: qualunque numero moltiplicato per 0 dà 0, quindi non c'è una risposta sola. Diverso da n : 0, che invece è <b>impossibile</b>.",
+      note:"<b>n : 0 è impossibile</b> (con n diverso da 0); <b>0 : 0 è indeterminato</b>."};
+  }
+  var q={zerodiv:{str:"0 : "+n,ans:0,why:"0 diviso qualsiasi numero (diverso da 0) fa <b>0</b>: se non hai niente da distribuire, ognuno riceve 0.",hint:"Non c'è niente da dividere."},
+         per0:{str:n+" × 0",ans:0,why:n+" × 0 = <b>0</b>: moltiplicare per zero azzera sempre.",hint:"Prendere "+n+" zero volte."},
+         per1:{str:n+" × 1",ans:n,why:n+" × 1 = <b>"+n+"</b>: 1 è l'elemento neutro della moltiplicazione.",hint:"Prendere "+n+" una volta sola."},
+         piu0:{str:n+" + 0",ans:n,why:n+" + 0 = <b>"+n+"</b>: 0 è l'elemento neutro dell'addizione.",hint:"Aggiungere niente."},
+         div1:{str:n+" : 1",ans:n,why:n+" : 1 = <b>"+n+"</b>: dividere in una parte sola lascia tutto com'è.",hint:"Una parte sola."},
+         nn:{str:n+" : "+n,ans:1,why:n+" : "+n+" = <b>1</b>: quante volte ci sta un numero in se stesso? Una.",hint:"Quante volte ci sta "+n+" in "+n+"?"}}[t];
+  return{tag:"Zero e uno",text:"Quanto fa <b>"+q.str+"</b> ?",
+    sub:"Sono i casi che nelle espressioni fanno perdere punti.",
+    cap:"n + 0 = n   ·   n × 1 = n   ·   n × 0 = 0   ·   n : 1 = n   ·   0 : n = 0",
+    w:460,h:112,draw:eqFig(q.str+"  =  ?"),
+    kind:"number",answer:q.ans,
+    hint:q.hint,why:q.why,
+    note:"Casi speciali: <b>n + 0 = n</b>, <b>n × 1 = n</b>, <b>n × 0 = 0</b>, <b>n : 1 = n</b>, <b>0 : n = 0</b>."};
+}
+window.NLM5=bag([m5_quale,m5_quale,m5_scorciatoia,m5_scorciatoia,m5_vf,m5_vf,m5_vf,m5_zerouno,m5_zerouno,m5_zerouno]);
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.NL;
+var rnd=Z.rnd,pick=Z.pick,shuffle=Z.shuffle,uch=Z.uch,fmt=Z.fmt,bag=Z.bag,eur=Z.eur;
+
+/* ============================================================
+   6. L'ORDINE GIUSTO — espressioni una mossa alla volta
+   ============================================================ */
+var REG="Prima le parentesi (tonde, poi quadre, poi graffe). Dentro: prima × e : nell'ordine in cui compaiono, poi + e − nell'ordine in cui compaiono.";
+
+function q_priorita(){
+  var a=rnd(8,40),b=rnd(2,9),c=rnd(2,9),d=rnd(2,9),e=rnd(2,9);
+  var forma=pick(["mix","div","due"]);
+  var str,ok,wrongs;
+  if(forma==="mix"){
+    str=a+" + "+b+" × "+c+" − "+d;
+    ok=b+" × "+c;
+    wrongs=[a+" + "+b,c+" − "+d,"Si va da sinistra a destra: "+a+" + "+b];
+  }else if(forma==="div"){
+    str=a+" − "+(b*c)+" : "+c+" + "+d;
+    ok=(b*c)+" : "+c;
+    wrongs=[a+" − "+(b*c),c+" + "+d,"Si va da sinistra a destra: "+a+" − "+(b*c)];
+  }else{
+    str=a+" + "+b+" × "+c+" − "+(d*e)+" : "+e;
+    ok=b+" × "+c;
+    wrongs=[(d*e)+" : "+e+", perché la divisione viene prima della moltiplicazione",a+" + "+b,"Si va da sinistra a destra: "+a+" + "+b];
+  }
+  return{tag:"L'ordine giusto",text:"In questa espressione, quale operazione si calcola per <b>prima</b>?",
+    sub:"Non c'è nessuna parentesi: decidono le precedenze.",
+    cap:"× e : vengono prima di + e −.",
+    expr:str,
+    kind:"choice",choices:shuffle([{label:ok,ok:true}].concat(wrongs.map(function(w){return{label:w,ok:false}}))),
+    hint:"Moltiplicazioni e divisioni per prime, nell'ordine in cui compaiono da sinistra.",
+    why:"Si comincia da <b>"+ok+"</b>: × e : hanno la precedenza su + e −. Fra × e : non c'è gerarchia, si va nell'ordine in cui compaiono.",
+    note:REG};
+}
+function q_parentesi(){
+  var a=rnd(2,9),b=rnd(2,9),c=rnd(2,9),d=rnd(2,9),e=rnd(2,9);
+  var str="{["+a+" × "+b+" + "+c+"] − "+d+"} : "+e;
+  return{tag:"L'ordine giusto",text:"Da quale pezzo si comincia?",
+    sub:"Ci sono tre livelli di parentesi.",
+    cap:"Si apre sempre dalla parentesi più interna: tonda, poi quadra, poi graffa.",
+    expr:str,
+    kind:"choice",choices:shuffle([
+      {label:a+" × "+b+", dentro la quadra",ok:true},
+      {label:": "+e+", la divisione finale",ok:false},
+      {label:"− "+d+", dentro la graffa",ok:false},
+      {label:"Si va da destra verso sinistra",ok:false}]),
+    hint:"Si parte da dentro, non da fuori. E dentro la quadra vale la solita precedenza.",
+    why:"Si parte dal pezzo più <b>interno</b>: dentro la quadra, e lì la moltiplicazione "+a+" × "+b+" viene prima dell'addizione.",
+    note:REG};
+}
+function q_stessolivello(){
+  var b=rnd(2,6),c=rnd(2,6),A=b*c*rnd(2,6);
+  var mode=pick(["divmol","mensot"]);
+  if(mode==="divmol"){
+    return{tag:"L'ordine giusto",text:"Quanto fa <b>"+A+" : "+b+" × "+c+"</b> ?",
+      sub:"Attenzione: × e : hanno la <b>stessa</b> importanza.",
+      cap:"Fra × e : si procede da sinistra a destra, nell'ordine in cui compaiono.",
+      expr:A+" : "+b+" × "+c,
+      kind:"number",answer:A/b*c,
+      hint:"Prima "+A+" : "+b+" = "+(A/b)+", poi × "+c+". Non si fa prima la moltiplicazione.",
+      why:A+" : "+b+" = "+(A/b)+", poi "+(A/b)+" × "+c+" = <b>"+(A/b*c)+"</b>. Se avessi fatto prima "+b+" × "+c+" avresti ottenuto "+(A/(b*c))+": sbagliato.",
+      note:"Fra <b>× e :</b> non c'è gerarchia: si va nell'ordine in cui compaiono, da sinistra."};
+  }
+  var x=rnd(30,60),y=rnd(5,20),z=rnd(3,15);
+  return{tag:"L'ordine giusto",text:"Quanto fa <b>"+x+" − "+y+" + "+z+"</b> ?",
+    sub:"Attenzione: + e − hanno la <b>stessa</b> importanza.",
+    cap:"Fra + e − si procede da sinistra a destra, nell'ordine in cui compaiono.",
+    expr:x+" − "+y+" + "+z,
+    kind:"number",answer:x-y+z,
+    hint:"Prima "+x+" − "+y+" = "+(x-y)+", poi + "+z+".",
+    why:x+" − "+y+" = "+(x-y)+", poi + "+z+" = <b>"+(x-y+z)+"</b>. Se avessi sommato prima "+y+" + "+z+" avresti ottenuto "+(x-y-z)+": sbagliato.",
+    note:"Fra <b>+ e −</b> non c'è gerarchia: si va nell'ordine in cui compaiono, da sinistra."};
+}
+
+function mvA(){ /* a − b − c×d − 0:1   (esercizio A del libro: 18 − 5 − 6×2 − 0:1 = 1) */
+  var c=rnd(2,9),d=rnd(2,6),b=rnd(3,9),P=c*d;
+  var a=P+b+rnd(0,6);
+  var e1=pick([1,1,2,5]);
+  return{tag:"L'ordine giusto",text:"Risolviamo insieme, una mossa alla volta.",
+    sub:"Nessuna parentesi: comandano le precedenze. Occhio all'ultimo pezzo.",
+    cap:REG,
+    expr:a+" − "+b+" − "+c+" × "+d+" − 0 : "+e1,
+    kind:"moves",
+    moves:[
+      {q:"Quale operazione si calcola per <b>prima</b>?",kind:"choice",
+       choices:shuffle([{label:c+" × "+d,ok:true},{label:a+" − "+b,ok:false},{label:"0 : "+e1,ok:false},
+                        {label:"Da sinistra a destra: "+a+" − "+b,ok:false}]),
+       hint:"× e : vengono prima di + e −. Fra le due, quella che compare prima.",
+       why:"× e : hanno la precedenza. La moltiplicazione "+c+" × "+d+" compare prima della divisione, quindi tocca a lei."},
+      {q:"Quanto fa "+c+" × "+d+" ?",kind:"number",answer:P,
+       hint:"Tabellina del "+c+".",why:c+" × "+d+" = <b>"+P+"</b>.",
+       to:a+" − "+b+" − "+P+" − 0 : "+e1},
+      {q:"Adesso tocca a 0 : "+e1+". Quanto fa?",kind:"number",answer:0,
+       hint:"Se non c'è niente da dividere, a ognuno tocca zero.",
+       why:"0 : "+e1+" = <b>0</b>. Zero diviso un numero fa sempre zero (mentre "+e1+" : 0 sarebbe impossibile).",
+       to:a+" − "+b+" − "+P+" − 0"},
+      {q:"Restano solo sottrazioni. Risultato finale?",kind:"number",answer:a-b-P,
+       hint:"Da sinistra: "+a+" − "+b+" = "+(a-b)+", poi − "+P+", poi − 0.",
+       why:a+" − "+b+" = "+(a-b)+", "+(a-b)+" − "+P+" = "+(a-b-P)+", "+(a-b-P)+" − 0 = <b>"+(a-b-P)+"</b>."}
+    ],
+    hint:REG,why:"Il risultato è <b>"+(a-b-P)+"</b>.",
+    note:"Le sottrazioni si eseguono <b>nell'ordine in cui compaiono</b>, da sinistra: non si raggruppano a piacere."};
+}
+function mvB(){ /* x + y:z − (p:q − r×s:u)   (esercizio B: 8 + 24:6 − (42:7 − 5×2×3:10) = 9) */
+  var z=rnd(2,8),yq=rnd(2,8),y=z*yq;
+  var r=rnd(2,9),s=rnd(2,9),t=r*s;
+  var du=[];for(var i=2;i<=9;i++)if(t%i===0&&t/i<=9&&t/i>=1)du.push(i);
+  if(!du.length)du=[r];
+  var u=pick(du),inner2=t/u;
+  var pq=inner2+rnd(1,5),q=rnd(2,9),p=q*pq;
+  var par=pq-inner2;
+  var x=par+rnd(1,9);
+  var res=x+yq-par;
+  var e0=x+" + "+y+" : "+z+" − ("+p+" : "+q+" − "+r+" × "+s+" : "+u+")";
+  return{tag:"L'ordine giusto",text:"Risolviamo insieme, una mossa alla volta.",
+    sub:"C'è una parentesi: si apre prima quella.",
+    cap:REG,
+    expr:e0,
+    kind:"moves",
+    moves:[
+      {q:"Da dove si comincia?",kind:"choice",
+       choices:shuffle([{label:"Dalla parentesi",ok:true},{label:"Dalla somma "+x+" + "+y+", che è a sinistra",ok:false},
+                        {label:"Dalla divisione "+y+" : "+z,ok:false},{label:"Da destra verso sinistra",ok:false}]),
+       hint:"Le parentesi vengono sempre prima di tutto.",
+       why:"Si apre sempre <b>la parentesi</b>: solo quando è chiusa si torna al resto dell'espressione."},
+      {q:"Dentro la parentesi: quanto fa "+p+" : "+q+" ?",kind:"number",answer:pq,
+       hint:"Quante volte ci sta "+q+" in "+p+"?",why:p+" : "+q+" = <b>"+pq+"</b>.",
+       to:x+" + "+y+" : "+z+" − ("+pq+" − "+r+" × "+s+" : "+u+")"},
+      {q:"E "+r+" × "+s+" : "+u+" ?",kind:"number",answer:inner2,
+       hint:"Nell'ordine in cui compaiono: prima "+r+" × "+s+" = "+t+", poi "+t+" : "+u+".",
+       why:r+" × "+s+" = "+t+", poi "+t+" : "+u+" = <b>"+inner2+"</b>. Fra × e : si va da sinistra.",
+       to:x+" + "+y+" : "+z+" − ("+pq+" − "+inner2+")"},
+      {q:"Chiudiamo la parentesi: "+pq+" − "+inner2+" =",kind:"number",answer:par,
+       hint:"Una sottrazione semplice.",why:pq+" − "+inner2+" = <b>"+par+"</b>. La parentesi è chiusa.",
+       to:x+" + "+y+" : "+z+" − "+par},
+      {q:"Resta "+x+" + "+y+" : "+z+" − "+par+". Che cosa si fa adesso?",kind:"choice",
+       choices:shuffle([{label:"La divisione "+y+" : "+z,ok:true},{label:"La somma "+x+" + "+y,ok:false},
+                        {label:"La sottrazione − "+par,ok:false}]),
+       hint:"× e : prima di + e −, anche se sono scritte dopo.",
+       why:"La divisione ha la <b>precedenza</b> sull'addizione e sulla sottrazione, anche se compare in mezzo."},
+      {q:"Risultato finale dell'espressione?",kind:"number",answer:res,
+       hint:y+" : "+z+" = "+yq+", quindi "+x+" + "+yq+" − "+par+".",
+       why:y+" : "+z+" = "+yq+", poi "+x+" + "+yq+" = "+(x+yq)+" e "+(x+yq)+" − "+par+" = <b>"+res+"</b>."}
+    ],
+    hint:REG,why:"Il risultato è <b>"+res+"</b>.",
+    note:"Si apre <b>prima la parentesi</b>; dentro e fuori vale sempre: × e : prima di + e −."};
+}
+function mvC(){ /* x + y×z − (a:b + c:d + e×f)  (esercizio C: 5 + 7×8 − (54:9 + 12:6 + 9×5) = 8) */
+  var b=rnd(2,9),ab=rnd(2,9),a=b*ab;
+  var d=rnd(2,9),cd=rnd(2,9),c=d*cd;
+  var e=rnd(3,9),f=rnd(3,9),ef=e*f;
+  var par=ab+cd+ef;
+  var y=rnd(4,9),z=rnd(4,9),yz=y*z;
+  var x=Math.max(1,par-yz+rnd(1,9));
+  var res=x+yz-par;
+  var e0=x+" + "+y+" × "+z+" − ("+a+" : "+b+" + "+c+" : "+d+" + "+e+" × "+f+")";
+  return{tag:"L'ordine giusto",text:"Risolviamo insieme, una mossa alla volta.",
+    sub:"Dentro la parentesi ci sono tre operazioni: nessuna somma prima del tempo.",
+    cap:REG,
+    expr:e0,
+    kind:"moves",
+    moves:[
+      {q:"Dentro la parentesi, che cosa si calcola per prime?",kind:"choice",
+       choices:shuffle([{label:"Le due divisioni e la moltiplicazione",ok:true},
+                        {label:"Le due addizioni, da sinistra",ok:false},
+                        {label:"Prima "+c+" : "+d+" + "+e+", poi il resto",ok:false}]),
+       hint:"Anche dentro le parentesi vale la precedenza di × e :.",
+       why:"Dentro la parentesi si applicano le stesse regole: prima <b>× e :</b>, poi le addizioni."},
+      {q:"Quanto vale tutta la parentesi ("+a+" : "+b+" + "+c+" : "+d+" + "+e+" × "+f+") ?",kind:"number",answer:par,
+       hint:a+" : "+b+" = "+ab+", "+c+" : "+d+" = "+cd+", "+e+" × "+f+" = "+ef+". Poi somma i tre.",
+       why:ab+" + "+cd+" + "+ef+" = <b>"+par+"</b>.",
+       to:x+" + "+y+" × "+z+" − "+par},
+      {q:"Ora "+x+" + "+y+" × "+z+" − "+par+". Quanto fa "+y+" × "+z+" ?",kind:"number",answer:yz,
+       hint:"Tabellina del "+y+".",why:y+" × "+z+" = <b>"+yz+"</b>: la moltiplicazione va fatta prima della somma.",
+       to:x+" + "+yz+" − "+par},
+      {q:"Risultato finale?",kind:"number",answer:res,
+       hint:"Da sinistra: "+x+" + "+yz+" = "+(x+yz)+", poi − "+par+".",
+       why:x+" + "+yz+" = "+(x+yz)+", poi "+(x+yz)+" − "+par+" = <b>"+res+"</b>."}
+    ],
+    hint:REG,why:"Il risultato è <b>"+res+"</b>.",
+    note:"Dentro le parentesi valgono le stesse precedenze di fuori: <b>× e : prima di + e −</b>."};
+}
+function divisors(n){var o=[];for(var i=2;i<=n;i++)if(n%i===0)o.push(i);return o}
+function mvD(){ /* {[(a × b) : c + d] × e − f} : g */
+  var a,b,c,d,e,f,g,P,Q,R,S,fin,tries=0;
+  do{
+    tries++;
+    a=rnd(2,9);b=rnd(2,9);P=a*b;
+    var dv=divisors(P).filter(function(v){return v<P});
+    if(!dv.length)continue;
+    c=pick(dv);Q=P/c;
+    d=rnd(2,9);R=Q+d;
+    e=rnd(2,6);f=rnd(1,9);
+    if(R*e<=f)continue;
+    S=R*e-f;
+    var dg=divisors(S).filter(function(v){return v>1&&v<=S});
+    if(!dg.length)continue;
+    g=pick(dg);fin=S/g;
+  }while((!fin||fin<1||fin%1!==0)&&tries<80);
+  if(!fin||fin%1!==0){a=8;b=3;P=24;c=6;Q=4;d=7;R=11;e=5;f=5;S=50;g=25;fin=2}
+  var e0="{[("+a+" × "+b+") : "+c+" + "+d+"] × "+e+" − "+f+"} : "+g;
+  return{tag:"L'ordine giusto",text:"Tre parentesi: si smonta dall'interno.",
+    sub:"Tonda, poi quadra, poi graffa.",
+    cap:REG,
+    expr:e0,
+    kind:"moves",
+    moves:[
+      {q:"Quale pezzo si calcola per primo?",kind:"choice",
+       choices:shuffle([{label:"("+a+" × "+b+"), la tonda",ok:true},
+                        {label:": "+g+", la divisione finale",ok:false},
+                        {label:"× "+e+" − "+f+", dentro la graffa",ok:false},
+                        {label:"+ "+d+", dentro la quadra",ok:false}]),
+       hint:"Dall'interno verso l'esterno.",
+       why:"Si comincia sempre dalla parentesi più <b>interna</b>: la tonda."},
+      {q:a+" × "+b+" =",kind:"number",answer:P,
+       hint:"Tabellina del "+a+".",why:a+" × "+b+" = <b>"+P+"</b>.",
+       to:"{["+P+" : "+c+" + "+d+"] × "+e+" − "+f+"} : "+g},
+      {q:"Dentro la quadra: "+P+" : "+c+" + "+d+" =",kind:"number",answer:R,
+       hint:"Prima la divisione "+P+" : "+c+" = "+Q+", poi + "+d+".",
+       why:P+" : "+c+" = "+Q+", poi "+Q+" + "+d+" = <b>"+R+"</b>: la divisione viene prima dell'addizione.",
+       to:"{"+R+" × "+e+" − "+f+"} : "+g},
+      {q:"Dentro la graffa: "+R+" × "+e+" − "+f+" =",kind:"number",answer:S,
+       hint:"Prima la moltiplicazione, poi la sottrazione.",
+       why:R+" × "+e+" = "+(R*e)+", poi − "+f+" = <b>"+S+"</b>.",
+       to:S+" : "+g},
+      {q:"Ultimo passo: "+S+" : "+g+" =",kind:"number",answer:fin,
+       hint:"Quante volte ci sta "+g+" in "+S+"?",why:S+" : "+g+" = <b>"+fin+"</b>. Espressione chiusa."}
+    ],
+    hint:REG,why:"Il risultato è <b>"+fin+"</b>.",
+    note:"Ordine delle parentesi: <b>tonde → quadre → graffe</b>, sempre dall'interno verso l'esterno."};
+}
+window.NLM6=bag([q_priorita,q_parentesi,q_stessolivello,mvA,mvB,mvC,mvD,q_priorita,q_stessolivello]);
+
+/* ============================================================
+   7. IL BANCO DEI PROBLEMI — problemi reali e divisione con resto
+   ============================================================ */
+function listFig(title,rows,foot){
+  return function(s){
+    Z.txt(s,230,16,title,"v");
+    rows.forEach(function(r,i){
+      var y=30+i*30;
+      Z.rect(s,40,y,380,26,r[2]?"o":"off",5);
+      Z.txt(s,54,y+13,r[0],"l"+(r[2]?" o":""));
+      Z.txt(s,406,y+13,r[1],"e"+(r[2]?" o":""));
+    });
+    if(foot)Z.txt(s,230,30+rows.length*30+16,foot,"s");
+  };
+}
+function p_maniscalco(){
+  var per=rnd(4,9),tot=rnd(40,140)*per+rnd(1,per-1);
+  var cav=Math.floor(tot/per),res=tot%per;
+  return{tag:"Divisione con resto",text:"Il maniscalco ha "+fmt(tot)+" chiodi e ne usa "+per+" per ferrare un cavallo.",
+    sub:"Quanti cavalli riesce a ferrare? E quanti chiodi gli avanzano?",
+    cap:"Quando il dividendo non si divide esattamente, resta un <b>resto</b>.",
+    w:460,h:150,draw:listFig("IL MANISCALCO",[["chiodi disponibili",fmt(tot)],["chiodi per un cavallo",String(per)],["cavalli ferrati","?",true],["chiodi avanzati","?",true]]),
+    kind:"moves",
+    moves:[
+      {q:"Quale operazione serve?",kind:"choice",
+       choices:shuffle([{label:"Una divisione: "+fmt(tot)+" : "+per,ok:true},
+                        {label:"Una moltiplicazione: "+fmt(tot)+" × "+per,ok:false},
+                        {label:"Una sottrazione: "+fmt(tot)+" − "+per,ok:false},
+                        {label:"Un'addizione: "+fmt(tot)+" + "+per,ok:false}]),
+       hint:"Devi vedere quante volte "+per+" ci sta in "+fmt(tot)+".",
+       why:"Serve una <b>divisione</b>: quante volte "+per+" ci sta in "+fmt(tot)+"."},
+      {q:"Quanti cavalli riesce a ferrare?",kind:"number",answer:cav,
+       hint:fmt(tot)+" : "+per+" = "+cav+" con un avanzo.",
+       why:fmt(tot)+" : "+per+" = <b>"+cav+"</b> cavalli (quoziente)."},
+      {q:"E quanti chiodi gli avanzano?",kind:"number",answer:res,
+       hint:cav+" × "+per+" = "+fmt(cav*per)+". Confronta con "+fmt(tot)+".",
+       why:cav+" × "+per+" = "+fmt(cav*per)+", e "+fmt(tot)+" − "+fmt(cav*per)+" = <b>"+res+"</b> chiodi di resto."}
+    ],
+    hint:"Divisione: il quoziente sono i cavalli, il resto sono i chiodi che avanzano.",
+    why:fmt(tot)+" : "+per+" = "+cav+" con resto "+res+".",
+    note:"Nella divisione con resto: <b>dividendo = divisore × quoziente + resto</b>, e il resto è sempre minore del divisore."};
+}
+function p_squadre(){
+  var per=pick([5,7,11]),tot=rnd(6,26)*per+rnd(1,per-1);
+  var sq=Math.floor(tot/per),res=tot%per;
+  var nome=per===11?"calcio a 11":per===7?"calcio a 7":"calcio a 5";
+  return{tag:"Divisione con resto",text:"Alla scuola calcio si sono iscritti "+tot+" ragazzi e si formano squadre di "+per+" ("+nome+").",
+    sub:"Quante squadre complete si formano? Quanti ragazzi restano fuori?",
+    cap:"Il resto è sempre più piccolo del divisore.",
+    w:460,h:150,draw:listFig("SCUOLA CALCIO",[["ragazzi iscritti",String(tot)],["giocatori per squadra",String(per)],["squadre complete","?",true],["ragazzi in panchina","?",true]]),
+    kind:"moves",
+    moves:[
+      {q:"Quante squadre complete si formano?",kind:"number",answer:sq,
+       hint:"Dividi "+tot+" per "+per+".",why:tot+" : "+per+" = <b>"+sq+"</b> squadre complete."},
+      {q:"Quanti ragazzi restano senza squadra?",kind:"number",answer:res,
+       hint:sq+" × "+per+" = "+(sq*per)+". Quanti ne mancano per arrivare a "+tot+"?",
+       why:tot+" − "+(sq*per)+" = <b>"+res+"</b> ragazzi. È il resto della divisione, e infatti è minore di "+per+"."}
+    ],
+    hint:"È una divisione con resto.",
+    why:tot+" : "+per+" = "+sq+" con resto "+res+".",
+    note:"Nella divisione con resto: <b>dividendo = divisore × quoziente + resto</b>, e il resto è sempre minore del divisore."};
+}
+var LIST=[{n:"ombrellone",pl:"ombrelloni",i:900,m:500},{n:"lettino",pl:"lettini",i:850,m:600},{n:"sdraio",pl:"sdraio",i:600,m:450}];
+function p_spiaggia(){
+  var mezza=pick([true,true,false]);
+  var idx=shuffle([0,1,2]).slice(0,2);
+  var q1=rnd(1,3),q2=rnd(1,2),days=rnd(2,7);
+  var it1=LIST[idx[0]],it2=LIST[idx[1]];
+  var c1=mezza?it1.m:it1.i,c2=mezza?it2.m:it2.i;
+  var perDay=q1*c1+q2*c2,tot=perDay*days;
+  var rows=LIST.map(function(o){
+    return[o.n,eur(o.i)+"  /  "+eur(o.m),idx.indexOf(LIST.indexOf(o))>=0];
+  });
+  var testo=q1+" "+(q1>1?it1.pl:it1.n)+" e "+q2+" "+(q2>1?it2.pl:it2.n);
+  return{tag:"Il listino",text:"Al mare noleggi "+testo+" per <b>"+days+" giorni</b>, sempre a "+(mezza?"mezza giornata":"giornata intera")+".",
+    sub:"Quanto spendi in tutto? Il listino è qui sopra: prima colonna giornata intera, seconda mezza giornata.",
+    cap:"intera giornata  /  mezza giornata",
+    w:460,h:158,draw:listFig("LISTINO SPIAGGIA",rows,"in arancione le voci che ti servono"),
+    kind:"moves",
+    moves:[
+      {q:"Quanto spendi in <b>un solo giorno</b>? (in euro)",kind:"number",answer:perDay/100,dec:(perDay%100!==0),
+       hint:q1+" × "+eur(c1)+" + "+q2+" × "+eur(c2)+".",
+       why:q1+" × "+eur(c1)+" = "+eur(q1*c1)+" e "+q2+" × "+eur(c2)+" = "+eur(q2*c2)+", in tutto <b>"+eur(perDay)+"</b> al giorno."},
+      {q:"E in "+days+" giorni? (in euro)",kind:"number",answer:tot/100,dec:(tot%100!==0),
+       hint:eur(perDay)+" × "+days+".",
+       why:eur(perDay)+" × "+days+" = <b>"+eur(tot)+"</b>."}
+    ],
+    hint:"Prima il costo di una giornata, poi moltiplichi per i giorni.",
+    why:"In tutto <b>"+eur(tot)+"</b>.",
+    note:"Nei problemi con un listino: prima calcola il costo di <b>una unità di tempo</b>, poi moltiplica."};
+}
+function p_sconto(){
+  var pr=[rnd(40,80),rnd(90,160),rnd(30,70)];
+  var nomi=shuffle(["il completo da gioco","la racchetta","le scarpe","il pallone","la tuta","gli scarpini"]).slice(0,3);
+  var tot=pr[0]+pr[1]+pr[2];
+  var soglia=pick([150,180,200]);
+  var sconto=pick([5,8,10,12]);
+  var ha=tot>soglia;
+  var spesa=ha?tot-sconto:tot;
+  var banco=Math.ceil((spesa+rnd(10,80))/50)*50;
+  var resto=banco-spesa;
+  return{tag:"Spesa e resto",text:"Compri tre articoli. Il negozio fa "+eur(sconto*100)+" di sconto se spendi più di "+eur(soglia*100)+".",
+    sub:"Paghi con "+eur(banco*100)+": quanto ti torna indietro?",
+    cap:"Attenzione all'ordine: prima il totale, poi lo sconto, poi il resto.",
+    w:460,h:180,draw:listFig("LO SCONTRINO",[[nomi[0],eur(pr[0]*100)],[nomi[1],eur(pr[1]*100)],[nomi[2],eur(pr[2]*100)],["totale","?",true]],"sconto di "+eur(sconto*100)+" oltre "+eur(soglia*100)),
+    kind:"moves",
+    moves:[
+      {q:"Quanto fa il totale prima dello sconto? (in euro)",kind:"number",answer:tot,
+       hint:pr[0]+" + "+pr[1]+" + "+pr[2]+".",
+       why:pr[0]+" + "+pr[1]+" + "+pr[2]+" = <b>"+eur(tot*100)+"</b>."},
+      {q:"Hai diritto allo sconto?",kind:"choice",
+       choices:shuffle([{label:"Sì",ok:ha},{label:"No",ok:!ha}]),
+       hint:"Lo sconto vale solo sopra "+eur(soglia*100)+": confronta con il totale.",
+       why:ha?eur(tot*100)+" è più di "+eur(soglia*100)+", quindi <b>sì</b>, lo sconto si applica.":
+             eur(tot*100)+" non supera "+eur(soglia*100)+", quindi <b>no</b>: si paga tutto."},
+      {q:"Quanto paghi davvero? (in euro)",kind:"number",answer:spesa,
+       hint:ha?eur(tot*100)+" − "+eur(sconto*100)+".":"Nessuno sconto: paghi il totale.",
+       why:ha?eur(tot*100)+" − "+eur(sconto*100)+" = <b>"+eur(spesa*100)+"</b>.":"Senza sconto paghi <b>"+eur(spesa*100)+"</b>."},
+      {q:"Paghi con "+eur(banco*100)+": quanto ti torna? (in euro)",kind:"number",answer:resto,
+       hint:eur(banco*100)+" − "+eur(spesa*100)+".",
+       why:eur(banco*100)+" − "+eur(spesa*100)+" = <b>"+eur(resto*100)+"</b> di resto."}
+    ],
+    hint:"Somma, poi togli lo sconto (se spetta), poi sottrai dal denaro dato.",
+    why:"Spendi "+eur(spesa*100)+" e ti tornano "+eur(resto*100)+".",
+    note:"Nei problemi di spesa segui l'ordine: <b>totale → sconto → resto</b>. Lo sconto si applica solo se la condizione è vera."};
+}
+function p_pullman(){
+  var posti=pick([50,52,54,55]),tifosi=rnd(1,4)*posti+rnd(8,posti-8);
+  var pieni=Math.floor(tifosi/posti),serve=Math.ceil(tifosi/posti);
+  var liberi=serve*posti-tifosi;
+  return{tag:"Problema in due mosse",text:"Partono "+tifosi+" tifosi per la trasferta. Ogni pullman ha "+posti+" posti.",
+    sub:"Quanti pullman servono? E quanti posti restano liberi nell'ultimo?",
+    cap:"Qui il resto non si butta via: chi avanza deve comunque partire.",
+    w:460,h:150,draw:listFig("LA TRASFERTA",[["tifosi in partenza",String(tifosi)],["posti per pullman",String(posti)],["pullman necessari","?",true],["posti liberi nell'ultimo","?",true]]),
+    kind:"moves",
+    moves:[
+      {q:"Quanti pullman servono in tutto?",kind:"number",answer:serve,
+       hint:tifosi+" : "+posti+" = "+pieni+" con resto "+(tifosi-pieni*posti)+". Quelli che avanzano dove li metti?",
+       why:tifosi+" : "+posti+" = "+pieni+" con resto "+(tifosi-pieni*posti)+", ma i "+(tifosi-pieni*posti)+" che restano hanno bisogno di un altro pullman: servono <b>"+serve+"</b> pullman."},
+      {q:"Quanti posti restano liberi nell'ultimo pullman?",kind:"number",answer:liberi,
+       hint:serve+" × "+posti+" = "+(serve*posti)+" posti in tutto.",
+       why:serve+" × "+posti+" = "+(serve*posti)+" posti, meno "+tifosi+" tifosi = <b>"+liberi+"</b> posti liberi."}
+    ],
+    hint:"Fai la divisione, poi ragiona su che cosa fare del resto.",
+    why:"Servono "+serve+" pullman e restano liberi "+liberi+" posti.",
+    note:"Quando il resto rappresenta persone o oggetti da sistemare, il quoziente va <b>arrotondato per eccesso</b>."};
+}
+window.NLM7=bag([p_maniscalco,p_maniscalco,p_squadre,p_spiaggia,p_spiaggia,p_sconto,p_sconto,p_pullman]);
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.NL;
+var rnd=Z.rnd,pick=Z.pick,shuffle=Z.shuffle,uch=Z.uch,fmt=Z.fmt,bag=Z.bag;
+
+/* ============================================================
+   8. GLI ENIGMI DELL'OFFICINA
+   ============================================================ */
+function pad(s,n){s=String(s);while(s.length<n)s=" "+s;return s}
+
+function e_colonna(){
+  var kind=pick(["add","add","sot","mol"]);
+  var L,rows,digs;
+  if(kind==="add"){
+    L=4;
+    var a=rnd(1000,4999),b=rnd(1000,4999),c=a+b;
+    L=String(c).length;
+    rows=[{d:pad(a,L)},{d:pad(b,L),op:"+"},{d:pad(c,L),res:true}];
+  }else if(kind==="sot"){
+    L=5;
+    var d2=rnd(1000,8999),b2=rnd(1000,d2-100),a2=d2;
+    var min=d2+b2;
+    L=String(min).length;
+    rows=[{d:pad(min,L)},{d:pad(b2,L),op:"−"},{d:pad(d2,L),res:true}];
+  }else{
+    var m=rnd(3,9),a3=rnd(1002,9998),p3=a3*m;
+    L=String(p3).length;
+    rows=[{d:pad(a3,L)},{d:pad(m,L),op:"×"},{d:pad(p3,L),res:true}];
+  }
+  /* una sola casella nascosta per colonna, e mai su uno spazio vuoto */
+  var cells=[];
+  for(var k=0;k<L;k++){
+    var here=[];
+    for(var rI=0;rI<3;rI++)if(rows[rI].d.charAt(k)!==" ")here.push([rI,k]);
+    if(here.length)cells.push(here[rnd(0,here.length-1)]);
+  }
+  cells=shuffle(cells);
+  var nh=(kind==="mol")?1:Math.min(2,cells.length);
+  var hidden=cells.slice(0,nh);
+  var target=hidden[rnd(0,hidden.length-1)];
+  var ans=parseInt(rows[target[0]].d.charAt(target[1]),10);
+  var segno=kind==="add"?"+":(kind==="sot"?"−":"×");
+  return{tag:"Quali cifre mancano",text:"Scopri la cifra che manca nella casella <b>arancione</b>.",
+    sub:"Le altre caselle vuote non ti servono per rispondere, ma puoi ricavarle allo stesso modo.",
+    cap:"Lavora colonna per colonna, partendo da destra, e ricordati i riporti.",
+    w:460,h:150,draw:function(s){
+      Z.column(s,(460-L*30)/2,34,rows,hidden,target);
+    },
+    kind:"number",answer:ans,
+    hint:kind==="mol"?"Puoi anche fare la divisione al contrario: il risultato diviso "+rows[1].d.replace(/ /g,"")+".":
+         "Nella colonna dove sta la casella arancione, prova tutte le cifre da 0 a 9: una sola fa tornare il conto.",
+    why:"L'operazione completa è "+rows[0].d.replace(/ /g,"")+" "+segno+" "+rows[1].d.replace(/ /g,"")+" = "+rows[2].d.replace(/ /g,"")+
+        ", quindi nella casella arancione va <b>"+ans+"</b>.",
+    note:"Nei calcoli in colonna si ragiona <b>da destra verso sinistra</b>, tenendo conto dei riporti (o dei prestiti)."};
+}
+
+var SIM=["◆","▲","●"];
+function e_simboli(){
+  var m1=rnd(6,9),m2=rnd(6,9),D=m1*m2;
+  var k=pick([4,6,8]),q=rnd(3,8),T=k*q;
+  var guard=0;
+  while((T>=D||D-T<1)&&guard++<60){k=pick([4,6,8]);q=rnd(2,8);T=k*q}
+  if(T>=D){m1=9;m2=9;D=81;k=8;q=6;T=48}
+  var C=D-T,K=D+T,fin=q*C;
+  return{tag:"A simbolo uguale, numero uguale",text:"Le medaglie olimpiche: risolvi i simboli uno dopo l'altro.",
+    sub:"Ogni simbolo vale sempre lo stesso numero. L'ultima riga dà il numero di medaglie.",
+    cap:"Un enigma alla volta: ogni riga ti serve per la successiva.",
+    w:460,h:150,draw:function(s){
+      var L=[m1+" × "+m2+" = "+SIM[0],
+             K+" − "+SIM[0]+" = "+SIM[1],
+             SIM[0]+" − "+SIM[1]+" = "+SIM[2],
+             SIM[1]+" : "+k+" × "+SIM[2]+" = ?"];
+      L.forEach(function(t,i){
+        Z.rect(s,90,14+i*33,280,28,i===3?"o":"off",5);
+        Z.txt(s,230,28+i*33,t,i===3?"o":"");
+      });
+    },
+    kind:"moves",
+    moves:[
+      {q:"Quanto vale "+SIM[0]+" ?",kind:"number",answer:D,
+       hint:m1+" × "+m2+".",why:m1+" × "+m2+" = <b>"+D+"</b>, quindi "+SIM[0]+" = "+D+"."},
+      {q:"E "+SIM[1]+" ?",kind:"number",answer:T,
+       hint:K+" − "+D+".",why:K+" − "+D+" = <b>"+T+"</b>, quindi "+SIM[1]+" = "+T+"."},
+      {q:"E "+SIM[2]+" ?",kind:"number",answer:C,
+       hint:D+" − "+T+".",why:D+" − "+T+" = <b>"+C+"</b>, quindi "+SIM[2]+" = "+C+"."},
+      {q:"Ultima riga: "+SIM[1]+" : "+k+" × "+SIM[2]+" =",kind:"number",answer:fin,
+       hint:T+" : "+k+" = "+q+", poi × "+C+". Da sinistra a destra.",
+       why:T+" : "+k+" = "+q+", poi "+q+" × "+C+" = <b>"+fin+"</b> medaglie."}
+    ],
+    hint:"Parti dalla prima riga: è l'unica con due numeri noti.",
+    why:SIM[0]+" = "+D+", "+SIM[1]+" = "+T+", "+SIM[2]+" = "+C+", risultato <b>"+fin+"</b>.",
+    note:"Negli enigmi con i simboli, a <b>simbolo uguale corrisponde numero uguale</b>: si parte dalla riga con meno incognite."};
+}
+
+var MAG=[[2,7,6],[9,5,1],[4,3,8]];
+function e_magico(){
+  var a=pick([1,1,2,3]),b=rnd(0,12);
+  var g=MAG.map(function(r){return r.slice()});
+  if(pick([0,1])){g=[[g[0][2],g[0][1],g[0][0]],[g[1][2],g[1][1],g[1][0]],[g[2][2],g[2][1],g[2][0]]]}
+  if(pick([0,1])){g=[g[2],g[1],g[0]]}
+  var v=g.map(function(r){return r.map(function(x){return a*x+b})});
+  var K=v[0][0]+v[0][1]+v[0][2];
+  var r0=rnd(0,2),others=[0,1,2].filter(function(r){return r!==r0});
+  var cols=shuffle([0,1,2]);
+  var rowA=others[0],rowB=others[1];
+  var hid=[[rowA,cols[0]],[rowA,cols[1]],[rowB,cols[2]]];
+  var target=hid[rnd(0,2)];
+  var ans=v[target[0]][target[1]];
+  var colKnown=[0,1,2].filter(function(r){return r!==target[0]}).map(function(r){return v[r][target[1]]});
+  return{tag:"Quadrato magico",text:"Completa il quadrato: che numero va nella casella <b>arancione</b>?",
+    sub:"Righe, colonne e diagonali devono dare tutte la stessa somma. Ti serve solo la casella arancione: le altre due vuote puoi ignorarle.",
+    cap:"Una riga è già completa: da lì ricavi la somma magica.",
+    w:460,h:158,draw:function(s){
+      Z.msquare(s,(460-144)/2,7,v,hid,target);
+    },
+    kind:"number",answer:ans,
+    hint:"La riga completa vale "+K+". Nella colonna della casella arancione ci sono già "+colKnown[0]+" e "+colKnown[1]+".",
+    why:"La somma magica è <b>"+K+"</b> (la si legge dalla riga completa). Nella colonna della casella arancione ci sono "+
+        colKnown[0]+" e "+colKnown[1]+", quindi manca "+K+" − "+colKnown[0]+" − "+colKnown[1]+" = <b>"+ans+"</b>.",
+    note:"Nel quadrato magico si parte da una <b>riga o colonna completa</b> per trovare la somma, poi si procede per differenza."};
+}
+
+function ev(a,o1,b,o2,c){
+  function ap(x,o,y){return o==="+"?x+y:o==="−"?x-y:o==="×"?x*y:(y===0?null:x/y)}
+  var pr={"+":1,"−":1,"×":2,":":2};
+  if(pr[o2]>pr[o1]){var t=ap(b,o2,c);if(t===null)return null;return ap(a,o1,t)}
+  var u=ap(a,o1,b);if(u===null)return null;return ap(u,o2,c);
+}
+function e_segni(){
+  var OP=["+","−","×",":"];
+  var a,b,c,o1,o2,R,which,found=false;
+  for(var tries=0;tries<300&&!found;tries++){
+    a=rnd(2,9)*rnd(2,6);b=rnd(2,9);c=rnd(2,9);
+    o1=pick(OP);o2=pick(OP);
+    which=pick([1,2]);
+    R=ev(a,o1,b,o2,c);
+    if(R===null||R<0||R%1!==0)continue;
+    var vals=OP.map(function(o){return which===1?ev(a,o,b,o2,c):ev(a,o1,b,o,c)});
+    var okCount=0;
+    for(var i=0;i<4;i++)if(vals[i]!==null&&vals[i]===R)okCount++;
+    if(okCount===1)found=true;
+  }
+  if(!found){a=18;b=6;c=3;o1=":";o2="−";which=1;R=0}
+  var right=which===1?o1:o2;
+  return{tag:"Inserisci il segno",text:"Quale segno va al posto del <b>punto interrogativo</b>?",
+    sub:"Ricorda le precedenze: × e : prima di + e −.",
+    cap:"Un solo segno fa tornare il risultato.",
+    w:460,h:110,draw:function(s){
+      var str=a+" "+(which===1?"?":o1)+" "+b+" "+(which===2?"?":o2)+" "+c+" = "+R;
+      Z.rect(s,60,26,340,52,"off",8);
+      Z.txt(s,230,52,str,"b o");
+      Z.txt(s,230,96,"prova i quattro segni e controlla","s");
+    },
+    kind:"choice",choices:shuffle(OP.map(function(o){return{label:o,ok:o===right}})),
+    hint:"Prova uno alla volta, rispettando le precedenze.",
+    why:"Il segno giusto è <b>"+right+"</b>: "+a+" "+o1+" "+b+" "+o2+" "+c+" = "+R+". Gli altri tre danno risultati diversi.",
+    note:"Prima di inserire un segno controlla le <b>precedenze</b>: × e : si eseguono prima di + e −."};
+}
+
+function e_nove(){
+  var N=rnd(21,98);
+  var S=Math.floor(N/10)+(N%10);
+  var D=N-S;
+  return{tag:"Il trucco del mentalista",text:"Pensa al numero <b>"+N+"</b>, somma le sue cifre e togli il risultato dal numero di partenza.",
+    sub:"Il mentalista dice di sapere già una cosa sul risultato. Scopriamo quale.",
+    cap:"numero − somma delle sue cifre = ?",
+    w:460,h:126,draw:function(s){
+      Z.rect(s,40,20,110,44,"v",8);Z.txt(s,95,42,N,"v");Z.txt(s,95,76,"il numero","s");
+      Z.rect(s,180,20,110,44,"off",8);Z.txt(s,235,42,"?","");Z.txt(s,235,76,"somma cifre","s");
+      Z.rect(s,320,20,110,44,"o",8);Z.txt(s,375,42,"?","o");Z.txt(s,375,76,"differenza","s");
+      Z.path(s,"M156 42h18","");Z.path(s,"M296 42h18","");
+      Z.txt(s,230,110,"il mentalista sa già che cosa succede","s");
+    },
+    kind:"moves",
+    moves:[
+      {q:"Quanto fa la somma delle cifre di "+N+" ?",kind:"number",answer:S,
+       hint:Math.floor(N/10)+" + "+(N%10)+".",why:Math.floor(N/10)+" + "+(N%10)+" = <b>"+S+"</b>."},
+      {q:"E adesso "+N+" − "+S+" =",kind:"number",answer:D,
+       hint:"Una sottrazione semplice.",why:N+" − "+S+" = <b>"+D+"</b>."},
+      {q:"Di quale numero è sempre multiplo questa differenza?",kind:"choice",
+       choices:shuffle([{label:"9",ok:true},{label:"5",ok:false},{label:"7",ok:false},{label:"11",ok:false}]),
+       hint:D+" : 9 = "+(D/9)+". Prova con un altro numero e succede di nuovo.",
+       why:"È sempre un multiplo di <b>9</b>: "+D+" = 9 × "+(D/9)+". Succede con qualunque numero, e per questo il mentalista può fingere di leggerti nel pensiero."}
+    ],
+    hint:"Fai i conti e poi guarda che numero ti esce: prova a dividerlo per 9.",
+    why:N+" − "+S+" = "+D+", che è 9 × "+(D/9)+".",
+    note:"La differenza fra un numero e la <b>somma delle sue cifre</b> è sempre un multiplo di <b>9</b>."};
+}
+window.NLM8=bag([e_colonna,e_colonna,e_simboli,e_magico,e_magico,e_segni,e_segni,e_nove]);
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var Z=window.NL,$=Z.$;
+
+var MODS=[
+  {id:"insieme",name:"La squadra di N",desc:"Chi è naturale e chi no, precedente e successivo, ordine.",color:"var(--rame)",n:6,make:window.NLM1,
+   icon:'<rect x="5" y="18" width="16" height="14" rx="3" class="bx r"/><rect x="27" y="18" width="16" height="14" rx="3" class="bx off"/>'+
+        '<text x="13" y="26" class="tx r" font-size="11">0</text><text x="35" y="26" class="tx" font-size="11">1</text>'+
+        '<path d="M6 40h36" class="ln r"/><path d="M36 37l6 3-6 3" class="ln r"/><text x="24" y="11" class="tx r" font-size="12">N</text>'},
+  {id:"retta",name:"Il binario graduato",desc:"La retta orientata, le distanze giuste, i numeri romani.",color:"var(--ottone)",n:6,make:window.NLM2,
+   icon:'<path d="M4 30h38" class="ln o"/><path d="M36 27l6 3-6 3" class="ln o"/>'+
+        '<path d="M10 24v12M20 26v8M30 24v12M40 26v8" class="ln o"/>'+
+        '<text x="10" y="16" class="tx o" font-size="11">0</text><text x="30" y="16" class="tx o" font-size="11">2</text>'},
+  {id:"cifre",name:"Il peso delle cifre",desc:"Valore posizionale, milioni e miliardi, confronti.",color:"var(--verderame)",n:6,make:window.NLM3,
+   icon:'<rect x="5" y="16" width="12" height="18" rx="3" class="bx v"/><rect x="19" y="16" width="12" height="18" rx="3" class="bx v"/>'+
+        '<rect x="33" y="16" width="10" height="18" rx="3" class="bx off"/>'+
+        '<text x="11" y="25" class="tx v" font-size="11">4</text><text x="25" y="25" class="tx v" font-size="11">0</text>'+
+        '<text x="38" y="25" class="tx" font-size="11">7</text><text x="24" y="42" class="tx s" font-size="9">h da u</text>'},
+  {id:"parole",name:"Le parole del calcolo",desc:"Addendo, minuendo, fattore, divisore: chi è chi.",color:"var(--indaco)",n:6,make:window.NLM4,
+   icon:'<rect x="4" y="18" width="14" height="14" rx="3" class="bx i"/><rect x="30" y="18" width="14" height="14" rx="3" class="bx i"/>'+
+        '<text x="24" y="26" class="tx i" font-size="14">:</text>'+
+        '<text x="24" y="41" class="tx s" font-size="9">divisore</text><path d="M37 34v3" class="ln i"/>'},
+  {id:"regole",name:"Le regole d'oro",desc:"Le proprietà, le trappole del vero/falso, i casi con 0 e 1.",color:"var(--ottone)",n:6,key:true,make:window.NLM5,
+   icon:'<circle cx="24" cy="24" r="15" fill="none" class="ln o"/><text x="24" y="21" class="tx o" font-size="12">a×b</text>'+
+        '<text x="24" y="33" class="tx o" font-size="12">b×a</text>'},
+  {id:"ordine",name:"L'ordine giusto",desc:"Le espressioni si smontano un pezzo alla volta.",color:"var(--rame)",n:6,key:true,make:window.NLM6,
+   icon:'<text x="8" y="14" class="tx o" font-size="10">1</text><rect x="16" y="7" width="27" height="9" rx="2" class="bx r"/>'+
+        '<text x="8" y="28" class="tx o" font-size="10">2</text><rect x="16" y="21" width="20" height="9" rx="2" class="bx o"/>'+
+        '<text x="8" y="42" class="tx o" font-size="10">3</text><rect x="16" y="35" width="12" height="9" rx="2" class="bx v"/>'},
+  {id:"problemi",name:"Il banco dei problemi",desc:"Testi veri, listini, sconti e divisioni con resto.",color:"var(--verde)",n:6,key:true,make:window.NLM7,
+   icon:'<rect x="9" y="6" width="30" height="36" rx="4" class="bx g"/><path d="M15 16h18M15 24h18M15 32h11" class="ln g"/>'},
+  {id:"enigmi",name:"Gli enigmi dell'officina",desc:"Cifre mancanti, simboli, quadrato magico, il trucco del 9.",color:"var(--indaco)",n:6,make:window.NLM8,
+   icon:'<rect x="6" y="6" width="12" height="12" rx="2" class="bx i"/><rect x="19" y="6" width="12" height="12" rx="2" class="bx off"/>'+
+        '<rect x="32" y="6" width="10" height="12" rx="2" class="bx i"/>'+
+        '<rect x="6" y="19" width="12" height="12" rx="2" class="bx off"/><rect x="19" y="19" width="12" height="12" rx="2" class="bx i"/>'+
+        '<rect x="32" y="19" width="10" height="12" rx="2" class="bx off"/>'+
+        '<rect x="6" y="32" width="12" height="10" rx="2" class="bx i"/><rect x="19" y="32" width="12" height="10" rx="2" class="bx off"/>'+
+        '<rect x="32" y="32" width="10" height="10" rx="2" class="bx i"/>'}
+];
+var ALL=[window.NLM1,window.NLM2,window.NLM3,window.NLM4,window.NLM5,window.NLM6,window.NLM7,window.NLM8];
+var PARTITA={id:"partita",name:"La partita",desc:"Otto domande pescate da tutti i banchi, come in verifica.",
+  color:"var(--ottone)",n:8,big:true,make:function(){return Z.pick(ALL)()},
+  icon:'<circle cx="24" cy="24" r="16" fill="none" class="ln o"/><circle cx="24" cy="24" r="5" fill="#F0B429"/>'+
+       '<path d="M24 8v6M24 34v6M8 24h6M34 24h6M12 12l4 4M32 32l4 4M36 12l-4 4M16 32l-4 4" class="ln o"/>'};
+
+var S={m:null,i:0,task:null,tries:0,mv:0,typed:"",lock:false,score:0,notes:[],expr:"",perfect:true};
+
+/* ---------------- home ---------------- */
+function starsHTML(k){var h="";for(var i=0;i<3;i++)h+='<i class="'+(i<k?"on":"")+'"></i>';return h}
+function paintHome(){
+  var g=$("#grid");g.innerHTML="";
+  MODS.concat([PARTITA]).forEach(function(m,i){
+    var b=document.createElement("button");
+    b.className="mod"+(m.big?" big":"")+(m.key?" key":"");
+    b.style.setProperty("--mc",m.color);
+    b.style.animationDelay=(i*38)+"ms";
+    b.innerHTML='<span class="rail"><span class="idx">'+(i<9?"0"+(i+1):String(i+1))+'</span>'+
+      '<svg class="ic" viewBox="0 0 48 48" aria-hidden="true">'+m.icon+'</svg></span>'+
+      '<span class="bd">'+(m.key?'<span class="tag">da rinforzare</span>':"")+
+      '<h3>'+m.name+'</h3><p>'+m.desc+'</p>'+
+      '<span class="ft"><span class="stars">'+starsHTML(Z.P.stars[m.id]||0)+'</span>'+
+      '<span class="go">'+m.n+' domande</span></span></span>';
+    b.addEventListener("click",function(){start(m)});
+    g.appendChild(b);
+  });
+  Z.paintXP();
+}
+function show(id){
+  ["home","game","end"].forEach(function(s){$("#"+s).classList.toggle("hide",s!==id)});
+  try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){window.scrollTo(0,0)}
+}
+
+/* ---------------- sessione ---------------- */
+function start(m){
+  S={m:m,i:0,task:null,tries:0,mv:0,typed:"",lock:false,score:0,notes:[],expr:"",perfect:true};
+  $("#modeName").textContent=m.name;
+  var d=$("#dots");d.innerHTML="";
+  for(var k=0;k<m.n;k++)d.appendChild(document.createElement("i"));
+  show("game");next();
+}
+function next(){
+  if(S.i>=S.m.n)return finish();
+  S.task=S.m.make();S.tries=0;S.mv=0;S.typed="";S.lock=false;S.perfect=true;
+  var t=S.task;
+  S.expr=t.expr||"";
+  var dots=$("#dots").children;
+  for(var k=0;k<dots.length;k++)dots[k].classList.toggle("now",k===S.i);
+  $("#qTag").textContent=t.tag;
+  $("#qText").innerHTML=t.text;
+  var sub=$("#qSub");
+  if(t.sub){sub.innerHTML=t.sub;sub.classList.remove("hide")}else sub.classList.add("hide");
+  $("#figCap").innerHTML=t.cap||"";
+  $("#fb").className="fb";$("#fb").innerHTML="";
+  $("#btnNext").classList.add("hide");
+  $("#btnHint").classList.remove("hide");$("#btnHint").disabled=false;
+  drawFig();renderInput();
+}
+function drawFig(){
+  var t=S.task,host=$("#fig");host.innerHTML="";
+  if(S.expr){
+    var d=document.createElement("div");d.className="exprbox";d.innerHTML=S.expr;
+    host.appendChild(d);
+  }
+  if(t.draw){
+    var s=Z.board(t.w||460,t.h||120);
+    try{t.draw(s)}catch(e){}
+    host.appendChild(s);
+    if(t.kind==="pick")bindPick();
+  }
+}
+function bindPick(){
+  var els=$("#fig").querySelectorAll("[data-v]");
+  Array.prototype.forEach.call(els,function(el){
+    el.addEventListener("click",function(){
+      if(S.lock)return;
+      judge(el.getAttribute("data-v")===String(S.task.answer));
+    });
+  });
+}
+
+/* ---------------- input ---------------- */
+function curKind(){var t=S.task;return t.kind==="moves"?t.moves[S.mv].kind:t.kind}
+function curDec(){var t=S.task;return !!(t.kind==="moves"?t.moves[S.mv].dec:t.dec)}
+function keypad(withComma){
+  var pad=document.createElement("div");pad.className="pad";
+  var keys=["1","2","3","4","5","6","7","8","9"];
+  if(withComma)keys=keys.concat([",","0","←","✓"]);
+  else keys=keys.concat(["←","0","✓"]);
+  keys.forEach(function(k){
+    var b=document.createElement("button");b.textContent=k;
+    if(k==="✓"){b.className="ok";if(withComma)b.className="ok wide"}
+    if(k==="←")b.className="del";
+    b.setAttribute("type","button");
+    b.addEventListener("click",function(){typeKey(k)});
+    pad.appendChild(b);
+  });
+  return pad;
+}
+function renderInput(){
+  var t=S.task,box=$("#answer");box.innerHTML="";
+  var kind=t.kind,mv=null;
+  if(kind==="moves"){
+    mv=t.moves[S.mv];kind=mv.kind;
+    var h=document.createElement("div");h.className="qcard mvcard";
+    h.innerHTML='<span class="tag">mossa '+(S.mv+1)+' di '+t.moves.length+'</span><h3>'+mv.q+'</h3>';
+    box.appendChild(h);
+  }
+  if(kind==="choice"){
+    var list=(mv||t).choices;
+    var g=document.createElement("div");g.className="opts";
+    list.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";b.setAttribute("type","button");
+      b.innerHTML='<span class="k">'+"ABCD"[i]+'</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(S.lock||b.disabled)return;
+        b.classList.add(c.ok?"good":"bad");
+        if(!c.ok)b.disabled=true;
+        judge(c.ok);
+      });
+      g.appendChild(b);
+    });
+    box.appendChild(g);
+  }else if(kind==="pick"){
+    var p=document.createElement("div");p.className="fb soft on";
+    p.innerHTML='<b class="h">Come si risponde</b>Clicca direttamente sulla figura qui sopra.';
+    box.appendChild(p);
+  }else{
+    var d=document.createElement("div");d.className="disp";
+    d.innerHTML='<span class="v" id="dv">–</span>'+(curDec()?'<span class="un">euro</span>':"");
+    box.appendChild(d);box.appendChild(keypad(curDec()));
+  }
+}
+function typeKey(k){
+  if(S.lock)return;
+  var kind=curKind();
+  if(kind==="choice"||kind==="pick")return;
+  if(k==="←"){S.typed=S.typed.slice(0,-1);paint();return}
+  if(k===","){if(S.typed&&S.typed.indexOf(",")<0)S.typed+=",";paint();return}
+  if(k==="✓"){
+    if(!S.typed||S.typed.charAt(S.typed.length-1)===",")return;
+    var v=parseFloat(S.typed.replace(",","."));
+    var t=S.task,target=(t.kind==="moves")?t.moves[S.mv].answer:t.answer;
+    S.typed="";paint();
+    judge(Math.abs(v-target)<1e-9);
+    return;
+  }
+  if(S.typed.length<9)S.typed+=k;
+  paint();
+}
+function paint(){var d=$("#dv");if(d)d.textContent=S.typed||"–"}
+
+/* ---------------- valutazione ---------------- */
+function fb(cls,title,body,extra){
+  var f=$("#fb");f.className="fb on "+cls;
+  f.innerHTML='<b class="h">'+title+"</b>"+body+(extra?'<div class="xpline">'+extra+"</div>":"");
+}
+function shake(){var st=document.querySelector(".bench");if(!st)return;st.classList.remove("shake");void st.offsetWidth;st.classList.add("shake")}
+function dotSet(cls){var d=$("#dots").children[S.i];if(!d)return;d.classList.remove("now");d.classList.add(cls)}
+function keepNote(){var t=S.task;if(t.note&&S.notes.indexOf(t.note)<0)S.notes.push(t.note)}
+function lockOpts(){
+  Array.prototype.forEach.call(document.querySelectorAll(".opt"),function(b){b.disabled=true});
+  var pd=document.querySelector(".pad");
+  if(pd)Array.prototype.forEach.call(pd.querySelectorAll("button"),function(b){b.disabled=true});
+}
+
+function judge(ok){
+  var t=S.task;S.tries++;
+  if(t.kind==="moves"){
+    var mv=t.moves[S.mv];
+    if(ok){
+      if(S.tries>1)S.perfect=false;
+      if(mv.to){S.expr=mv.to;drawFig()}
+      if(S.mv<t.moves.length-1){
+        S.mv++;S.tries=0;
+        fb("good","Mossa giusta",mv.why);
+        renderInput();return;
+      }
+      close(true,mv.why);return;
+    }
+    if(S.tries<2){fb("soft","Non ancora",mv.hint||t.hint);shake();return}
+    S.perfect=false;keepNote();
+    if(mv.kind==="choice"){
+      Array.prototype.forEach.call(document.querySelectorAll(".opt"),function(b,i){
+        if(mv.choices[i].ok)b.classList.add("good");b.disabled=true});
+    }
+    fb("soft","Guardiamola insieme",(mv.answer!==undefined?"La risposta è <b>"+Z.dec(mv.answer)+"</b>. ":"")+mv.why);
+    if(mv.to){S.expr=mv.to;drawFig()}
+    if(S.mv<t.moves.length-1){
+      S.mv++;S.tries=0;
+      setTimeout(function(){renderInput()},90);return;
+    }
+    close(false);return;
+  }
+  if(ok){if(S.tries>1)S.perfect=false;close(true,t.why);return}
+  if(S.tries<2){fb("soft","Non ancora",t.hint);shake();return}
+  S.perfect=false;
+  if(t.kind==="choice"){
+    Array.prototype.forEach.call(document.querySelectorAll(".opt"),function(b,i){
+      if(t.choices[i].ok)b.classList.add("good");b.disabled=true});
+  }
+  var sol="";
+  if(t.kind==="number")sol="La risposta è <b>"+Z.dec(t.answer)+"</b>. ";
+  else if(t.kind==="pick")sol="Era <b>"+t.answer+"</b>. ";
+  fb("soft","Impariamo questa",sol+t.why);
+  close(false);
+}
+function close(good,why){
+  var t=S.task;S.lock=true;
+  if(good){
+    var pts=S.perfect?10:5;
+    Z.P.xp+=pts;Z.save();Z.paintXP();
+    S.score+=S.perfect?1:0.5;
+    dotSet(S.perfect?"ok":"ko");
+    if(!S.perfect)keepNote();
+    fb("good",S.perfect?"Esatto!":"Giusto, al secondo colpo",(why||t.why||""),"+"+pts+" XP");
+  }else{
+    dotSet("ko");keepNote();
+  }
+  lockOpts();
+  $("#btnHint").classList.add("hide");
+  var n=$("#btnNext");n.classList.remove("hide");
+  n.textContent=(S.i===S.m.n-1)?"Vedi il risultato":"Continua";
+  S.i++;
+}
+
+/* ---------------- fine ---------------- */
+function finish(){
+  var frac=S.score/S.m.n,stars=frac>=.9?3:frac>=.7?2:frac>=.5?1:0;
+  if(stars>(Z.P.stars[S.m.id]||0))Z.P.stars[S.m.id]=stars;
+  if(stars===3)Z.P.xp+=20;
+  Z.save();Z.paintXP();
+  $("#endTitle").textContent=(S.score===S.m.n)?"Serie perfetta":stars===3?"Quasi perfetto":stars===2?"Ci siamo":stars===1?"Buon lavoro":"Riproviamo";
+  $("#endScore").textContent=String(Math.round(S.score*10)/10).replace(".",",");
+  $("#endOf").textContent="su "+S.m.n+" · "+S.m.name;
+  var st=$("#endStars").children;
+  for(var i=0;i<3;i++)st[i].className=i<stars?"on":"";
+  $("#endMsg").textContent=
+    stars===3?"Serie chiusa alla grande: +20 XP di bonus. Puoi passare a un altro banco.":
+    stars===2?"Manca poco: quasi tutte al primo colpo. Rifai la serie, i numeri cambiano ogni volta.":
+    stars===1?"Il metodo c'è, serve ripetizione. Rifai la serie con calma, leggendo gli indizi.":
+    "Nessun problema: è così che si impara. Rifai la serie e leggi ogni spiegazione fino in fondo.";
+  var learn=$("#endLearn");
+  learn.innerHTML='<h4>Da tenere a mente</h4><ul>'+
+    (S.notes.length?S.notes.map(function(x){return"<li>"+x+"</li>"}).join("")
+      :"<li>Non hai lasciato niente indietro: cambia banco per non abituarti a un solo tipo di domanda.</li>")+"</ul>";
+  show("end");
+}
+
+/* ---------------- eventi ---------------- */
+$("#btnNext").addEventListener("click",next);
+$("#btnBack").addEventListener("click",function(){paintHome();show("home")});
+$("#btnHome").addEventListener("click",function(){paintHome();show("home")});
+$("#btnAgain").addEventListener("click",function(){start(S.m)});
+$("#btnHint").addEventListener("click",function(){
+  var t=S.task,h=(t.kind==="moves")?(t.moves[S.mv].hint||t.hint):t.hint;
+  fb("soft","Indizio",h);$("#btnHint").disabled=true;
+});
+$("#reset").addEventListener("click",function(){
+  Z.P.xp=0;Z.P.stars={};Z.save();paintHome();this.textContent="Fatto: si riparte da zero";
+});
+document.addEventListener("keydown",function(e){
+  if($("#game").classList.contains("hide"))return;
+  var t=S.task;if(!t)return;
+  var kind=curKind();
+  if(e.key==="Enter"&&!$("#btnNext").classList.contains("hide")){next();return}
+  if(kind==="choice"||kind==="pick")return;
+  if(/^[0-9]$/.test(e.key))typeKey(e.key);
+  else if(e.key===","||e.key===".")typeKey(",");
+  else if(e.key==="Backspace")typeKey("←");
+  else if(e.key==="Enter")typeKey("✓");
+});
+
+/* ---------------- collaudo ---------------- */
+function selftest(){
+  var out=[],n=0,bad=0,N=45;
+  function bang(id,msg){bad++;out.push("["+id+"] "+msg)}
+  function scan(id,label,v){
+    if(v===undefined||v===null){bang(id,label+" mancante");return}
+    var str=String(v);
+    if(/undefined|NaN|\[object|(^|[^a-zA-Z])null([^a-zA-Z]|$)/.test(str))bang(id,label+" sporco: "+str.slice(0,70));
+  }
+  function checkChoices(id,list,label){
+    if(!list||!list.length){bang(id,label+" senza opzioni");return}
+    if(list.length<2||list.length>4)bang(id,label+" ha "+list.length+" opzioni");
+    var ok=list.filter(function(c){return c.ok});
+    if(ok.length!==1)bang(id,label+" ha "+ok.length+" opzioni corrette");
+    var seen={};
+    list.forEach(function(c){
+      scan(id,label+" etichetta",c.label);
+      if(seen[c.label])bang(id,label+" opzione doppia: "+c.label);
+      seen[c.label]=1;
+    });
+  }
+  function checkNum(id,v,label,allowDec){
+    if(typeof v!=="number"||!isFinite(v)){bang(id,label+" non è un numero: "+v);return}
+    if(v<0)bang(id,label+" negativo: "+v);
+    if(!allowDec&&v%1!==0)bang(id,label+" non intero: "+v);
+    if(allowDec&&Math.abs(v*100-Math.round(v*100))>1e-6)bang(id,label+" con più di 2 decimali: "+v);
+    if(v>1e10)bang(id,label+" fuori scala: "+v);
+  }
+  MODS.concat([PARTITA]).forEach(function(m){
+    for(var k=0;k<N;k++){
+      n++;
+      var t=null;
+      try{t=m.make()}catch(err){bang(m.id,"make() esplode: "+err.message);continue}
+      try{
+        scan(m.id,"testo",t.text);scan(m.id,"indizio",t.hint);scan(m.id,"perché",t.why);scan(m.id,"regola",t.note);
+        if(t.sub)scan(m.id,"sottotitolo",t.sub);
+        if(t.cap)scan(m.id,"didascalia",t.cap);
+        if(t.expr)scan(m.id,"espressione",t.expr);
+        var svg=null;
+        if(t.draw){
+          svg=Z.board(t.w||460,t.h||120);
+          try{t.draw(svg)}catch(err2){bang(m.id,"figura esplode: "+err2.message)}
+          var tx=svg.querySelectorAll("text");
+          Array.prototype.forEach.call(tx,function(e){scan(m.id,"testo nella figura",e.textContent)});
+        }
+        if(t.kind==="choice"){
+          checkChoices(m.id,t.choices,"domanda");
+        }else if(t.kind==="number"){
+          checkNum(m.id,t.answer,"risposta",!!t.dec);
+        }else if(t.kind==="pick"){
+          if(!svg){bang(m.id,"pick senza figura");}
+          else{
+            var els=svg.querySelectorAll("[data-v]");
+            if(els.length<2)bang(m.id,"pick con "+els.length+" bersagli");
+            var hit=0;
+            Array.prototype.forEach.call(els,function(e){if(e.getAttribute("data-v")===String(t.answer))hit++});
+            if(hit!==1)bang(m.id,"pick: bersagli giusti = "+hit+" (risposta "+t.answer+")");
+          }
+        }else if(t.kind==="moves"){
+          if(!t.moves||!t.moves.length){bang(m.id,"moves vuoto")}
+          else t.moves.forEach(function(mv,mi){
+            scan(m.id,"mossa "+(mi+1)+" domanda",mv.q);
+            scan(m.id,"mossa "+(mi+1)+" perché",mv.why);
+            if(mv.hint)scan(m.id,"mossa "+(mi+1)+" indizio",mv.hint);
+            if(mv.to!==undefined){
+              if(!mv.to||!String(mv.to).length)bang(m.id,"mossa "+(mi+1)+" riscrittura vuota");
+              scan(m.id,"mossa "+(mi+1)+" riscrittura",mv.to);
+            }
+            if(mv.kind==="choice")checkChoices(m.id,mv.choices,"mossa "+(mi+1));
+            else if(mv.kind==="number")checkNum(m.id,mv.answer,"mossa "+(mi+1)+" risposta",!!mv.dec);
+            else bang(m.id,"mossa "+(mi+1)+" di tipo sconosciuto: "+mv.kind);
+          });
+        }else{
+          bang(m.id,"tipo sconosciuto: "+t.kind);
+        }
+      }catch(err3){bang(m.id,"controllo esplode: "+err3.message)}
+    }
+  });
+  var u=[];out.forEach(function(x){if(u.indexOf(x)<0)u.push(x)});
+  var el=$("#ntest");
+  el.classList.remove("hide");
+  el.textContent=(bad===0?"TUTTO OK — ":"ERRORI — ")+n+" test, "+bad+" falliti\n"+u.slice(0,25).join("\n");
+}
+
+/* ---------------- avvio ---------------- */
+paintHome();
+if(location.search.indexOf("test=1")>=0)selftest();
+var dm=/mod=(\d+)/.exec(location.search);
+if(dm){
+  var list=MODS.concat([PARTITA]);
+  var idx=parseInt(dm[1],10)-1;
+  start(list[Math.max(0,Math.min(list.length-1,idx))]);
+}
+})();
+</script>
+</body>
+</html>

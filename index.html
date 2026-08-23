@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Le palestre di matematica</title>
-<meta name="description" content="Tre giochi interattivi di matematica per la scuola media: due sugli angoli (metodo finlandese e metodo di Singapore) e uno sulle potenze.">
+<meta name="description" content="Quattro giochi interattivi di matematica per la scuola media: due sugli angoli (metodo finlandese e metodo di Singapore), uno sulle potenze e uno sui numeri naturali con le quattro operazioni.">
 <meta name="theme-color" content="#0F1216">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
@@ -13,7 +13,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%230F1216'/%3E%3Cpath d='M8 34 L40 34' stroke='%23E8EDE6' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L33 13' stroke='%23FFB020' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L36 26' stroke='%232A6FB0' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;700&family=Fraunces:opsz,wght@9..144,600&family=Karla:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;700&family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=Fraunces:opsz,wght@9..144,600&family=Karla:wght@400;600&display=swap">
 <style>
 :root{
   --bg:#0F1216; --bg2:#151A20; --fg:#EDEFF2; --fg2:#9AA5B1; --edge:#242C35;
@@ -93,6 +93,17 @@ h1 em{font-style:normal;background:linear-gradient(90deg,var(--fin-amber),var(--
 .pot ul{grid-template-columns:1fr}
 @media (min-width:761px){.pot ul{grid-template-columns:1fr 1fr;gap:8px 18px}.pot li:last-child{grid-column:span 2}}
 
+/* porta officina */
+.off{background:linear-gradient(150deg,#2E251D 0%,#1E1712 65%,#33281F 100%);border-color:#4C3B2D;color:#F7EFE3}
+.off:hover{box-shadow:0 20px 44px -28px #E8703F}
+.off .kicker{color:#E8703F}
+.off h2{font-family:"Bricolage Grotesque","Archivo",system-ui,sans-serif;font-weight:800;font-size:29px;letter-spacing:-.02em}
+.off .desc{color:#C9B9A6;max-width:64ch}
+.off li span{background:rgba(240,180,41,.16);color:#F0B429}
+.off .enter{color:#E8703F}
+.off ul{grid-template-columns:1fr}
+@media (min-width:761px){.off ul{grid-template-columns:1fr 1fr;gap:8px 18px}.off li:last-child{grid-column:span 2}}
+
 /* confronto */
 .compare{margin-top:44px;border-top:1px solid var(--edge);padding-top:26px}
 .compare h3{font-family:var(--f-h);font-weight:700;font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
@@ -123,10 +134,10 @@ footer a:hover{color:var(--fg)}
 <body>
 <div class="wrap">
   <p class="eyebrow">Matematica · scuola media · per Fomyn</p>
-  <h1>Due argomenti,<br><em>tre palestre</em>.</h1>
+  <h1>Tre argomenti,<br><em>quattro palestre</em>.</h1>
   <p class="intro">Sugli <b>angoli</b> ci sono due palestre costruite su idee opposte di come si impara: una dove scegli tu e l'errore non toglie niente,
-  una dove si sale un gradino per volta. Sulle <b>potenze</b> c'è il laboratorio: otto allenamenti liberi, con due dedicati ai punti che
-  nella verifica erano andati storti.</p>
+  una dove si sale un gradino per volta. Sulle <b>potenze</b> c'è il laboratorio, e sui <b>numeri naturali</b> l'officina: allenamenti liberi,
+  con quelli più utili messi in evidenza.</p>
 
   <h3 class="sech"><span>Angoli</span> due metodi a confronto</h3>
   <div class="doors">
@@ -187,6 +198,27 @@ footer a:hover{color:var(--fg)}
     <div class="enter">Entra nel laboratorio →</div>
   </a>
 
+  <h3 class="sech"><span>Numeri naturali</span> l'officina</h3>
+  <a class="door off" href="naturali.html">
+    <svg class="art" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="30" cy="30" r="15" fill="none" stroke="#E8703F" stroke-width="4"/>
+      <circle cx="30" cy="30" r="4" fill="#E8703F"/>
+      <path d="M10 72 L90 72" stroke="#F0B429" stroke-width="4" stroke-linecap="round"/>
+      <path d="M22 66 L22 78 M40 66 L40 78 M58 66 L58 78 M76 66 L76 78" stroke="#F0B429" stroke-width="3" stroke-linecap="round"/>
+      <rect x="56" y="18" width="26" height="26" rx="4" fill="none" stroke="#3FB9A5" stroke-width="3.5"/>
+    </svg>
+    <div class="kicker">Numeri naturali · metodo finlandese</div>
+    <h2>Officina<br>dei Numeri</h2>
+    <p class="desc">Otto banchi di lavoro: chi entra in ℕ, la retta graduata, il valore delle cifre, i nomi delle operazioni,
+    le proprietà e i casi con 0 e 1, le espressioni una mossa alla volta, i problemi con il resto e gli enigmi.</p>
+    <ul>
+      <li><span>★</span><div><b>Le regole d'oro</b> — le proprietà e le loro trappole, compreso «diviso zero».</div></li>
+      <li><span>★</span><div><b>L'ordine giusto</b> — l'espressione si smonta un pezzo alla volta.</div></li>
+      <li><span>★</span><div><b>Il banco dei problemi</b> — leggere il testo, scegliere l'operazione, controllare il resto.</div></li>
+    </ul>
+    <div class="enter">Entra in officina →</div>
+  </a>
+
   <section class="compare">
     <h3>Che cosa cambia davvero</h3>
     <p class="sub">Non è una questione di grafica: cambia la <b>forma del percorso</b>, e quindi che cosa impari a fare.</p>
@@ -244,6 +276,8 @@ footer a:hover{color:var(--fg)}
     quel ragionamento veloce e automatico.</p>
     <p><b>Per le potenze</b> il laboratorio è già puntato dove serve: le due tessere con la stellina sono
     l'ordine delle operazioni e le potenze di 10, cioè gli esercizi E5.b ed E7.b della verifica.</p>
+    <p><b>Per i numeri naturali</b> l'officina segue lo stesso principio: i tre banchi con la stellina sono le proprietà con i casi 0 e 1,
+    l'ordine delle espressioni e i problemi con il resto — cioè i punti dove il capitolo si gioca davvero.</p>
     <p><b>Quindici minuti bastano.</b> Meglio poco e spesso che una maratona la domenica: i due giochi tengono il conto dei progressi
     ognuno per conto suo, sullo stesso dispositivo.</p>
   </section>
@@ -253,6 +287,7 @@ footer a:hover{color:var(--fg)}
     <a href="finlandia.html">Palestra finlandese</a>
     <a href="singapore.html">Metodo Singapore</a>
     <a href="potenze.html">Laboratorio delle Potenze</a>
+    <a href="naturali.html">Officina dei Numeri</a>
   </footer>
 </div>
 </body>

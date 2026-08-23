@@ -1,7 +1,8 @@
 # Le palestre di matematica
 
 Giochi didattici di matematica per la scuola media: due sugli **angoli**, costruiti su impostazioni
-pedagogiche opposte, e uno sulle **potenze**. Una pagina d'ingresso li presenta e mette a confronto i metodi.
+pedagogiche opposte, uno sulle **potenze** e uno sui **numeri naturali e le quattro operazioni**.
+Una pagina d'ingresso li presenta e mette a confronto i metodi.
 
 **Vai al sito:** https://fomynangoli.vercel.app
 
@@ -11,6 +12,7 @@ pedagogiche opposte, e uno sulle **potenze**. Una pagina d'ingresso li presenta 
 | `finlandia.html` | **Palestra degli Angoli** — otto allenamenti liberi, errore senza penalità |
 | `singapore.html` | **Metodo Singapore** — cinque unità in sequenza, C-P-A, modello a barre |
 | `potenze.html` | **Laboratorio delle Potenze** — otto allenamenti liberi (metodo finlandese) |
+| `naturali.html` | **Officina dei Numeri** — otto banchi di lavoro sui naturali (metodo finlandese) |
 
 ## Le due impostazioni
 
@@ -37,6 +39,15 @@ Gli altri moduli: definizione di potenza (senza confonderla con × e +), casi sp
 proprietà con la stessa base, proprietà con lo stesso esponente e potenza di potenza, esponente mancante,
 crescita per raddoppio (il bastoncino, 2¹⁰ = 1024), più una partita mista.
 
+## L'officina dei numeri
+
+Copre l'intero capitolo 1 (numeri naturali e quattro operazioni): l'insieme ℕ e i numeri che non ne fanno parte,
+precedente e successivo, la retta orientata e graduata (con l'esercizio INVALSI sulle distanze proporzionali,
+le bandierine mancanti e i numeri romani), il valore posizionale e i numeri grandi, i nomi dei termini e dei
+risultati, le quattro proprietà con le loro trappole, i casi con 0 e 1 (`n : 0` impossibile, `0 : 0` indeterminato),
+l'ordine delle espressioni risolte **una mossa alla volta**, i problemi reali con divisione e resto,
+e gli enigmi del libro (cifre mancanti, crittarritmetica, quadrato magico, il trucco del 9).
+
 ## Contenuti
 
 **Finlandia** — stima a occhio, lettura del goniometro (con la trappola delle due scale), costruzione
@@ -59,7 +70,8 @@ l'intruso), traduzione figura → modello → numero fino al problema in più pa
 - `finlandia.html?test=1` → 360 esercizi generati e verificati
 - `singapore.html?test=1` → 660 schede generate e verificate
 - `potenze.html?test=1` → 360 domande generate e verificate
-- `finlandia.html?demo=N&auto=1`, `singapore.html?unit=N` e `potenze.html?mod=N` aprono direttamente un modulo
+- `naturali.html?test=1` → 405 domande generate e verificate
+- `finlandia.html?demo=N&auto=1`, `singapore.html?unit=N` `potenze.html?mod=N` e `naturali.html?mod=N` aprono direttamente un modulo
 
 ## Licenza
 
