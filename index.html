@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Le palestre di matematica</title>
-<meta name="description" content="Quattro giochi interattivi di matematica per la scuola media: due sugli angoli (metodo finlandese e metodo di Singapore), uno sulle potenze e uno sui numeri naturali con le quattro operazioni.">
+<meta name="description" content="Cinque giochi interattivi di matematica per la scuola media: due sugli angoli (metodo finlandese e metodo di Singapore), uno sui triangoli, uno sulle potenze e uno sui numeri naturali con le quattro operazioni.">
 <meta name="theme-color" content="#0F1216">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Le palestre di matematica">
-<meta property="og:description" content="Angoli e potenze: tre modi di allenarsi, ognuno con la sua idea di come si impara.">
+<meta property="og:description" content="Angoli, triangoli, potenze e numeri naturali: cinque palestre, ognuna con la sua idea di come si impara.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%230F1216'/%3E%3Cpath d='M8 34 L40 34' stroke='%23E8EDE6' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L33 13' stroke='%23FFB020' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L36 26' stroke='%232A6FB0' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,6 +81,19 @@ h1 em{font-style:normal;background:linear-gradient(90deg,var(--fin-amber),var(--
   background:var(--fg);border-radius:99px;padding:3px 10px;font-weight:700}
 .sech:first-of-type{margin-top:30px}
 
+/* porta cantiere (triangoli) */
+.tri{background:linear-gradient(150deg,#141C2B 0%,#0C121E 62%,#18243A 100%);border-color:#25324A;color:#E9EEF6}
+.tri:hover{box-shadow:0 20px 44px -28px #FFA23A}
+.tri .kicker{color:#FFA23A}
+.tri h2{font-family:"Anton",Haettenschweiler,"Arial Narrow",sans-serif;font-weight:400;font-size:33px;
+  text-transform:uppercase;letter-spacing:.01em}
+.tri .desc{color:#AEBFD4;max-width:64ch}
+.tri li span{background:rgba(87,199,242,.14);color:#57C7F2}
+.tri .enter{color:#FFA23A}
+.tri .art{opacity:.22;right:-10px;top:-12px;width:160px;height:160px}
+.tri ul{grid-template-columns:1fr}
+@media (min-width:761px){.tri ul{grid-template-columns:1fr 1fr;gap:8px 18px}.tri li:last-child{grid-column:span 2}}
+
 /* porta potenze */
 .pot{background:linear-gradient(150deg,#101728 0%,#080C18 65%,#12182B 100%);border-color:#233150;color:#E9EDF7}
 .pot:hover{box-shadow:0 20px 44px -28px var(--sg-blue)}
@@ -134,10 +147,10 @@ footer a:hover{color:var(--fg)}
 <body>
 <div class="wrap">
   <p class="eyebrow">Matematica · scuola media · per Fomyn</p>
-  <h1>Tre argomenti,<br><em>quattro palestre</em>.</h1>
+  <h1>Quattro argomenti,<br><em>cinque palestre</em>.</h1>
   <p class="intro">Sugli <b>angoli</b> ci sono due palestre costruite su idee opposte di come si impara: una dove scegli tu e l'errore non toglie niente,
-  una dove si sale un gradino per volta. Sulle <b>potenze</b> c'è il laboratorio, e sui <b>numeri naturali</b> l'officina: allenamenti liberi,
-  con quelli più utili messi in evidenza.</p>
+  una dove si sale un gradino per volta. Sui <b>triangoli</b> c'è il cantiere, dove si costruisce col dito; sulle <b>potenze</b> il laboratorio,
+  e sui <b>numeri naturali</b> l'officina: allenamenti liberi, con quelli più utili messi in evidenza.</p>
 
   <h3 class="sech"><span>Angoli</span> due metodi a confronto</h3>
   <div class="doors">
@@ -177,6 +190,29 @@ footer a:hover{color:var(--fg)}
       <div class="enter">Sali il primo gradino →</div>
     </a>
   </div>
+
+  <h3 class="sech"><span>Triangoli</span> il cantiere</h3>
+  <a class="door tri" href="triangoli.html">
+    <svg class="art" viewBox="0 0 100 100" aria-hidden="true">
+      <g fill="none" stroke="#FFA23A" stroke-width="2">
+        <path d="M8 84 L92 84 L58 20 Z" stroke-linejoin="round"/>
+        <path d="M58 20 L58 84" stroke="#57C7F2" stroke-dasharray="5 5"/>
+        <path d="M58 78 l-6 0 l0 6" stroke="#57C7F2"/>
+        <path d="M8 84 m 20 0 a 20 20 0 0 0 -2.6 -9.8"/>
+      </g>
+    </svg>
+    <div class="kicker">Triangoli · metodo finlandese</div>
+    <h2>Cantiere<br>dei Triangoli</h2>
+    <p class="desc">Otto allenamenti in cui si <b>fa</b>, non si guarda: tre bastoncini che chiudono o no, i due cognomi
+    (lati e angoli), la somma dei 180°, l'angolo esterno, la costruzione col dito, l'altezza giusta da toccare,
+    l'area e il modello a barre.</p>
+    <ul>
+      <li><span>★</span><div><b>Il costruttore</b> — trascini il vertice C e vedi i tre angoli cambiare insieme, in tempo reale.</div></li>
+      <li><span>★</span><div><b>Base e altezza</b> — tocchi l'altezza vera fra quattro segmenti, anche quando il piede cade fuori.</div></li>
+      <li><span>★</span><div><b>Modello a barre</b> — i problemi in due mosse: prima si toglie, poi si divide. Mai il contrario.</div></li>
+    </ul>
+    <div class="enter">Entra nel cantiere →</div>
+  </a>
 
   <h3 class="sech"><span>Potenze</span> il laboratorio</h3>
   <a class="door pot" href="potenze.html">

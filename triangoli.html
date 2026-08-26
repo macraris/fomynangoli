@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Otto allenamenti interattivi sui triangoli: la disuguaglianza, i due cognomi, la somma 180°, l'angolo esterno, la costruzione col dito, altezze, area e modello a barre.">
+<meta name="theme-color" content="#0C121E">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cantiere dei Triangoli">
+<meta property="og:description" content="Otto allenamenti interattivi sui triangoli: si costruisce col dito, si misura, si ragiona.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%230C121E'/%3E%3Cpath d='M9 37 L39 37 L26 12 Z' fill='none' stroke='%23FFA23A' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M26 12 L26 37' stroke='%2357C7F2' stroke-width='2.2' stroke-dasharray='3 3'/%3E%3C/svg%3E">
+<style>html{background:#0C121E}</style>
+<title>Cantiere dei Triangoli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;600;800&display=swap">
+<style>
+:root{
+  --grass:#0C121E; --grass2:#101827; --surf:#141C2B; --surf2:#1B2537; --line:#E9EEF6;
+  --dim:#8FA3BC; --edge:#25324A;
+  --amber:#FFA23A; --cyan:#57C7F2; --go:#3DD68C; --stop:#FF6B5A; --violet:#B79CFF;
+  --r:18px; --r-sm:12px;
+  --f-disp:"Anton","Haettenschweiler","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1100px 620px at 50% -12%, #22304C22 0%, transparent 62%),
+    var(--grass);
+  color:var(--line); font-family:var(--f-body); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2.5px solid var(--amber);outline-offset:3px;border-radius:6px}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1120px;margin:0 auto;padding:14px 16px 40px;position:relative;z-index:1}
+.pitch-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+.pitch-bg svg{width:100%;height:100%}
+
+.top{display:flex;align-items:center;gap:14px;padding:6px 2px 14px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand .mark{width:38px;height:38px;flex:0 0 auto}
+.brand h1{font-family:var(--f-disp);font-weight:400;font-size:23px;letter-spacing:.02em;margin:0;line-height:1;text-transform:uppercase}
+.brand p{margin:2px 0 0;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.spacer{flex:1}
+.xpbox{display:flex;align-items:center;gap:12px}
+.lvl{text-align:right}
+.lvl .n{font-family:var(--f-disp);font-size:15px;letter-spacing:.03em;line-height:1;text-transform:uppercase}
+.lvl .s{font-size:11px;color:var(--dim);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.ring{width:46px;height:46px;flex:0 0 auto}
+
+/* ---------- home ---------- */
+.hero{
+  border:1px solid var(--edge);border-radius:var(--r);padding:20px 22px;margin-bottom:18px;
+  background:linear-gradient(135deg,#162033 0%,#111926 55%,#172236 100%);position:relative;overflow:hidden
+}
+.hero h2{font-family:var(--f-disp);font-weight:400;font-size:clamp(28px,5.2vw,42px);line-height:.98;margin:0;text-transform:uppercase;text-wrap:balance;letter-spacing:.01em}
+.hero h2 em{font-style:normal;color:var(--amber)}
+.hero p{margin:8px 0 0;max-width:56ch;color:#C6D3E4;font-size:15px}
+.hero .stripe{position:absolute;right:-40px;top:-40px;width:220px;height:220px;opacity:.16}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(226px,1fr));gap:12px}
+.mission{
+  --mc:var(--cyan);
+  position:relative;text-align:left;border:1px solid var(--edge);border-radius:var(--r);
+  background:linear-gradient(180deg,var(--surf) 0%,#111A29 100%);
+  padding:16px 16px 14px;display:flex;flex-direction:column;gap:10px;min-height:158px;
+  transition:transform .18s cubic-bezier(.2,.8,.3,1),border-color .18s,box-shadow .18s;
+  animation:rise .5s cubic-bezier(.2,.8,.3,1) both;
+}
+.mission:hover,.mission:focus-visible{transform:translateY(-3px);border-color:var(--mc);box-shadow:0 12px 28px -18px var(--mc)}
+.mission .ico{width:46px;height:46px}
+.mission h3{font-family:var(--f-disp);font-weight:400;font-size:19px;margin:0;line-height:1;text-transform:uppercase;letter-spacing:.02em}
+.mission p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.35}
+.mission .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stars{display:flex;gap:3px}
+.stars i{width:13px;height:13px;display:block;background:currentColor;color:#2C3A52;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.stars i.on{color:var(--amber)}
+.mission .go{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mc);font-weight:800}
+.mission.big{grid-column:span 2}
+@media (max-width:520px){.mission.big{grid-column:span 1}}
+.mission.big h3{font-size:24px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.foot-note{margin:16px 2px 0;font-size:12px;color:#71849E;text-align:right}
+.linky{color:#8FA3BC;text-decoration:underline;text-underline-offset:3px;font-size:12px}
+.linky:hover{color:var(--amber)}
+.tip{margin-top:10px;border:1px dashed var(--edge);border-radius:var(--r-sm);padding:12px 14px;color:#B7C6DA;font-size:13.5px;display:flex;gap:10px;align-items:flex-start}
+.tip b{color:var(--line)}
+.tip .k{flex:0 0 auto;font-family:var(--f-disp);font-size:11px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase;padding-top:2px}
+
+/* ---------- session ---------- */
+.hide{display:none!important}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.back{border:1px solid var(--edge);border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#C6D3E4;transition:.15s}
+.back:hover{border-color:var(--line);color:var(--line)}
+.dots{display:flex;gap:5px;flex:1;justify-content:center}
+.dots i{width:26px;height:5px;border-radius:99px;background:#25324A;display:block;transition:.3s}
+.dots i.ok{background:var(--go)}
+.dots i.ko{background:var(--stop)}
+.dots i.now{background:var(--line);transform:scaleY(1.8)}
+.mode{font-family:var(--f-disp);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+
+.play{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:16px;align-items:start}
+@media (max-width:860px){.play{grid-template-columns:1fr}}
+.stage{
+  border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,#121A29,#0E1522);
+  padding:14px;position:relative;overflow:hidden
+}
+.stage svg{width:100%;height:auto;display:block;touch-action:none}
+.stage .cap{margin:8px 2px 0;font-size:12px;color:var(--dim);text-align:center;min-height:16px}
+
+.panel{display:flex;flex-direction:column;gap:12px}
+.q{border:1px solid var(--edge);border-radius:var(--r);background:var(--surf);padding:16px}
+.q .tag{font-family:var(--f-disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:6px}
+.q h3{margin:0;font-size:19px;line-height:1.25;font-weight:800;text-wrap:balance}
+.q .sub{margin:7px 0 0;font-size:13.5px;color:#AEBFD4}
+
+.opts{display:grid;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:12px;border:1.5px solid var(--edge);border-radius:var(--r-sm);
+  background:#111A29;padding:12px 14px;text-align:left;font-size:16px;font-weight:600;transition:.15s;
+}
+.opt:hover:not(:disabled){border-color:var(--cyan);transform:translateX(2px)}
+.opt .l{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:#1E2A3E;color:var(--dim);
+  display:grid;place-items:center;font-size:12.5px;font-weight:800}
+.opt.good{border-color:var(--go);background:#122B22}.opt.good .l{background:var(--go);color:#06231A}
+.opt.bad{border-color:var(--stop);background:#2A1512}.opt.bad .l{background:var(--stop);color:#2A1512}
+.opt:disabled{cursor:default;opacity:.75}
+.opt.good,.opt.bad{opacity:1}
+
+.numline{display:flex;align-items:center;gap:10px}
+.numshow{
+  flex:1;border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#111A29;padding:10px 14px;
+  font-family:var(--f-disp);font-size:34px;line-height:1.1;letter-spacing:.02em;min-height:58px;
+  display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums
+}
+.numshow .cur{color:var(--amber)}
+.numshow .deg{font-size:20px;color:var(--dim)}
+.numshow.good{border-color:var(--go)}.numshow.bad{border-color:var(--stop)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.pad button{border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#111A29;padding:12px 0;
+  font-size:20px;font-weight:800;transition:.12s;font-variant-numeric:tabular-nums}
+.pad button:hover{border-color:var(--cyan);background:#152134}
+.pad button:active{transform:scale(.96)}
+.pad .ok{background:var(--go);border-color:var(--go);color:#06231A}
+.pad .ok:hover{background:#43dc8b;border-color:#43dc8b}
+.pad .del{color:var(--stop)}
+
+.slide{display:flex;flex-direction:column;gap:8px}
+.slide input[type=range]{width:100%;accent-color:var(--amber);height:30px}
+.slide .val{font-family:var(--f-disp);font-size:30px;line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+
+.fb{border-radius:var(--r-sm);padding:12px 14px;font-size:14px;display:none;animation:pop .3s cubic-bezier(.2,.8,.3,1)}
+.fb.on{display:block}
+.fb.good{background:#0F2A21;border:1.5px solid var(--go)}
+.fb.soft{background:#2A1F14;border:1.5px solid var(--amber)}
+.fb>b:first-child{display:block;font-family:var(--f-disp);font-weight:400;font-size:16px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px}
+.fb.good>b:first-child{color:var(--go)}.fb.soft>b:first-child{color:var(--amber)}
+.fb b{font-weight:800;color:var(--line)}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border-radius:99px;padding:12px 20px;font-weight:800;font-size:14.5px;letter-spacing:.02em;transition:.15s;border:1.5px solid transparent}
+.btn.pri{background:var(--amber);color:#221400}
+.btn.pri:hover{background:#ffc44e;transform:translateY(-1px)}
+.btn.ghost{border-color:var(--edge);color:#C6D3E4}
+.btn.ghost:hover{border-color:var(--line);color:var(--line)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+
+.shake{animation:shake .4s}
+@keyframes shake{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-4px)}}
+
+/* ---------- result ---------- */
+.res{border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,var(--surf),#101827);padding:26px;text-align:center;max-width:560px;margin:6px auto}
+.res .big{font-family:var(--f-disp);font-size:clamp(34px,7vw,52px);line-height:1;text-transform:uppercase;margin:0}
+.res .score{font-family:var(--f-disp);font-size:64px;line-height:1;color:var(--amber);font-variant-numeric:tabular-nums;margin:10px 0 2px}
+.res .of{color:var(--dim);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.res .bigstars{display:flex;gap:10px;justify-content:center;margin:16px 0 6px}
+.res .bigstars i{width:38px;height:38px;display:block;background:#2C3A52;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.res .bigstars i.on{background:var(--amber);animation:star .5s cubic-bezier(.2,1.6,.4,1) both}
+.res .bigstars i.on:nth-child(2){animation-delay:.12s}
+.res .bigstars i.on:nth-child(3){animation-delay:.24s}
+@keyframes star{from{transform:scale(.2) rotate(-40deg);opacity:0}to{transform:none;opacity:1}}
+.res p{color:#BFCDE0;font-size:15px;max-width:44ch;margin:12px auto 0}
+.res .learn{margin-top:16px;text-align:left;border-top:1px solid var(--edge);padding-top:14px}
+.res .learn h4{font-family:var(--f-disp);font-weight:400;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.res .learn li{font-size:13.5px;color:#BFCDE0;margin:5px 0}
+
+/* ---------- svg tokens ---------- */
+.ln{stroke:var(--line);stroke-width:3;stroke-linecap:round;fill:none}
+.ln.thin{stroke-width:2}
+.gh{stroke:#4A5C78;stroke-width:2.4;stroke-dasharray:3 7;stroke-linecap:round;fill:none}
+.ac{stroke:var(--amber)}.cy{stroke:var(--cyan)}.vi{stroke:var(--violet)}.gn{stroke:var(--go)}
+.sect{fill:rgba(255,176,32,.22);stroke:var(--amber);stroke-width:2.2}
+.sect.b{fill:rgba(76,201,240,.20);stroke:var(--cyan)}
+.sect.g{fill:rgba(52,199,123,.20);stroke:var(--go)}
+.sect.v{fill:rgba(183,156,255,.20);stroke:var(--violet)}
+.sect.mute{fill:rgba(232,237,230,.07);stroke:#42556F}
+.hit{fill:rgba(232,237,230,.001);stroke:none;cursor:pointer;transition:fill .15s}
+.hit:hover{fill:rgba(232,237,230,.10)}
+.tx{font-family:var(--f-body);font-size:15px;font-weight:800;fill:var(--line);text-anchor:middle;dominant-baseline:middle}
+.tx.sm{font-size:12.5px;font-weight:600;fill:var(--dim)}
+.tx.am{fill:var(--amber)}.tx.cy{fill:var(--cyan)}.tx.gn{fill:var(--go)}.tx.vi{fill:var(--violet)}
+.dot{fill:var(--line)}
+.dot.am{fill:var(--amber)}
+.grass-r{fill:#111C2C;stroke:#2B3B57;stroke-width:2}
+.goal-r{stroke:var(--stop);stroke-width:5;stroke-linecap:round}
+.prot{fill:rgba(76,201,240,.09);stroke:var(--cyan);stroke-width:2}
+.tick{stroke:#63799A;stroke-width:1.2}
+.tick.maj{stroke:var(--line);stroke-width:1.8}
+.handle{fill:var(--amber);stroke:#0B1613;stroke-width:3;cursor:grab}
+.handle:active{cursor:grabbing}
+
+/* ---------- schermi stretti ---------- */
+@media (max-width:620px){
+  .wrap{padding:10px 12px 32px}
+  .top{flex-wrap:wrap;gap:10px;padding-bottom:10px}
+  .brand .mark{width:30px;height:30px}
+  .brand h1{font-size:17px}
+  .brand p{font-size:9.5px;letter-spacing:.12em}
+  .lvl .n{font-size:12px}.lvl .s{font-size:10px}
+  .ring{width:38px;height:38px}
+  .hero{padding:16px 15px}
+  .hero p{font-size:14px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .mission{min-height:0;padding:13px 13px 11px;gap:8px}
+  .mission .ico{width:34px;height:34px}
+  .mission h3{font-size:16px}
+  .mission p{font-size:11.5px}
+  .mode{display:none}
+  .bar{gap:8px}
+  .dots i{width:16px}
+  .q{padding:13px}
+  .q h3{font-size:17px}
+  .stage{padding:10px}
+  .numshow{font-size:28px;min-height:52px}
+  .pad button{padding:13px 0;font-size:19px}
+  .opt{font-size:15px;padding:11px 12px}
+  .res{padding:22px 16px}
+  .foot-note{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+#testout{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px;padding:12px;color:var(--line)}
+</style>
+<div class="pitch-bg" aria-hidden="true">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="bpg" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M40 0 L0 0 0 40" fill="none" stroke="#E9EEF6" stroke-opacity=".05" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="800" fill="url(#bpg)"/>
+    <g fill="none" stroke="#E9EEF6" stroke-opacity=".055" stroke-width="2">
+      <path d="M120 660 L520 660 L300 300 Z"/>
+      <path d="M700 640 L1080 640 L1080 340 Z"/>
+      <path d="M300 300 L300 660"/>
+      <path d="M1080 640 L700 640"/>
+    </g>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M7 39 L41 39 L27 12 Z" fill="none" stroke="#E9EEF6" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M27 12 L27 39" stroke="#FFA23A" stroke-width="2.4" stroke-dasharray="4 4"/>
+        <path d="M27 39 l0 -7 l7 0" fill="none" stroke="#FFA23A" stroke-width="2.2"/>
+      </svg>
+      <div>
+        <h1>Cantiere dei Triangoli</h1>
+        <p><a href="./" style="color:inherit;text-decoration:none;border-bottom:1px solid #25324A">↩ Torna alle palestre</a></p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="xpbox">
+      <div class="lvl">
+        <div class="n" id="lvlName">Apprendista</div>
+        <div class="s"><span id="xpNow">0</span> / <span id="xpNext">150</span> XP</div>
+      </div>
+      <svg class="ring" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="19" fill="none" stroke="#25324A" stroke-width="5"/>
+        <circle id="ringFill" cx="23" cy="23" r="19" fill="none" stroke="#FFA23A" stroke-width="5"
+                stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"
+                transform="rotate(-90 23 23)" style="transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.3,1)"/>
+        <text id="ringTxt" x="23" y="24" text-anchor="middle" dominant-baseline="middle"
+              font-family="Anton,sans-serif" font-size="14" fill="#E9EEF6">1</text>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <main id="home">
+    <section class="hero">
+      <svg class="stripe" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#FFA23A" stroke-width="1.5">
+          <path d="M8 88 L92 88 L58 20 Z"/>
+          <path d="M58 20 L58 88"/>
+          <path d="M58 88 l0 -9 l9 0"/>
+          <path d="M8 88 m 22 0 a 22 22 0 0 0 -3 -11"/>
+        </g>
+      </svg>
+      <h2>Otto allenamenti.<br>Un solo obiettivo: <em>costruire triangoli</em>.</h2>
+      <p>Qui non si guarda: si <b>fa</b>. Trascini un vertice col dito, provi se tre bastoncini chiudono, tocchi l'altezza giusta,
+      dividi una barra. Scegli tu da dove partire e quante volte ripetere: sbagliare non toglie niente, ogni errore ti mostra la regola e ti fa riprovare subito.</p>
+    </section>
+
+    <div class="grid" id="grid"></div>
+
+    <p class="foot-note">I progressi restano su questo dispositivo. <button id="btnReset" class="linky">Azzera i progressi</button></p>
+    <div class="tip">
+      <span class="k">Regola del cantiere</span>
+      <span>Tre domande da farsi <b>prima</b> di rispondere: <b>«il lato più lungo è minore della somma degli altri due?»</b>,
+      <b>«i tre angoli fanno 180°?»</b> e, se il triangolo è isoscele, <b>«mi hanno dato l'angolo al vertice o quello alla base?»</b>.
+      Se rispondi a queste tre, il resto viene da sé.</span>
+    </div>
+  </main>
+
+  <!-- ============ SESSIONE ============ -->
+  <main id="game" class="hide">
+    <div class="bar">
+      <button class="back" id="btnBack">← Esci</button>
+      <div class="dots" id="dots"></div>
+      <div class="mode" id="modeName"></div>
+    </div>
+    <div class="play">
+      <div class="stage">
+        <div id="fig"></div>
+        <div class="cap" id="figCap"></div>
+      </div>
+      <div class="panel">
+        <div class="q">
+          <span class="tag" id="qTag">Domanda</span>
+          <h3 id="qText"></h3>
+          <p class="sub hide" id="qSub"></p>
+        </div>
+        <div id="answer"></div>
+        <div class="fb" id="fb"></div>
+        <div class="row">
+          <button class="btn ghost" id="btnHint">Dammi un indizio</button>
+          <button class="btn pri hide" id="btnNext">Continua →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ RISULTATO ============ -->
+  <main id="end" class="hide">
+    <div class="res">
+      <h2 class="big" id="endTitle"></h2>
+      <div class="score" id="endScore"></div>
+      <div class="of" id="endOf"></div>
+      <div class="bigstars" id="endStars"><i></i><i></i><i></i></div>
+      <p id="endMsg"></p>
+      <div class="learn" id="endLearn"></div>
+      <div class="row" style="justify-content:center;margin-top:18px">
+        <button class="btn pri" id="btnAgain">Ancora una serie</button>
+        <button class="btn ghost" id="btnHome">Torna agli allenamenti</button>
+      </div>
+    </div>
+  </main>
+</div>
+<pre id="testout" class="hide"></pre>
+
+<script>
+(function(){
+"use strict";
+/* ============================================================
+   CANTIERE DEI TRIANGOLI — motore
+   ============================================================ */
+var NS="http://www.w3.org/2000/svg", $=function(s){return document.querySelector(s)};
+var PI=Math.PI;
+
+/* ---------- disegno ---------- */
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function R(n){return Math.round(n*100)/100}
+function pol(cx,cy,r,d){var t=d*PI/180;return[cx+r*Math.cos(t),cy-r*Math.sin(t)]}
+function ang(cx,cy,x,y){var d=Math.atan2(cy-y,x-cx)*180/PI;return(d+360)%360}
+
+function Board(w,h){
+  var s=E("svg",{viewBox:"0 0 "+w+" "+h,width:"100%"});
+  s.W=w;s.H=h;return s;
+}
+function line(s,x1,y1,x2,y2,cls){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"ln "+(cls||"")},s)}
+function seg(s,p1,p2,cls){return line(s,p1[0],p1[1],p2[0],p2[1],cls)}
+function ghost(s,x1,y1,x2,y2){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"gh"},s)}
+function ray(s,cx,cy,d,len,cls,tail){
+  var a=pol(cx,cy,len,d);line(s,cx,cy,a[0],a[1],cls);
+  if(tail!==0){var b=pol(cx,cy,len+(tail||18),d);ghost(s,a[0],a[1],b[0],b[1])}
+  return a;
+}
+function fullline(s,cx,cy,d,l1,l2,cls){
+  var a=pol(cx,cy,l1,d+180),b=pol(cx,cy,l2,d);
+  line(s,a[0],a[1],b[0],b[1],cls);
+  var a2=pol(cx,cy,l1+16,d+180),b2=pol(cx,cy,l2+16,d);
+  ghost(s,a[0],a[1],a2[0],a2[1]);ghost(s,b[0],b[1],b2[0],b2[1]);
+  return[a,b];
+}
+function sector(s,cx,cy,r,a,b,cls){
+  var sp=((b-a)%360+360)%360,p1=pol(cx,cy,r,a),p2=pol(cx,cy,r,b),lg=sp>180?1:0;
+  return E("path",{d:"M "+R(cx)+" "+R(cy)+" L "+R(p1[0])+" "+R(p1[1])+" A "+r+" "+r+" 0 "+lg+" 0 "+R(p2[0])+" "+R(p2[1])+" Z","class":"sect "+(cls||"")},s);
+}
+function txt(s,x,y,t,cls){var e=E("text",{x:R(x),y:R(y),"class":"tx "+(cls||"")},s);e.textContent=t;return e}
+function txtAt(s,cx,cy,r,d,t,cls){var p=pol(cx,cy,r,d);return txt(s,p[0],p[1],t,cls)}
+function dot(s,x,y,cls){return E("circle",{cx:R(x),cy:R(y),r:5,"class":"dot "+(cls||"")},s)}
+function rightMark(s,cx,cy,d,sz){
+  var p1=pol(cx,cy,sz,d),p3=pol(cx,cy,sz,d+90),px=p1[0]+p3[0]-cx,py=p1[1]+p3[1]-cy;
+  return E("polyline",{points:R(p1[0])+","+R(p1[1])+" "+R(px)+","+R(py)+" "+R(p3[0])+","+R(p3[1]),
+    fill:"none",stroke:"var(--amber)","stroke-width":2.2},s);
+}
+function arrow(s,x1,y1,x2,y2,col){
+  var c=col||"var(--amber)";
+  E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),stroke:c,"stroke-width":2.4,"stroke-linecap":"round"},s);
+  var a=Math.atan2(y1-y2,x2-x1)*180/PI,p=pol(x2,y2,10,a+202),q=pol(x2,y2,10,a+158);
+  E("polyline",{points:R(p[0])+","+R(p[1])+" "+R(x2)+","+R(y2)+" "+R(q[0])+","+R(q[1]),
+    fill:"none",stroke:c,"stroke-width":2.4,"stroke-linecap":"round"},s);
+}
+
+/* ---------- utilità ---------- */
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pickOne(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function kind(v){return v<90?"acuto":v===90?"retto":v<180?"ottuso":v===180?"piatto":v<360?"concavo":"giro"}
+function uniq(arr){var o=[],s={};arr.forEach(function(v){if(!s[v]){s[v]=1;o.push(v)}});return o}
+function opts(correct,wrongs,suffix){
+  var all=uniq([correct].concat(wrongs)).slice(0,4);
+  return shuffle(all.map(function(v){return{label:v+(suffix||""),ok:v===correct}}));
+}
+
+
+/* area invisibile cliccabile, per le domande "tocca la figura" */
+function hit(s,pts,idx){
+  var e=E("polygon",{points:pts.map(function(p){return R(p[0])+","+R(p[1])}).join(" "),"class":"hit"},s);
+  e.setAttribute("data-pick",String(idx));return e;
+}
+function hitLine(s,p1,p2,idx,w){
+  var dx=p2[0]-p1[0],dy=p2[1]-p1[1],L=Math.sqrt(dx*dx+dy*dy)||1,nx=-dy/L*(w||14),ny=dx/L*(w||14);
+  return hit(s,[[p1[0]+nx,p1[1]+ny],[p2[0]+nx,p2[1]+ny],[p2[0]-nx,p2[1]-ny],[p1[0]-nx,p1[1]-ny]],idx);
+}
+
+/* ============================================================
+   AGGIUNTE PER I TRIANGOLI
+   ============================================================ */
+function dist(A,B){return Math.sqrt((A[0]-B[0])*(A[0]-B[0])+(A[1]-B[1])*(A[1]-B[1]))}
+function mid(A,B){return[(A[0]+B[0])/2,(A[1]+B[1])/2]}
+function dir(V,P){return ang(V[0],V[1],P[0],P[1])}
+
+/* triangolo dagli angoli in A e in B, scalato dentro il riquadro */
+function triFit(W,H,angA,angB,o){
+  o=o||{};
+  var ml=(o.ml!=null?o.ml:(o.mx!=null?o.mx:46)), mr=(o.mr!=null?o.mr:(o.mx!=null?o.mx:46));
+  var mt=(o.mt!=null?o.mt:46), mb=(o.mb!=null?o.mb:46);
+  var ra=angA*PI/180, rb=angB*PI/180;
+  var h=1/(1/Math.tan(ra)+1/Math.tan(rb)), ax=h/Math.tan(ra);
+  var x1=Math.min(0,ax), x2=Math.max(1,ax), span=x2-x1;
+  var sc=Math.min((W-ml-mr)/span,(H-mt-mb)/h);
+  var x0=ml+(W-ml-mr-span*sc)/2-x1*sc;
+  var y0=mt+(H-mt-mb)/2+h*sc/2;                     /* centrato anche in verticale */
+  return{A:[x0,y0],B:[x0+sc,y0],C:[x0+ax*sc,y0-h*sc],base:sc,hh:h*sc};
+}
+/* disegna il triangolo; names:null per non etichettare i vertici */
+function triDraw(s,A,B,C,o){
+  o=o||{};
+  if(o.fill)E("path",{d:"M "+R(A[0])+" "+R(A[1])+" L "+R(B[0])+" "+R(B[1])+" L "+R(C[0])+" "+R(C[1])+" Z",
+    fill:o.fill,stroke:"none"},s);
+  seg(s,A,B,o.cls||"");seg(s,B,C,o.cls||"");seg(s,C,A,o.cls||"");
+  if(o.dots!==false){dot(s,A[0],A[1]);dot(s,B[0],B[1]);dot(s,C[0],C[1])}
+  var n=("names" in o)?o.names:["A","B","C"];
+  if(n){
+    var G=[(A[0]+B[0]+C[0])/3,(A[1]+B[1]+C[1])/3];
+    [A,B,C].forEach(function(V,i){
+      if(!n[i])return;
+      var dx=V[0]-G[0],dy=V[1]-G[1],L=Math.sqrt(dx*dx+dy*dy)||1,k=(o.nd||20)/L;
+      txt(s,V[0]+dx*k,V[1]+dy*k,n[i],o.ncls||"");
+    });
+  }
+  return{A:A,B:B,C:C};
+}
+/* settore dell'angolo interno nel vertice V, fra i lati verso P e verso Q */
+function angAt(s,V,P,Q,r,label,cls,lr){
+  var a=dir(V,P),b=dir(V,Q),sp=(b-a+360)%360;
+  var from=(sp<=180)?a:b, to=(sp<=180)?b:a, w=Math.min(sp,360-sp);
+  sector(s,V[0],V[1],r,from,to,cls||"");
+  if(label){
+    var tc=(cls||"").indexOf("b")>=0?"cy":(cls||"").indexOf("g")>=0?"gn":(cls||"").indexOf("v")>=0?"vi":"am";
+    /* lr negativo: etichetta FUORI dal triangolo, dalla parte opposta alla bisettrice */
+    if(lr<0)txtAt(s,V[0],V[1],-lr,from+w/2+180,label,tc);
+    else txtAt(s,V[0],V[1],lr||(r+19),from+w/2,label,tc);
+  }
+  return Math.round(w);
+}
+/* squadretta dell'angolo retto nel vertice V */
+function rightAt(s,V,P,Q,sz){
+  var a=dir(V,P),b=dir(V,Q),sp=(b-a+360)%360;
+  return rightMark(s,V[0],V[1],(sp<=180)?a:b,sz||15);
+}
+/* piede della perpendicolare da C sulla retta AB; ritorna [x,y,t] */
+function foot(A,B,C){
+  var vx=B[0]-A[0],vy=B[1]-A[1],L2=vx*vx+vy*vy;
+  var t=((C[0]-A[0])*vx+(C[1]-A[1])*vy)/L2;
+  return[A[0]+t*vx,A[1]+t*vy,t];
+}
+/* altezza da C su AB (prolunga la base se il piede cade fuori) */
+function heightTo(s,A,B,C,o){
+  o=o||{};var H=foot(A,B,C),t=H[2];
+  if(t<0)ghost(s,A[0],A[1],H[0],H[1]);
+  if(t>1)ghost(s,B[0],B[1],H[0],H[1]);
+  E("line",{x1:R(C[0]),y1:R(C[1]),x2:R(H[0]),y2:R(H[1]),
+    stroke:o.col||"var(--amber)","stroke-width":2.6,"stroke-dasharray":"5 5","stroke-linecap":"round"},s);
+  rightAt(s,[H[0],H[1]],(t<0?A:B),C,o.sq||13);
+  dot(s,H[0],H[1],"am");
+  if(o.label)txt(s,H[0]+(o.dx||0),H[1]+(o.dy||20),o.label,"sm");
+  if(o.h){var m=mid(C,[H[0],H[1]]);txt(s,m[0]+(o.hdx||36),m[1],o.h,"am")}
+  return[H[0],H[1]];
+}
+/* trattini di congruenza su un lato */
+function ticks(s,A,B,n,col){
+  var m=mid(A,B),a=Math.atan2(B[1]-A[1],B[0]-A[0])*180/PI;
+  for(var i=0;i<n;i++){
+    var off=(i-(n-1)/2)*6,c=pol(m[0],m[1],off,-a),p1=pol(c[0],c[1],7,-a+90),p2=pol(c[0],c[1],7,-a-90);
+    E("line",{x1:R(p1[0]),y1:R(p1[1]),x2:R(p2[0]),y2:R(p2[1]),stroke:col||"var(--line)","stroke-width":2,"stroke-linecap":"round"},s);
+  }
+}
+/* etichetta su un lato, spostata verso l'esterno rispetto al terzo vertice */
+function sideLab(s,A,B,C,t,cls,off){
+  var m=mid(A,B),dx=m[0]-C[0],dy=m[1]-C[1],L=Math.sqrt(dx*dx+dy*dy)||1,k=(off||20)/L;
+  return txt(s,m[0]+dx*k,m[1]+dy*k,t,cls||"sm");
+}
+/* barre proporzionali (modello di Singapore) */
+function bars(s,x,y,w,h,parts,total,under){
+  var sum=0;parts.forEach(function(p){sum+=p.u});
+  var cx=x;
+  parts.forEach(function(p){
+    var pw=w*p.u/sum;
+    E("rect",{x:R(cx),y:R(y),width:R(pw),height:h,rx:4,fill:p.f||"rgba(87,199,242,.20)",stroke:p.st||"var(--cyan)","stroke-width":2},s);
+    if(p.t)txt(s,cx+pw/2,y+h/2,p.t,p.tc||"");
+    cx+=pw;
+  });
+  if(total){
+    E("path",{d:"M "+R(x)+" "+R(y-7)+" L "+R(x)+" "+R(y-13)+" L "+R(x+w)+" "+R(y-13)+" L "+R(x+w)+" "+R(y-7),
+      fill:"none",stroke:"var(--dim)","stroke-width":1.8},s);
+    txt(s,x+w/2,y-25,total,"sm");
+  }
+  if(under){
+    E("path",{d:"M "+R(x)+" "+R(y+h+7)+" L "+R(x)+" "+R(y+h+13)+" L "+R(x+w)+" "+R(y+h+13)+" L "+R(x+w)+" "+R(y+h+7),
+      fill:"none",stroke:"var(--dim)","stroke-width":1.8},s);
+    txt(s,x+w/2,y+h+27,under,"sm");
+  }
+}
+/* bastoncino orizzontale con la misura scritta sopra (fase concreta) */
+function stick(s,x,y,len,label,col,fade){
+  E("line",{x1:R(x),y1:R(y),x2:R(x+len),y2:R(y),stroke:col||"var(--line)","stroke-width":9,
+    "stroke-linecap":"round",opacity:fade?.5:1},s);
+  txt(s,x+len/2,y-16,label,"sm");
+}
+
+/* ---------- stato / progresso ---------- */
+var KEY="cantiere-triangoli-v1";
+var P={xp:0,stars:{}};
+try{var raw=localStorage.getItem(KEY);if(raw)P=JSON.parse(raw)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+var LEVELS=[[0,"Apprendista"],[150,"Disegnatore"],[350,"Geometra"],[650,"Costruttore"],[1000,"Capocantiere"],[1500,"Architetto"]];
+function levelInfo(){
+  var i=0;for(var k=0;k<LEVELS.length;k++)if(P.xp>=LEVELS[k][0])i=k;
+  var base=LEVELS[i][0],next=(LEVELS[i+1]||[base+600])[0];
+  return{i:i,name:LEVELS[i][1],base:base,next:next,frac:Math.min(1,(P.xp-base)/(next-base))};
+}
+function paintXP(){
+  var L=levelInfo();
+  $("#lvlName").textContent=L.name;
+  $("#xpNow").textContent=P.xp;
+  $("#xpNext").textContent=L.next;
+  $("#ringTxt").textContent=String(L.i+1);
+  $("#ringFill").setAttribute("stroke-dashoffset",String(119.4*(1-L.frac)));
+}
+
+/* ---------- esporta ---------- */
+window.PA={E:E,R:R,pol:pol,ang:ang,Board:Board,line:line,seg:seg,ghost:ghost,ray:ray,fullline:fullline,
+  sector:sector,txt:txt,txtAt:txtAt,dot:dot,rightMark:rightMark,arrow:arrow,
+  rnd:rnd,pickOne:pickOne,shuffle:shuffle,kind:kind,opts:opts,uniq:uniq,
+  P:P,save:save,levelInfo:levelInfo,paintXP:paintXP,$:$,
+  dist:dist,mid:mid,dir:dir,triFit:triFit,triDraw:triDraw,angAt:angAt,rightAt:rightAt,foot:foot,
+  heightTo:heightTo,ticks:ticks,sideLab:sideLab,bars:bars,stick:stick,hit:hit,hitLine:hitLine};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var A=window.PA,rnd=A.rnd,pick=A.pickOne,shuffle=A.shuffle,opts=A.opts;
+var W=430,H=310;
+
+function mixOpts(correct,wrongs){
+  var seen={},out=[{label:correct,ok:true}];seen[correct]=1;
+  wrongs.forEach(function(w){if(!seen[w]&&out.length<4){seen[w]=1;out.push({label:w,ok:false})}});
+  return shuffle(out);
+}
+
+/* ============================================================
+   1. CHIUDE O NON CHIUDE — la disuguaglianza triangolare
+   ============================================================ */
+function tChiude(){
+  if(Math.random()<.34){                                   /* variante: l'intervallo */
+    var p=rnd(4,12),q=p+rnd(2,7),big=Math.random()<.5;
+    return{
+      w:W,h:250,tag:"Chiude o non chiude",
+      text:big?("Due lati misurano <b>"+p+"</b> e <b>"+q+" cm</b>. Qual è il valore intero <b>più grande</b> che può avere il terzo lato?")
+              :("Due lati misurano <b>"+p+"</b> e <b>"+q+" cm</b>. Qual è il valore intero <b>più piccolo</b> che può avere il terzo lato?"),
+      sub:"Il terzo lato deve essere un numero intero di centimetri.",
+      cap:"I due lati che conosci, uno sopra l'altro.",
+      kind:"number",unit:" cm",answer:big?(p+q-1):(q-p+1),
+      draw:function(s){
+        var sc=Math.min(300/q,17);
+        A.stick(s,60,90,q*sc,q+" cm","var(--cyan)");
+        A.stick(s,60,150,p*sc,p+" cm","var(--go)");
+        A.txt(s,W/2,205,"terzo lato: fra la differenza e la somma","sm");
+        A.txt(s,W/2,228,(q-p)+" < x < "+(p+q),"am");
+      },
+      hint:big?("Il terzo lato deve restare <b>sotto</b> la somma "+p+" + "+q+" = "+(p+q)+", e non può valerla: quindi al massimo "+(p+q)+" − 1.")
+              :("Il terzo lato deve stare <b>sopra</b> la differenza "+q+" − "+p+" = "+(q-p)+", e non può valerla: quindi almeno "+(q-p)+" + 1."),
+      why:"Ogni lato sta fra la <b>differenza</b> e la <b>somma</b> degli altri due, estremi esclusi: "+(q-p)+" < x < "+(p+q)+"."
+    };
+  }
+  var a,b,c,ok,type=rnd(1,4);
+  a=rnd(3,13);b=rnd(3,13);
+  if(type===1){c=a+b+rnd(1,5);ok=false}                    /* troppo lungo */
+  else if(type===2){c=a+b;ok=false}                        /* piatto */
+  else{c=rnd(Math.abs(a-b)+1,a+b-1);ok=true}
+  var L=[a,b,c];shuffle(L);
+  var mx=Math.max(L[0],L[1],L[2]),rest=L[0]+L[1]+L[2]-mx;
+  return{
+    w:W,h:250,tag:"Chiude o non chiude",
+    text:"Con questi tre bastoncini si può costruire un triangolo?",
+    sub:"Guarda il più lungo e confrontalo con gli altri due messi in fila.",
+    cap:"Tre bastoncini sul tavolo: chiudono o resta un buco?",
+    kind:"choice",
+    choices:shuffle([
+      {label:"Sì, chiude",ok:ok},
+      {label:"No: il più lungo supera la somma degli altri due",ok:(!ok&&mx>rest)},
+      {label:"No: i tre si stendono in fila, viene piatto",ok:(!ok&&mx===rest)}
+    ]),
+    draw:function(s){
+      var sc=Math.min(300/mx,17),y=64,col=["var(--cyan)","var(--go)","var(--violet)"];
+      L.forEach(function(v,i){A.stick(s,60,y,v*sc,v+" cm",col[i]);y+=54});
+      A.txt(s,W/2,232,"il più lungo è "+mx+" cm","sm");
+    },
+    hint:"Metti i due più corti in fila: fanno "+rest+". Il più lungo è "+mx+". Chi vince?",
+    why:ok?("Il lato più lungo ("+mx+") è <b>minore</b> della somma degli altri due ("+rest+"): il triangolo esiste.")
+          :(mx===rest?("Il più lungo ("+mx+") è <b>uguale</b> alla somma degli altri due: i bastoncini si stendono in fila, nessuna apertura, nessun triangolo.")
+                     :("Il più lungo ("+mx+") <b>supera</b> la somma degli altri due ("+rest+"): resta sempre un buco."))
+  };
+}
+
+/* ============================================================
+   2. I DUE COGNOMI — classificare per lati e per angoli
+   ============================================================ */
+var LATI=["scaleno","isoscele","equilatero"],ANGOLI=["acutangolo","rettangolo","ottusangolo"];
+function famiglia(){
+  var f=pick(["eq","iso-ac","iso-re","iso-ot","sc-ac","sc-re","sc-ot"]),a,b,lat,an;
+  if(f==="eq"){a=60;b=60;lat="equilatero";an="acutangolo"}
+  else if(f==="iso-ac"){a=rnd(50,78);b=a;lat="isoscele";an="acutangolo";if(180-2*a===a){a++;b=a}}
+  else if(f==="iso-re"){a=45;b=45;lat="isoscele";an="rettangolo"}
+  else if(f==="iso-ot"){a=rnd(22,42);b=a;lat="isoscele";an="ottusangolo"}
+  else if(f==="sc-ac"){do{a=rnd(48,76);b=rnd(48,76)}while(a===b||180-a-b>=90||180-a-b===a||180-a-b===b);lat="scaleno";an="acutangolo"}
+  else if(f==="sc-re"){a=90;do{b=rnd(24,66)}while(b===45);lat="scaleno";an="rettangolo"}
+  else{do{a=rnd(20,44);b=rnd(20,44)}while(a===b||180-a-b<=90);lat="scaleno";an="ottusangolo"}
+  return{a:a,b:b,c:180-a-b,lat:lat,an:an};
+}
+/* raggi del settore e dell'etichetta, proporzionati alla figura */
+function rad(T){var r=Math.max(16,Math.min(32,T.base*0.20));return{r:r,lr:r+Math.max(13,Math.min(24,T.base*0.10))}}
+function drawFam(s,F,showAng){
+  var T=A.triFit(W,270,F.a,F.b,{mx:52,mt:50,mb:52}),k=rad(T);
+  A.triDraw(s,T.A,T.B,T.C,{names:null,fill:"rgba(87,199,242,.07)"});
+  if(F.lat==="equilatero"){A.ticks(s,T.A,T.B,1);A.ticks(s,T.B,T.C,1);A.ticks(s,T.C,T.A,1)}
+  else if(F.lat==="isoscele"){A.ticks(s,T.C,T.A,1);A.ticks(s,T.C,T.B,1)}
+  if(F.a===90)A.rightAt(s,T.A,T.B,T.C,17);
+  if(F.c===90)A.rightAt(s,T.C,T.A,T.B,17);
+  if(showAng!==false){
+    if(F.a!==90)A.angAt(s,T.A,T.B,T.C,k.r,F.a+"°","",k.lr);
+    if(F.b!==90)A.angAt(s,T.B,T.C,T.A,k.r,F.b+"°","b",k.lr);
+    if(F.c!==90)A.angAt(s,T.C,T.A,T.B,k.r*.85,F.c+"°","g",k.lr*.9);
+  }
+  return T;
+}
+function tCognomi(){
+  var F=famiglia();
+  if(Math.random()<.3){                                    /* variante: quale NON può esistere */
+    var good=F.lat+" "+F.an;
+    var impossibili=["equilatero rettangolo","equilatero ottusangolo","scaleno con due angoli uguali"];
+    var possibili=["isoscele rettangolo","isoscele ottusangolo","scaleno acutangolo","isoscele acutangolo","scaleno rettangolo"];
+    var bad=pick(impossibili);
+    return{
+      w:W,h:200,tag:"I due cognomi",
+      text:"Quale di questi triangoli <b>non può esistere</b>?",
+      sub:"Ogni triangolo ha due cognomi: uno dai lati, uno dagli angoli. Ma non tutte le coppie stanno in piedi.",
+      cap:"Qui si ragiona senza figura: prova a disegnarli a mente.",
+      kind:"choice",
+      choices:mixOpts(bad,shuffle(possibili.slice()).slice(0,3)),
+      draw:function(s){
+        A.txt(s,W/2,60,"scaleno · isoscele · equilatero","sm");
+        A.txt(s,W/2,92,"×","am");
+        A.txt(s,W/2,124,"acutangolo · rettangolo · ottusangolo","sm");
+        A.txt(s,W/2,164,"7 caselle su 9 esistono","am");
+      },
+      hint:"L'equilatero ha sempre tre angoli da <b>60°</b>: non può averne uno da 90° né uno ottuso. E due angoli uguali rendono il triangolo isoscele, quindi non scaleno.",
+      why:"L'equilatero è per forza acutangolo (60°, 60°, 60°), e un triangolo con due angoli uguali è isoscele: non può essere scaleno."
+    };
+  }
+  var correct=F.lat+" "+F.an;
+  var wrongs=[];
+  LATI.forEach(function(l){if(l!==F.lat)wrongs.push(l+" "+F.an)});
+  ANGOLI.forEach(function(x){if(x!==F.an)wrongs.push(F.lat+" "+x)});
+  return{
+    w:W,h:270,tag:"I due cognomi",
+    text:"Come si chiama <b>per intero</b> questo triangolo?",
+    sub:"Prima guarda le <b>tacche</b> sui lati, poi l'angolo più grande.",
+    cap:"Tacche uguali = lati uguali. La squadretta rossa = angolo retto.",
+    kind:"choice",
+    choices:mixOpts(correct,shuffle(wrongs).slice(0,3)),
+    draw:function(s){drawFam(s,F)},
+    hint:(F.lat==="scaleno"?"Nessuna tacca uguale: i lati sono tutti diversi.":F.lat==="equilatero"?"Tre tacche uguali: tutti e tre i lati uguali.":"Due tacche uguali: due lati uguali.")+
+         " L'angolo più grande misura "+Math.max(F.a,F.b,F.c)+"°.",
+    why:"Il cognome dai lati lo dicono le tacche; quello dagli angoli lo decide <b>l'angolo maggiore</b>: "+Math.max(F.a,F.b,F.c)+"° → "+F.an+"."
+  };
+}
+
+/* ============================================================
+   3. IL TERZO ANGOLO — la somma fa 180°
+   ============================================================ */
+function tTerzo(){
+  var a,b,c;
+  do{a=rnd(20,110);b=rnd(20,110);c=180-a-b}while(c<15||c>135);
+  var quale=pick(["C","B","A"]);
+  var F={a:a,b:b,c:c};
+  return{
+    w:W,h:280,tag:"Il terzo angolo",
+    text:"Quanto misura l'angolo <b>"+quale+"̂</b>?",
+    sub:"Due angoli sono scritti sulla figura. Il terzo si ricava, non si misura.",
+    cap:"I tre angoli interni, insieme, formano sempre un angolo piatto.",
+    kind:"number",unit:"°",
+    answer:quale==="A"?a:quale==="B"?b:c,
+    draw:function(s){
+      var T=A.triFit(W,280,a,b,{mx:58,mt:54,mb:54}),k=rad(T);
+      A.triDraw(s,T.A,T.B,T.C,{names:["A","B","C"],nd:24,fill:"rgba(87,199,242,.07)"});
+      A.angAt(s,T.A,T.B,T.C,k.r,quale==="A"?"?":a+"°",quale==="A"?"v":"",k.lr);
+      A.angAt(s,T.B,T.C,T.A,k.r,quale==="B"?"?":b+"°",quale==="B"?"v":"b",k.lr);
+      A.angAt(s,T.C,T.A,T.B,k.r*.85,quale==="C"?"?":c+"°",quale==="C"?"v":"g",k.lr*.9);
+    },
+    hint:"Somma i due angoli che vedi e togli il risultato da 180°.",
+    why:"I tre angoli interni fanno <b>180°</b>: "+a+" + "+b+" + "+c+" = 180."
+  };
+}
+
+/* ============================================================
+   4. L'ISOSCELE — vertice o base?
+   ============================================================ */
+function tIsoscele(){
+  var daVertice=Math.random()<.5,v,base;
+  if(daVertice){v=rnd(10,80)*2;base=(180-v)/2}            /* vertice pari -> base intera */
+  else{base=rnd(25,80);v=180-2*base}
+  var F={a:base,b:base,c:v};
+  return{
+    w:W,h:280,tag:"L'isoscele",
+    text:daVertice?"L'angolo <b>al vertice</b> misura "+v+"°. Quanto misura <b>ciascun angolo alla base</b>?"
+                  :"Un angolo <b>alla base</b> misura "+base+"°. Quanto misura l'angolo <b>al vertice</b>?",
+    sub:"Le tacche dicono che i due lati obliqui sono uguali: gli angoli alla base sono uguali fra loro.",
+    cap:daVertice?"Prima si toglie, poi si divide per 2.":"Prima si raddoppia, poi si toglie da 180.",
+    kind:"number",unit:"°",answer:daVertice?base:v,
+    draw:function(s){
+      var T=A.triFit(W,280,base,base,{mx:60,mt:56,mb:56}),k=rad(T);
+      A.triDraw(s,T.A,T.B,T.C,{names:["A","B","C"],nd:24,fill:"rgba(87,199,242,.07)"});
+      A.ticks(s,T.C,T.A,1);A.ticks(s,T.C,T.B,1);
+      A.angAt(s,T.C,T.A,T.B,k.r*.85,daVertice?v+"°":"?",daVertice?"":"v",k.lr*.9);
+      A.angAt(s,T.A,T.B,T.C,k.r,daVertice?"?":base+"°",daVertice?"v":"b",k.lr);
+      A.angAt(s,T.B,T.C,T.A,k.r,daVertice?"?":base+"°",daVertice?"v":"b",k.lr);
+      A.sideLab(s,T.A,T.B,T.C,"base","sm",22);
+    },
+    hint:daVertice?("I due angoli alla base si dividono quello che resta: (180 − "+v+") : 2.")
+                  :("Gli angoli alla base sono <b>due</b>, uguali: 180 − ("+base+" × 2)."),
+    why:daVertice?("Angolo al vertice dato → si <b>sottrae e poi si divide per 2</b>: (180 − "+v+") : 2 = "+base+"°.")
+                 :("Angolo alla base dato → si <b>raddoppia e poi si sottrae</b>: 180 − "+(2*base)+" = "+v+"°.")
+  };
+}
+
+/* ============================================================
+   5. L'ANGOLO ESTERNO — la scorciatoia
+   ============================================================ */
+function tEsterno(){
+  var a,b,c;
+  do{a=rnd(25,80);b=rnd(30,85);c=180-a-b}while(c<25||c>120);
+  var e=180-b,tipo=pick(["e","lontano","adiacente"]);
+  return{
+    w:W,h:290,tag:"L'angolo esterno",
+    text:tipo==="e"?"Quanto misura l'angolo <b>esterno</b> in B?"
+        :tipo==="lontano"?("L'angolo esterno in B misura <b>"+e+"°</b>. Quanto misura l'angolo <b>Ĉ</b>?")
+        :("L'angolo esterno in B misura <b>"+e+"°</b>. Quanto misura l'angolo <b>B̂</b>?"),
+    sub:tipo==="adiacente"?"Interno ed esterno stanno insieme su una retta."
+                          :"L'esterno vale la somma dei due interni <b>lontani</b>: quello che tocca non conta.",
+    cap:"Il tratteggio è il prolungamento del lato AB oltre B.",
+    kind:"number",unit:"°",
+    answer:tipo==="e"?e:tipo==="lontano"?c:b,
+    draw:function(s){
+      var T=A.triFit(W,290,a,b,{ml:52,mr:112,mt:52,mb:56}),k=rad(T);
+      A.triDraw(s,T.A,T.B,T.C,{names:["A","B","C"],nd:24,fill:"rgba(87,199,242,.07)"});
+      var d=[T.B[0]+78,T.B[1]];
+      A.ghost(s,T.B[0],T.B[1],d[0],d[1]);
+      A.angAt(s,T.A,T.B,T.C,k.r,a+"°","b",k.lr);
+      A.angAt(s,T.C,T.A,T.B,k.r*.85,tipo==="lontano"?"?":c+"°",tipo==="lontano"?"v":"g",k.lr*.9);
+      A.angAt(s,T.B,T.C,T.A,k.r*.7,tipo==="adiacente"?"?":b+"°",tipo==="adiacente"?"v":"mute",k.lr*.75);
+      A.angAt(s,T.B,d,T.C,k.r+8,tipo==="e"?"?":e+"°",tipo==="e"?"v":"",k.lr+18);
+    },
+    hint:tipo==="e"?("Somma i due lontani: "+a+"° e "+c+"°. Oppure: 180 − "+b+".")
+        :tipo==="lontano"?("L'esterno è la somma dei due lontani, e uno lo conosci: "+e+" − "+a+".")
+        :("Interno ed esterno stanno sulla stessa retta: 180 − "+e+"."),
+    why:tipo==="adiacente"?("L'angolo interno e il suo esterno sono <b>adiacenti</b>: insieme fanno 180°, quindi B̂ = 180 − "+e+" = "+b+"°.")
+                          :("Ogni angolo esterno vale la <b>somma dei due interni lontani</b>: "+e+" = "+a+" + "+c+".")
+  };
+}
+
+/* ============================================================
+   6. IL COSTRUTTORE — trascina il vertice
+   ============================================================ */
+function angoliDa(d,c,r){                                  /* angoli del triangolo con C su un raggio da A */
+  var rad=d*Math.PI/180,Cx=r*Math.cos(rad),Cy=r*Math.sin(rad);
+  var angB=Math.atan2(Cy,c-Cx)*180/Math.PI;
+  return{A:d,B:angB,C:180-d-angB};
+}
+function tCostr(){
+  var cW=470,cH=330,ax=86,ay=272,c=252,r=196;
+  var A0=[ax,ay],B0=[ax+c,ay];
+  var mode=pick(["angA","iso","retC","angB"]),target,text,sub,why,hint;
+  if(mode==="angA"){
+    target=rnd(6,15)*5;
+    text="Costruisci un triangolo con l'angolo in <b>A</b> di <b>"+target+"°</b>.";
+    sub="Trascina il vertice C con il dito: l'angolo in A cambia con lui.";
+    hint="Guarda il numero azzurro accanto ad A mentre trascini: fermati quando segna "+target+"°.";
+    why="L'angolo in A è quello fra la base AB e il lato AC: sposti C, cambia lui.";
+  }else if(mode==="iso"){
+    target=Math.round(Math.acos(c/(2*r))*180/Math.PI);
+    text="Porta C dove il triangolo diventa <b>isoscele sulla base AB</b>.";
+    sub="Isoscele sulla base vuol dire: <b>Â = B̂</b>, cioè C esattamente sopra la metà della base.";
+    hint="I due angoli alla base devono diventare uguali: guarda i due numeri e avvicinali.";
+    why="Se gli angoli alla base sono uguali, i due lati obliqui sono uguali: C sta sulla perpendicolare a metà di AB.";
+  }else if(mode==="retC"){
+    target=Math.round(Math.acos(r/c)*180/Math.PI);
+    text="Porta C dove l'angolo <b>in C diventa retto</b> (90°).";
+    sub="Il numero verde è l'angolo in C: fermati quando segna 90.";
+    hint="Se l'angolo in C è 90°, gli altri due insieme fanno 90°: guarda quando Â + B̂ = 90.";
+    why="I tre angoli fanno 180°: quando quello in C vale 90°, gli altri due si dividono i 90° che restano.";
+  }else{
+    var t=rnd(7,14)*5,best=30,bd=999;
+    for(var d=12;d<=140;d++){var g=angoliDa(d,c,r);if(Math.abs(g.B-t)<bd){bd=Math.abs(g.B-t);best=d}}
+    target=best;
+    text="Costruisci un triangolo con l'angolo in <b>B</b> di circa <b>"+t+"°</b>.";
+    sub="Attenzione: tu muovi C, ma devi guardare il numero che sta accanto a <b>B</b>.";
+    hint="Muovi C e tieni d'occhio il numero verde accanto a B: deve arrivare a "+t+"°.";
+    why="Spostando C cambiano tutti e tre gli angoli insieme: se ne segui uno solo, gli altri lo seguono.";
+  }
+  function paint(s,d,showTarget){
+    var g=angoliDa(d,c,r),rad=d*Math.PI/180,C0=[ax+r*Math.cos(rad),ay-r*Math.sin(rad)];
+    A.line(s,20,ay,cW-20,ay,"thin");
+    if(showTarget&&Math.abs(d-target)>3){                 /* la posizione giusta, solo se non ci sei già */
+      var rt=target*Math.PI/180,CT=[ax+r*Math.cos(rt),ay-r*Math.sin(rt)];
+      A.ghost(s,ax,ay,CT[0],CT[1]);A.ghost(s,CT[0],CT[1],B0[0],B0[1]);
+      A.E("circle",{cx:A.R(CT[0]),cy:A.R(CT[1]),r:8,fill:"none",stroke:"var(--go)","stroke-width":2.4},s);
+      A.txt(s,CT[0]-30,CT[1]-14,"qui","gn");
+    }
+    A.triDraw(s,A0,B0,C0,{names:["A","B","C"],nd:22,fill:"rgba(255,162,58,.08)"});
+    A.angAt(s,A0,B0,C0,34,Math.round(g.A)+"°","b",52);
+    A.angAt(s,B0,C0,A0,34,Math.round(g.B)+"°","g",52);
+    A.angAt(s,C0,A0,B0,26,Math.round(g.C)+"°","v",44);
+    A.E("circle",{cx:A.R(C0[0]),cy:A.R(C0[1]),r:13,"class":"handle"},s);
+  }
+  return{
+    w:cW,h:cH,tag:"Il costruttore",text:text,sub:sub,
+    cap:"Trascina il pallino arancione: i tre angoli si aggiornano da soli.",
+    kind:"drag",cx:ax,cy:ay,answer:target,tol:3,
+    draw:function(s,d){paint(s,d,false)},
+    drawAnswer:function(s,d){paint(s,d,true)},
+    hint:hint,why:why
+  };
+}
+
+/* ============================================================
+   7. BASE E ALTEZZA — tocca quella giusta, poi calcola
+   ============================================================ */
+function tAltezza(){
+  if(Math.random()<.5){                                    /* tocca l'altezza */
+    var ott=Math.random()<.35,a,b,T,Hp,tx,k=0;
+    do{                                                    /* i quattro segmenti devono restare ben separati */
+      a=ott?rnd(20,28):rnd(38,64);b=ott?rnd(100,116):rnd(40,66);
+      T=A.triFit(W,290,a,b,{mx:58,mt:54,mb:58});
+      Hp=A.foot(T.A,T.B,T.C);tx=Hp[2];k++;
+    }while(k<60&&!(ott?(tx>1.18||tx<-0.18):(tx>0.12&&tx<0.34)||(tx>0.66&&tx<0.86)));
+    var M=A.mid(T.A,T.B);
+    var fx=(tx<.5)?.78:.22;                                /* segmento obliquo, lontano da H e dal punto medio */
+    var P=[T.A[0]+fx*(T.B[0]-T.A[0]),T.A[1]];
+    var lato=(tx<.5)?T.B:T.A;                              /* il lato del triangolo, dalla parte opposta al piede */
+    var cand=shuffle([{p:[Hp[0],Hp[1]],ok:true},{p:M,ok:false},{p:P,ok:false},{p:lato,ok:false}]);
+    var good=0;cand.forEach(function(x,i){if(x.ok)good=i+1});
+    var paint=function(s,rev){
+      A.triDraw(s,T.A,T.B,T.C,{names:["A","B","C"],nd:28,fill:"rgba(87,199,242,.06)"});
+      if(tx>1)A.ghost(s,T.B[0],T.B[1],Hp[0],Hp[1]);
+      if(tx<0)A.ghost(s,T.A[0],T.A[1],Hp[0],Hp[1]);
+      cand.forEach(function(x,i){
+        var col=rev?(x.ok?"var(--go)":"#42556F"):"var(--violet)";
+        A.E("line",{x1:A.R(T.C[0]),y1:A.R(T.C[1]),x2:A.R(x.p[0]),y2:A.R(x.p[1]),
+          stroke:col,"stroke-width":2.6,"stroke-dasharray":"5 5","stroke-linecap":"round"},s);
+        A.E("circle",{cx:A.R(x.p[0]),cy:A.R(x.p[1]),r:12,fill:"var(--surf2)",stroke:col,"stroke-width":2.2},s);
+        A.txt(s,x.p[0],x.p[1],String(i+1),rev&&x.ok?"gn":"sm");
+      });
+      if(rev)A.rightAt(s,[Hp[0],Hp[1]],(tx<0?T.A:T.B),T.C,15);
+      A.sideLab(s,T.A,T.B,T.C,"base",'sm',34);
+    };
+    return{
+      w:W,h:290,tag:"Base e altezza",
+      text:"Quale dei quattro segmenti è l'<b>altezza</b> relativa alla base <b>AB</b>?",
+      sub:"Tocca il numero giusto direttamente sulla figura.",
+      cap:"Uno solo forma un angolo retto con la base (o con il suo prolungamento).",
+      kind:"pick",answer:good,
+      draw:function(s){paint(s,false);cand.forEach(function(x,i){A.hitLine(s,T.C,x.p,i+1,15)})},
+      drawAnswer:function(s){paint(s,true)},
+      hint:"L'altezza non va al punto medio e non è un lato: deve cadere <b>perpendicolare</b> alla base."+
+           (tx>1||tx<0?" Qui la base va prolungata: il piede cade fuori.":""),
+      why:"L'altezza relativa a un lato parte dal vertice opposto e arriva <b>perpendicolare</b> a quel lato, anche quando il piede cade sul prolungamento."
+    };
+  }
+  var inv=Math.random()<.45,bb=rnd(2,9)*2,hh=rnd(3,14),area=bb*hh/2;   /* base pari: l'area resta intera */
+  var T2=A.triFit(W,270,rnd(45,68),rnd(45,68),{mx:56,mt:66,mb:52});
+  return{
+    w:W,h:270,tag:"Base e altezza",
+    text:inv?("Un triangolo ha area <b>"+area+" cm²</b> e base <b>"+bb+" cm</b>. Quanto misura l'<b>altezza</b> relativa a quella base?")
+            :("Base <b>"+bb+" cm</b>, altezza <b>"+hh+" cm</b>. Quanto misura l'<b>area</b>?"),
+    sub:inv?"Per tornare indietro: prima si raddoppia l'area, poi si divide per la base.":"Base per altezza, e poi la metà.",
+    cap:"Base e altezza vanno sempre in coppia: perpendicolari fra loro.",
+    kind:"number",unit:inv?" cm":" cm²",answer:inv?hh:area,
+    draw:function(s){
+      A.triDraw(s,T2.A,T2.B,T2.C,{names:null,fill:"rgba(87,199,242,.07)"});
+      A.heightTo(s,T2.A,T2.B,T2.C,{h:inv?"h = ?":"h = "+hh});
+      A.sideLab(s,T2.A,T2.B,T2.C,"b = "+bb,"sm",30);
+      if(inv)A.txt(s,W/2,34,"area = "+area+" cm²","gn");
+    },
+    hint:inv?("("+area+" × 2) : "+bb+" = ?"):("("+bb+" × "+hh+") : 2 = ?"),
+    why:inv?("Dalla formula A = (b × h) : 2 si torna indietro con le mosse contrarie: h = ("+area+" × 2) : "+bb+" = "+hh+" cm.")
+           :("Due triangoli uguali formano un parallelogramma di area b × h: il triangolo è la <b>metà</b>, ("+bb+" × "+hh+") : 2 = "+area+" cm².")
+  };
+}
+
+/* ============================================================
+   8. IL MODELLO A BARRE — problemi in due o tre mosse
+   ============================================================ */
+function tBarre(){
+  var v=pick(["iso","blocchi","prop"]);
+
+  if(v==="iso"){
+    var lato=rnd(6,22),base=rnd(4,26),per=2*lato+base;
+    if(base>=2*lato)base=2*lato-1,per=2*lato+base;
+    return{
+      w:W,h:250,tag:"Modello a barre",
+      text:"Un triangolo <b>isoscele</b> ha perimetro <b>"+per+" cm</b> e base <b>"+base+" cm</b>.",
+      sub:"Disegna mentalmente le tre barre: base, lato, lato. Poi rispondi un passo alla volta.",
+      cap:"Prima si toglie quello che si conosce, poi si divide.",
+      kind:"chain",unit:" cm",
+      steps:[
+        {text:"Quanti centimetri restano per i <b>due lati obliqui</b> insieme?",answer:per-base,
+         hint:"Dal perimetro togli la base: "+per+" − "+base+".",
+         why:"Il perimetro è la somma dei tre lati: se togli la base, resta la parte dei due obliqui."},
+        {text:"E allora, quanto misura <b>un</b> lato obliquo?",answer:lato,
+         hint:"Quei "+(per-base)+" cm sono divisi in <b>due</b> parti uguali.",
+         why:"I due lati obliqui sono uguali: "+(per-base)+" : 2 = "+lato+" cm. Prima si toglie, poi si divide."}
+      ],
+      draw:function(s,st){
+        A.bars(s,40,70,350,34,[{u:base,t:base+"",f:"rgba(255,162,58,.22)",st:"var(--amber)"},
+                               {u:lato,t:st>0?String(lato):"?"},{u:lato,t:st>0?String(lato):"?"}],
+               "perimetro "+per+" cm",null);
+        var x0=40+350*base/per;
+        A.E("path",{d:"M "+A.R(x0)+" 118 L "+A.R(x0)+" 124 L 390 124 L 390 118",fill:"none",stroke:"var(--dim)","stroke-width":1.8},s);
+        A.txt(s,(x0+390)/2,142,st>0?(per+" − "+base+" = "+(per-base)):"?","gn");
+        if(st>0)A.txt(s,W/2,182,(per-base)+" : 2 = "+lato+" cm","am");
+        A.txt(s,W/2,220,"la barra dice che cosa dividere","sm");
+      },
+      hint:"Guarda la barra: quello da dividere non è il perimetro, è quello che <b>avanza</b>.",
+      why:"Nell'isoscele: (perimetro − base) : 2 = lato obliquo. Prima si toglie, poi si divide."
+    };
+  }
+
+  if(v==="blocchi"){
+    var u=rnd(4,14),extra=rnd(2,9),per2=4*u+extra;
+    var l1=u,l2=2*u,l3=u+extra;
+    return{
+      w:W,h:250,tag:"Modello a barre",
+      text:"Il secondo lato è il <b>doppio</b> del primo; il terzo supera il primo di <b>"+extra+" cm</b>. Il perimetro è <b>"+per2+" cm</b>.",
+      sub:"Chiama «un blocco» il lato più corto e conta quanti blocchi ci sono in tutto.",
+      cap:"Quattro blocchi uguali più un pezzetto di " + extra + " cm.",
+      kind:"chain",unit:" cm",
+      steps:[
+        {text:"Se togli il pezzetto in più, quanto resta per i <b>quattro blocchi</b>?",answer:per2-extra,
+         hint:"Dal perimetro togli il pezzetto: "+per2+" − "+extra+".",
+         why:"Il pezzetto da "+extra+" cm non fa parte dei blocchi: si toglie prima di dividere."},
+        {text:"Quanto vale <b>un blocco</b> (cioè il primo lato)?",answer:u,
+         hint:"Quei "+(per2-extra)+" cm sono divisi in <b>quattro</b> blocchi uguali.",
+         why:(per2-extra)+" : 4 = "+u+" cm."},
+        {text:"E allora, quanto misura il <b>lato più lungo</b>?",answer:Math.max(l2,l3),
+         hint:"Il secondo è "+l2+" cm, il terzo è "+u+" + "+extra+" = "+l3+" cm. Prendi il maggiore.",
+         why:"I tre lati sono "+l1+", "+l2+" e "+l3+" cm; il più lungo è "+Math.max(l2,l3)+" cm. Controllo: "+l1+"+"+l2+"+"+l3+" = "+per2+" ✓"}
+      ],
+      draw:function(s,st){
+        var uw=Math.min(64,300/4),y=40;
+        A.txt(s,26,y+17,"1°","sm");A.bars(s,50,y,uw,28,[{u:1,t:st>1?String(u):""}],null,null);
+        y+=44;A.txt(s,26,y+17,"2°","sm");A.bars(s,50,y,uw*2,28,[{u:1,t:""},{u:1,t:""}],null,null);
+        y+=44;A.txt(s,26,y+17,"3°","sm");A.bars(s,50,y,uw,28,[{u:1,t:""}],null,null);
+        A.bars(s,50+uw,y,uw*.62,28,[{u:1,t:String(extra),f:"rgba(255,162,58,.22)",st:"var(--amber)"}],null,null);
+        A.txt(s,300,58,"4 blocchi uguali","cy");
+        A.txt(s,300,80,"+ "+extra+" cm","am");
+        if(st>0)A.txt(s,300,112,per2+" − "+extra+" = "+(per2-extra),"sm");
+        if(st>1)A.txt(s,300,136,(per2-extra)+" : 4 = "+u+" cm","gn");
+        A.txt(s,W/2,224,"perimetro "+per2+" cm","sm");
+      },
+      hint:"Conta i blocchi: 1 + 2 + 1 = quattro, più il pezzetto da "+extra+" cm.",
+      why:"Si chiama «un blocco» la parte più piccola, si toglie il pezzetto in più e si divide: (perimetro − "+extra+") : 4."
+    };
+  }
+
+  var k=pick([[1,2,3],[1,1,2],[2,3,4],[1,2,2],[1,3,5]]);
+  var tot=k[0]+k[1]+k[2],parte=180/tot;
+  while(parte%1!==0){k=[1,2,3];tot=6;parte=30}
+  var big=Math.max(k[0],k[1],k[2])*parte;
+  return{
+    w:W,h:250,tag:"Modello a barre",
+    text:"I tre angoli di un triangolo stanno fra loro come <b>"+k[0]+" : "+k[1]+" : "+k[2]+"</b>.",
+    sub:"Una barra per ogni angolo, tutte fatte con la stessa parte.",
+    cap:"Le parti uguali si contano, poi si divide.",
+    kind:"chain",unit:"",
+    steps:[
+      {text:"Quante <b>parti uguali</b> ci sono in tutto?",answer:tot,unit:"",
+       hint:"Somma i tre numeri della proporzione: "+k[0]+" + "+k[1]+" + "+k[2]+".",
+       why:"Le barre sono fatte tutte con la stessa parte: in tutto sono "+tot+"."},
+      {text:"Quanto vale <b>una parte</b>, in gradi?",answer:parte,unit:"°",
+       hint:"Le "+tot+" parti insieme fanno 180°.",
+       why:"180 : "+tot+" = "+parte+"°: da qui esce tutto il resto."},
+      {text:"Quanto misura l'angolo <b>più grande</b>?",answer:big,unit:"°",
+       hint:"È fatto di "+Math.max(k[0],k[1],k[2])+" parti da "+parte+"°.",
+       why:"Gli angoli sono "+(k[0]*parte)+"°, "+(k[1]*parte)+"° e "+(k[2]*parte)+"°: insieme fanno 180. Il maggiore è "+big+"°."}
+    ],
+    draw:function(s,st){
+      var uw=300/tot,y=54,col=["var(--cyan)","var(--go)","var(--violet)"];
+      k.forEach(function(n,i){
+        var pieces=[];for(var j=0;j<n;j++)pieces.push({u:1,t:st>1?String(parte):"",
+          f:"rgba(87,199,242,.16)",st:col[i]});
+        A.bars(s,60,y,uw*n,30,pieces,null,null);
+        A.txt(s,38,y+15,String(i+1),"sm");
+        if(st>1)A.txt(s,60+uw*n+34,y+15,(n*parte)+"°",i===0?"cy":i===1?"gn":"vi");
+        y+=46;
+      });
+      A.txt(s,W/2,24,"le tre barre insieme: 180°","sm");
+      if(st>0)A.txt(s,W/2,222,"180 : "+tot+" = "+parte+"° una parte","am");
+    },
+    hint:"Prima conta le parti, poi dividi i 180° fra tutte.",
+    why:"Nei problemi con le proporzioni si conta il <b>totale delle parti</b> e si trova quanto vale <b>una</b> parte: il resto è moltiplicazione."
+  };
+}
+
+/* ============================================================
+   ALLENAMENTI
+   ============================================================ */
+var MISSIONS=[
+  {id:"chiude",name:"Chiude o no",desc:"Tre bastoncini: si chiudono in un triangolo?",color:"#57C7F2",n:6,make:tChiude,
+   icon:'<path d="M6 30 L42 30" stroke="#57C7F2" stroke-width="5" stroke-linecap="round"/><path d="M8 16 L26 16" stroke="#3DD68C" stroke-width="5" stroke-linecap="round"/><path d="M30 16 L42 16" stroke="#B79CFF" stroke-width="5" stroke-linecap="round"/>'},
+  {id:"cognomi",name:"I due cognomi",desc:"Scaleno o isoscele? Acuto, retto o ottuso?",color:"#FFA23A",n:6,make:tCognomi,
+   icon:'<path d="M7 38 L41 38 L24 12 Z" fill="none" stroke="#FFA23A" stroke-width="2.6" stroke-linejoin="round"/><path d="M13 26 l4 3 M35 26 l-4 3" stroke="#E9EEF6" stroke-width="2.2"/>'},
+  {id:"terzo",name:"Il terzo angolo",desc:"Due li vedi, il terzo si ricava: 180°.",color:"#3DD68C",n:6,make:tTerzo,
+   icon:'<path d="M7 38 L41 38 L27 13 Z" fill="none" stroke="#3DD68C" stroke-width="2.6" stroke-linejoin="round"/><path d="M7 38 m 13 0 a 13 13 0 0 0 -3.6 -9" fill="none" stroke="#57C7F2" stroke-width="2.2"/><path d="M41 38 m -12 0 a 12 12 0 0 1 3 -8" fill="none" stroke="#FFA23A" stroke-width="2.2"/>'},
+  {id:"isoscele",name:"L'isoscele",desc:"Ti danno il vertice o la base? Cambia tutto.",color:"#B79CFF",n:6,make:tIsoscele,
+   icon:'<path d="M8 38 L40 38 L24 11 Z" fill="none" stroke="#B79CFF" stroke-width="2.6" stroke-linejoin="round"/><path d="M14 26 l4 2 M34 26 l-4 2" stroke="#E9EEF6" stroke-width="2.2"/><path d="M24 11 L24 38" stroke="#42556F" stroke-width="1.8" stroke-dasharray="3 3"/>'},
+  {id:"esterno",name:"L'angolo esterno",desc:"La scorciatoia: la somma dei due lontani.",color:"#FF8A5A",n:6,make:tEsterno,
+   icon:'<path d="M8 34 L34 34 L22 12 Z" fill="none" stroke="#E9EEF6" stroke-width="2.4" stroke-linejoin="round"/><path d="M34 34 L44 34" stroke="#42556F" stroke-width="2.4" stroke-dasharray="3 3"/><path d="M34 34 m 8 0 a 8 8 0 0 0 -5.6 -7.6" fill="none" stroke="#FF8A5A" stroke-width="2.4"/>'},
+  {id:"costr",name:"Il costruttore",desc:"Trascina il vertice e costruisci col dito.",color:"#FFA23A",n:5,make:tCostr,
+   icon:'<path d="M7 38 L41 38 L20 14 Z" fill="none" stroke="#E9EEF6" stroke-width="2.4" stroke-linejoin="round"/><circle cx="20" cy="14" r="7" fill="#FFA23A"/>'},
+  {id:"altezza",name:"Base e altezza",desc:"Tocca l'altezza giusta, poi calcola l'area.",color:"#57C7F2",n:6,make:tAltezza,
+   icon:'<path d="M7 38 L41 38 L30 12 Z" fill="none" stroke="#57C7F2" stroke-width="2.4" stroke-linejoin="round"/><path d="M30 12 L30 38" stroke="#FFA23A" stroke-width="2.4" stroke-dasharray="4 4"/><path d="M30 32 l-6 0 l0 6" fill="none" stroke="#FF6B5A" stroke-width="2"/>'},
+  {id:"barre",name:"Modello a barre",desc:"Problemi in due mosse: togli, poi dividi.",color:"#3DD68C",n:5,make:tBarre,
+   icon:'<rect x="6" y="12" width="16" height="10" rx="2" fill="rgba(255,162,58,.3)" stroke="#FFA23A" stroke-width="2"/><rect x="24" y="12" width="18" height="10" rx="2" fill="rgba(87,199,242,.3)" stroke="#57C7F2" stroke-width="2"/><rect x="6" y="28" width="36" height="10" rx="2" fill="rgba(61,214,140,.25)" stroke="#3DD68C" stroke-width="2"/>'}
+];
+var ALL=[tChiude,tCognomi,tTerzo,tIsoscele,tEsterno,tCostr,tAltezza,tBarre];
+var PARTITA={id:"partita",name:"Il collaudo",desc:"Otto domande da tutti gli allenamenti: come in verifica.",
+  color:"#FFA23A",n:8,big:true,make:function(){return pick(ALL)()},
+  icon:'<path d="M24 6 L42 38 L6 38 Z" fill="none" stroke="#FFA23A" stroke-width="2.6" stroke-linejoin="round"/><path d="M16 27 l6 6 l11 -13" fill="none" stroke="#3DD68C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'};
+
+window.PAGAME={MISSIONS:MISSIONS,PARTITA:PARTITA,ALL:ALL};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var A=window.PA,G=window.PAGAME,$=A.$;
+var MISSIONS=G.MISSIONS,PARTITA=G.PARTITA;
+var S={m:null,i:0,task:null,step:0,tries:0,score:0,wrong:[],cur:45,typed:""};
+/* unità del passo corrente: "°" se non specificata, "" per un numero puro */
+function unit(){
+  var t=S.task;if(!t)return "\u00B0";
+  if(t.kind==="chain"){var st=t.steps[S.step];if(st&&st.unit!=null)return st.unit}
+  return t.unit!=null?t.unit:"\u00B0";
+}
+
+/* ---------------- HOME ---------------- */
+function starsHTML(k){var h="";for(var i=0;i<3;i++)h+='<i class="'+(i<k?"on":"")+'"></i>';return h}
+function paintHome(){
+  var g=$("#grid");g.innerHTML="";
+  var list=MISSIONS.concat([PARTITA]);
+  list.forEach(function(m,i){
+    var b=document.createElement("button");
+    b.className="mission"+(m.big?" big":"");
+    b.style.setProperty("--mc",m.color);
+    b.style.animationDelay=(i*45)+"ms";
+    b.innerHTML='<svg class="ico" viewBox="0 0 48 48" aria-hidden="true">'+m.icon+'</svg>'+
+      '<h3>'+m.name+'</h3><p>'+m.desc+'</p>'+
+      '<div class="foot"><span class="stars">'+starsHTML(A.P.stars[m.id]||0)+'</span>'+
+      '<span class="go">'+m.n+' domande →</span></div>';
+    b.addEventListener("click",function(){start(m)});
+    g.appendChild(b);
+  });
+  A.paintXP();
+}
+
+/* ---------------- SESSIONE ---------------- */
+function show(id){
+  ["home","game","end"].forEach(function(s){$("#"+s).classList.toggle("hide",s!==id)});
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function start(m){
+  S={m:m,i:0,task:null,step:0,tries:0,score:0,wrong:[],cur:45,typed:""};
+  $("#modeName").textContent=m.name;
+  var d=$("#dots");d.innerHTML="";
+  for(var k=0;k<m.n;k++)d.appendChild(document.createElement("i"));
+  show("game");next();
+}
+function next(){
+  if(S.i>=S.m.n)return finish();
+  S.task=S.m.make();S.step=0;S.tries=0;S.cur=45;S.typed="";S.locked=false;
+  var dots=$("#dots").children;
+  for(var k=0;k<dots.length;k++)dots[k].classList.toggle("now",k===S.i);
+  $("#qTag").textContent=S.task.tag;
+  $("#qText").innerHTML=S.task.text;
+  var sub=$("#qSub");
+  if(S.task.sub){sub.innerHTML=S.task.sub;sub.classList.remove("hide")}else sub.classList.add("hide");
+  $("#figCap").textContent=S.task.cap||"";
+  $("#fb").className="fb";$("#fb").innerHTML="";
+  $("#btnNext").classList.add("hide");
+  $("#btnHint").classList.remove("hide");$("#btnHint").disabled=false;
+  drawFig();renderAnswer();
+}
+function drawFig(rev){
+  var t=S.task,host=$("#fig");host.innerHTML="";
+  var s=A.Board(t.w||420,t.h||300);
+  try{
+    if(rev!==undefined&&t.drawAnswer)t.drawAnswer(s,rev);
+    else if(t.kind==="drag")t.draw(s,S.cur);
+    else if(t.kind==="chain")t.draw(s,S.step);
+    else t.draw(s);
+  }catch(e){}
+  host.appendChild(s);
+}
+/* interazioni delegate al contenitore, che non viene mai sostituito */
+(function(){
+  var host=$("#fig"),dragging=false;
+  function svgEl(){return host.firstChild}
+  function toAngle(ev){
+    var t=S.task,el=svgEl();if(!el||!t)return null;
+    var r=el.getBoundingClientRect();if(!r.width)return null;
+    var sc=(t.w||420)/r.width;
+    var x=(ev.clientX-r.left)*sc,y=(ev.clientY-r.top)*sc;
+    return Math.max(2,Math.min(178,Math.round(A.ang(t.cx,t.cy,x,y))));
+  }
+  host.addEventListener("click",function(ev){
+    var el=ev.target.closest?ev.target.closest("[data-pick]"):null;
+    if(el&&S.task&&S.task.kind==="pick"&&!S.locked)answer(parseInt(el.getAttribute("data-pick"),10));
+  });
+  host.addEventListener("pointerdown",function(ev){
+    if(!S.task||S.task.kind!=="drag"||S.locked)return;
+    dragging=true;var a=toAngle(ev);if(a!==null){S.cur=a;drawFig()}
+    ev.preventDefault();
+  });
+  window.addEventListener("pointermove",function(ev){
+    if(!dragging)return;var a=toAngle(ev);if(a!==null){S.cur=a;drawFig()}
+  },{passive:true});
+  window.addEventListener("pointerup",function(){dragging=false});
+  window.addEventListener("pointercancel",function(){dragging=false});
+})();
+
+/* ---------------- input ---------------- */
+function renderAnswer(){
+  var t=S.task,a=$("#answer");a.innerHTML="";
+  if(t.kind==="choice"){
+    var box=document.createElement("div");box.className="opts";
+    t.choices.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";
+      b.innerHTML='<span class="l">'+"ABCD"[i]+'</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(b.disabled)return;
+        b.classList.add(c.ok?"good":"bad");
+        if(!c.ok)b.disabled=true;
+        answer(c.ok);
+      });
+      box.appendChild(b);
+    });
+    a.appendChild(box);
+  }
+  else if(t.kind==="number"||t.kind==="chain"){
+    var st=t.kind==="chain"?t.steps[S.step]:null;
+    if(st){var h=document.createElement("div");h.className="q";
+      h.innerHTML='<span class="tag">Passo '+(S.step+1)+' di '+t.steps.length+'</span><h3>'+st.text+'</h3>';
+      a.appendChild(h)}
+    var line=document.createElement("div");line.className="numline";
+    line.innerHTML='<div class="numshow" id="nshow"><span class="cur">–</span><span class="deg">'+unit()+'</span></div>';
+    a.appendChild(line);
+    var pad=document.createElement("div");pad.className="pad";
+    ["1","2","3","4","5","6","7","8","9","←","0","✓"].forEach(function(k){
+      var b=document.createElement("button");b.textContent=k;
+      if(k==="✓")b.className="ok";if(k==="←")b.className="del";
+      b.addEventListener("click",function(){typeKey(k)});
+      pad.appendChild(b);
+    });
+    a.appendChild(pad);
+  }
+  else if(t.kind==="slider"){
+    var w=document.createElement("div");w.className="slide";
+    w.innerHTML='<div class="val"><span id="sval">'+S.cur+'</span>°</div>'+
+      '<input type="range" id="srange" min="5" max="'+(t.max||180)+'" step="1" value="'+S.cur+'" aria-label="La tua stima">';
+    a.appendChild(w);
+    var btn=document.createElement("button");btn.className="btn pri";btn.textContent="È questo";
+    btn.addEventListener("click",function(){answer(S.cur)});
+    a.appendChild(btn);
+    var r=w.querySelector("#srange");
+    r.addEventListener("input",function(){S.cur=parseInt(r.value,10);$("#sval").textContent=S.cur});
+  }
+  else if(t.kind==="drag"){
+    var b2=document.createElement("button");b2.className="btn pri";b2.textContent="È questa la posizione";
+    b2.addEventListener("click",function(){answer(S.cur)});
+    a.appendChild(b2);
+    var p=document.createElement("p");p.className="sub";p.style.marginTop="10px";
+    p.textContent="Trascina il pallino arancione sul vertice C: i tre angoli si aggiornano mentre muovi.";
+    a.appendChild(p);
+  }
+  else if(t.kind==="pick"){
+    var p2=document.createElement("div");p2.className="q";
+    p2.innerHTML='<span class="tag">Tocca la figura</span><h3 style="font-size:16px;font-weight:600">Clicca direttamente l\'angolo giusto nel disegno qui accanto.</h3>';
+    a.appendChild(p2);
+  }
+}
+function typeKey(k){
+  var t=S.task;
+  if(k==="←"){S.typed=S.typed.slice(0,-1)}
+  else if(k==="✓"){
+    if(S.typed==="")return;
+    var v=parseInt(S.typed,10);S.typed="";paintNum();
+    var target=(t.kind==="chain")?t.steps[S.step].answer:t.answer;
+    answer(v===target,v);
+    return;
+  }
+  else if(S.typed.length<3)S.typed+=k;
+  paintNum();
+}
+function paintNum(){
+  var n=$("#nshow");if(!n)return;
+  n.innerHTML='<span class="cur">'+(S.typed||"–")+'</span><span class="deg">'+unit()+'</span>';
+}
+
+/* ---------------- valutazione ---------------- */
+function fb(cls,title,body){
+  var f=$("#fb");f.className="fb on "+cls;
+  f.innerHTML="<b>"+title+"</b>"+body;
+}
+function dotSet(cls){
+  var d=$("#dots").children[S.i];if(!d)return;
+  d.classList.remove("now");d.classList.add(cls);
+}
+function answer(val,typed){
+  var t=S.task,ok;
+  if(t.kind==="choice")ok=(val===true);
+  else if(t.kind==="pick")ok=(val===t.answer);
+  else if(t.kind==="slider"||t.kind==="drag")ok=Math.abs(val-t.answer)<=t.tol;
+  else ok=(val===true);
+  S.tries++;
+
+  if(t.kind==="chain"){
+    var st=t.steps[S.step];
+    if(ok){
+      if(S.step<t.steps.length-1){
+        S.step++;S.tries=0;
+        fb("good","Anello trovato",st.why+" Ora il passo successivo.");
+        drawFig();renderAnswer();return;
+      }
+      close(true,st.why);
+    }else if(S.tries<2){
+      fb("soft","Non ancora",st.hint);shake();
+    }else{
+      fb("soft","Guarda qui","La risposta era <b style='display:inline;font-size:15px'>"+st.answer+unit()+"</b>. "+st.why);
+      if(S.step<t.steps.length-1){
+        S.step++;S.tries=0;S.wrong.push(t.why);
+        setTimeout(function(){drawFig();renderAnswer()},60);
+        return;
+      }
+      close(false,st.why);
+    }
+    return;
+  }
+
+  if(ok){
+    var extra="";
+    if(t.kind==="slider"||t.kind==="drag"){
+      var diff=Math.abs(val-t.answer);
+      extra=diff<=3?" Praticamente esatto: "+t.answer+"°.":" Il valore giusto era "+t.answer+"°: eri fuori di "+diff+"°.";
+      drawFig(val);
+    }
+    close(true,(t.why||"")+extra);
+  }else if(S.tries<2){
+    if(t.kind==="slider"||t.kind==="drag")fb("soft","Ci sei quasi","Sei ancora fuori di più di "+t.tol+"°. "+t.hint);
+    else fb("soft","Non ancora",t.hint);
+    shake();
+  }else{
+    var sol=(t.kind==="choice")?"":(" La risposta era <b style='display:inline;font-size:15px'>"+
+      (t.kind==="pick"?("il segmento n. "+t.answer):(t.answer+unit()))+"</b>.");
+    if(t.kind==="choice"){
+      document.querySelectorAll(".opt").forEach(function(b,i){
+        if(t.choices[i].ok){b.classList.add("good")}b.disabled=true;
+      });
+    }
+    if(t.kind==="slider"||t.kind==="drag")drawFig(val);
+    if(t.kind==="pick")drawFig(0);
+    fb("soft","Impariamo questa",sol+" "+t.why);
+    close(false,null,true);
+  }
+}
+function shake(){var st=document.querySelector(".stage");st.classList.remove("shake");void st.offsetWidth;st.classList.add("shake")}
+function close(good,why,silent){
+  var t=S.task;S.locked=true;
+  if(good){
+    var pts=S.tries<=1?10:5;
+    if((t.kind==="slider"||t.kind==="drag")&&S.tries<=1)pts+=2;
+    A.P.xp+=pts;A.save();A.paintXP();
+    S.score+=S.tries<=1?1:0.5;
+    dotSet(S.tries<=1?"ok":"ko");
+    if(!silent)fb("good",S.tries<=1?"Esatto!":"Giusto, al secondo colpo",(why||"")+" <b style='display:inline;color:var(--amber);font-size:13px'>+"+pts+" XP</b>");
+  }else{
+    dotSet("ko");S.wrong.push(t.why);
+  }
+  $("#btnHint").classList.add("hide");
+  var b=$("#btnNext");b.classList.remove("hide");
+  b.textContent=(S.i===S.m.n-1)?"Vedi il risultato →":"Continua →";
+  document.querySelectorAll(".opt").forEach(function(x){x.disabled=true});
+  var pd=document.querySelector(".pad");if(pd)pd.querySelectorAll("button").forEach(function(x){x.disabled=true});
+  S.i++;
+}
+
+/* ---------------- fine ---------------- */
+function finish(){
+  var frac=S.score/S.m.n,stars=frac>=.9?3:frac>=.7?2:frac>=.5?1:0;
+  var prev=A.P.stars[S.m.id]||0;
+  if(stars>prev){A.P.stars[S.m.id]=stars}
+  if(stars===3){A.P.xp+=20}
+  A.save();A.paintXP();
+  $("#endTitle").textContent=(S.score===S.m.n)?"Perfetto":stars===3?"Quasi perfetto":stars===2?"Ci siamo":stars===1?"Buon lavoro":"Riproviamo";
+  $("#endScore").textContent=Math.round(S.score*10)/10;
+  $("#endOf").textContent="su "+S.m.n+" · "+S.m.name;
+  var st=$("#endStars").children;
+  for(var i=0;i<3;i++)st[i].className=i<stars?"on":"";
+  $("#endMsg").textContent=
+    stars===3?(S.score===S.m.n?"Serie perfetta, tutte al primo colpo. +20 XP di bonus: puoi passare a un altro allenamento.":"Quasi tutte al primo colpo: +20 XP di bonus. Rifalla una volta per chiuderla a punteggio pieno."):
+    stars===2?"Manca poco: quasi tutte al primo colpo. Rifai la serie e guarda se scendi a zero errori.":
+    stars===1?"Il metodo c'è, serve solo ripetizione. Rifai questa serie: i numeri cambiano ogni volta.":
+    "Nessun problema: è così che si impara. Rifai la serie con calma, leggendo ogni indizio prima di rispondere.";
+  var learn=$("#endLearn"),w=[];
+  S.wrong.forEach(function(x){if(x&&w.indexOf(x)<0)w.push(x)});
+  if(w.length){
+    learn.innerHTML='<h4>Da tenere a mente</h4><ul>'+w.map(function(x){return"<li>"+x+"</li>"}).join("")+'</ul>';
+  }else{
+    learn.innerHTML='<h4>Da tenere a mente</h4><ul><li>Non hai lasciato niente indietro: continua a cambiare allenamento per non abituarti a una sola figura.</li></ul>';
+  }
+  show("end");
+}
+
+/* ---------------- eventi ---------------- */
+$("#btnNext").addEventListener("click",next);
+$("#btnBack").addEventListener("click",function(){paintHome();show("home")});
+$("#btnHome").addEventListener("click",function(){paintHome();show("home")});
+$("#btnAgain").addEventListener("click",function(){start(S.m)});
+$("#btnReset").addEventListener("click",function(){
+  A.P.xp=0;A.P.stars={};A.save();paintHome();
+  this.textContent="Fatto: si riparte da zero";
+});
+$("#btnHint").addEventListener("click",function(){
+  var t=S.task,h=(t.kind==="chain")?t.steps[S.step].hint:t.hint;
+  fb("soft","Indizio",h);$("#btnHint").disabled=true;
+});
+document.addEventListener("keydown",function(e){
+  if($("#game").classList.contains("hide"))return;
+  var t=S.task;if(!t)return;
+  if(t.kind==="number"||t.kind==="chain"){
+    if(/^[0-9]$/.test(e.key))typeKey(e.key);
+    else if(e.key==="Backspace")typeKey("←");
+    else if(e.key==="Enter")typeKey("✓");
+  }else if(e.key==="Enter"&&!$("#btnNext").classList.contains("hide"))next();
+});
+
+/* ---------------- self-test ---------------- */
+function selftest(){
+  var out=[],n=0,bad=0;
+  var makers=G.ALL.concat([PARTITA.make]);
+  function fig(t){return A.Board(t.w||420,t.h||300)}
+  makers.forEach(function(mk,idx){
+    for(var k=0;k<40;k++){
+      n++;
+      try{
+        var t=mk();
+        var s=A.Board(t.w||420,t.h||300);
+        if(t.kind==="chain"){for(var q=0;q<t.steps.length;q++)t.draw(A.Board(t.w||420,t.h||300),q)}
+        else if(t.kind==="drag"){for(var g=15;g<=140;g+=25)t.draw(A.Board(t.w||420,t.h||300),g)}
+        else t.draw(s);
+        if(t.drawAnswer)t.drawAnswer(A.Board(t.w||420,t.h||300),t.kind==="drag"?t.answer:40);
+        if(!t.text||!t.why||!t.hint)throw new Error("testo mancante");
+        if(t.kind==="choice"){
+          var ok=t.choices.filter(function(c){return c.ok});
+          if(ok.length!==1)throw new Error("scelte corrette = "+ok.length);
+          if(t.choices.length<3)throw new Error("poche scelte");
+          var labs={};t.choices.forEach(function(c){if(labs[c.label])throw new Error("scelta doppia");labs[c.label]=1});
+        }else if(t.kind==="chain"){
+          t.steps.forEach(function(st){
+            if(!(st.answer>0&&st.answer<=999&&st.answer%1===0))throw new Error("step "+st.answer);
+            if(!st.text||!st.hint||!st.why)throw new Error("passo senza testo");
+          });
+        }else if(t.kind==="pick"){
+          if(!(t.answer>=1&&t.answer<=8))throw new Error("pick "+t.answer);
+        }else{
+          if(!(t.answer>0&&t.answer<=999&&t.answer%1===0))throw new Error("answer "+t.answer);
+        }
+      }catch(err){bad++;out.push("["+idx+"] "+err.message)}
+    }
+  });
+  $("#testout").classList.remove("hide");
+  $("#testout").textContent=(bad===0?"TUTTO OK — ":"ERRORI ")+n+" test, "+bad+" falliti\n"+out.slice(0,20).join("\n");
+}
+
+/* ---------------- boot ---------------- */
+paintHome();
+if(location.search.indexOf("test=1")>=0)selftest();
+var dm=/demo=(\d+)/.exec(location.search);
+if(dm)start(MISSIONS.concat([PARTITA])[parseInt(dm[1],10)]||MISSIONS[0]);
+if(/end=1/.test(location.search)){S.m=MISSIONS[4];S.score=5.5;S.wrong=[MISSIONS[4].make().why];finish()}
+if(dm&&/auto=1/.test(location.search))setTimeout(function(){
+  var t=S.task;if(!t)return;
+  if(t.kind==="choice"){var idx=0;t.choices.forEach(function(c,i){if(c.ok)idx=i});
+    var bs=document.querySelectorAll(".opt");if(bs[idx])bs[idx].click()}
+  else if(t.kind==="chain"||t.kind==="number")answer(true);
+  else if(t.kind==="pick")answer(t.answer);
+  else answer(t.answer);
+},400);
+})();
+</script>

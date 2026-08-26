@@ -1,8 +1,8 @@
 # Le palestre di matematica
 
 Giochi didattici di matematica per la scuola media: due sugli **angoli**, costruiti su impostazioni
-pedagogiche opposte, uno sulle **potenze** e uno sui **numeri naturali e le quattro operazioni**.
-Una pagina d'ingresso li presenta e mette a confronto i metodi.
+pedagogiche opposte, uno sui **triangoli**, uno sulle **potenze** e uno sui **numeri naturali e le quattro
+operazioni**. Una pagina d'ingresso li presenta e mette a confronto i metodi.
 
 **Vai al sito:** https://fomynangoli.vercel.app
 
@@ -11,6 +11,7 @@ Una pagina d'ingresso li presenta e mette a confronto i metodi.
 | `index.html` | l'atrio: le due porte e il confronto fra i due metodi |
 | `finlandia.html` | **Palestra degli Angoli** — otto allenamenti liberi, errore senza penalità |
 | `singapore.html` | **Metodo Singapore** — cinque unità in sequenza, C-P-A, modello a barre |
+| `triangoli.html` | **Cantiere dei Triangoli** — otto allenamenti liberi (metodo finlandese) |
 | `potenze.html` | **Laboratorio delle Potenze** — otto allenamenti liberi (metodo finlandese) |
 | `naturali.html` | **Officina dei Numeri** — otto banchi di lavoro sui naturali (metodo finlandese) |
 
@@ -24,6 +25,23 @@ Una pagina d'ingresso li presenta e mette a confronto i metodi.
 | Esercizi | generati a caso | variazione sistematica: cambia un elemento per volta |
 | Errore | indizio e si prosegue | la scheda torna in coda fino alla padronanza |
 | Domanda tipica | «quanto misura?» | «come lo sai?» |
+
+## Il cantiere dei triangoli
+
+Segue il corso stampabile `Corso-Triangoli.html` e ne mette in gioco le stesse mosse, con tre allenamenti
+in cui si agisce invece di rispondere:
+
+- **Il costruttore** — la base AB è fissa, il vertice C si trascina col dito e i tre angoli si aggiornano
+  in tempo reale: «porta l'angolo in A a 40°», «rendilo isoscele sulla base», «rendi retto l'angolo in C».
+- **Base e altezza** — fra quattro segmenti che partono dallo stesso vertice bisogna toccare l'**altezza**,
+  distinguendola dalla mediana, da un obliquo e da un lato; nei casi ottusangoli il piede cade fuori dalla base.
+- **Modello a barre** — problemi di perimetro e di angoli in proporzione risolti in due o tre mosse:
+  prima si toglie, poi si divide.
+
+Gli altri: la disuguaglianza triangolare con i bastoncini (e l'intervallo del terzo lato), i due cognomi
+(scaleno/isoscele/equilatero × acutangolo/rettangolo/ottusangolo, comprese le due caselle impossibili),
+la somma dei 180°, l'isoscele nei due sensi (dato il vertice o data la base) e l'angolo esterno come somma
+dei due interni lontani, più il collaudo misto.
 
 ## Il laboratorio delle potenze
 
@@ -60,7 +78,7 @@ l'intruso), traduzione figura → modello → numero fino al problema in più pa
 
 ## Aspetti tecnici
 
-- Tre pagine statiche, nessuna build, nessuna dipendenza: HTML, CSS e JavaScript in ogni file.
+- Pagine statiche, nessuna build, nessuna dipendenza: HTML, CSS e JavaScript in ogni file.
 - Tutte le figure sono SVG generati a runtime (angoli, goniometro, modelli a barre, number bond, campo da gioco).
 - I progressi restano in `localStorage`, separati per gioco.
 - Nessun cookie e nessun tracciamento; l'unica risorsa esterna sono i font di Google.
@@ -71,7 +89,9 @@ l'intruso), traduzione figura → modello → numero fino al problema in più pa
 - `singapore.html?test=1` → 660 schede generate e verificate
 - `potenze.html?test=1` → 360 domande generate e verificate
 - `naturali.html?test=1` → 405 domande generate e verificate
-- `finlandia.html?demo=N&auto=1`, `singapore.html?unit=N` `potenze.html?mod=N` e `naturali.html?mod=N` aprono direttamente un modulo
+- `triangoli.html?test=1` → 360 domande generate e verificate
+- `finlandia.html?demo=N&auto=1`, `triangoli.html?demo=N&auto=1`, `singapore.html?unit=N`,
+  `potenze.html?mod=N` e `naturali.html?mod=N` aprono direttamente un modulo
 
 ## Licenza
 
