@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Otto reparti interattivi su divisibilità e poligoni: criteri, numeri primi, scomposizione in fattori, M.C.D., m.c.m., problemi da riconoscere, diagonali e angoli dei poligoni, perimetro a gradini.">
+<meta name="theme-color" content="#12161F">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fabbrica dei Numeri">
+<meta property="og:description" content="Otto reparti interattivi: si smontano i numeri in fattori primi e si contano le figure. Nessuna risposta regalata.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%2312161F'/%3E%3Ccircle cx='19' cy='20' r='8' fill='none' stroke='%23E2703A' stroke-width='3'/%3E%3Ccircle cx='31' cy='31' r='6' fill='none' stroke='%232FB6A8' stroke-width='3'/%3E%3Cpath d='M8 41 L40 41' stroke='%238FA0BC' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>html{background:#12161F}</style>
+<title>Fabbrica dei Numeri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;600;800&display=swap">
+<style>
+:root{
+  --grass:#12161F; --grass2:#171D28; --surf:#1A212C; --surf2:#222B39; --line:#ECEFF4;
+  --dim:#96A3B8; --edge:#2C3644;
+  --amber:#E2703A; --cyan:#2FB6A8; --go:#3DD68C; --stop:#FF6B5A; --violet:#A78BFA;
+  --r:18px; --r-sm:12px;
+  --f-disp:"Anton","Haettenschweiler","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1100px 620px at 50% -12%, #E2703A14 0%, transparent 62%),
+    var(--grass);
+  color:var(--line); font-family:var(--f-body); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2.5px solid var(--amber);outline-offset:3px;border-radius:6px}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1120px;margin:0 auto;padding:14px 16px 40px;position:relative;z-index:1}
+.pitch-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+.pitch-bg svg{width:100%;height:100%}
+
+.top{display:flex;align-items:center;gap:14px;padding:6px 2px 14px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand .mark{width:38px;height:38px;flex:0 0 auto}
+.brand h1{font-family:var(--f-disp);font-weight:400;font-size:23px;letter-spacing:.02em;margin:0;line-height:1;text-transform:uppercase}
+.brand p{margin:2px 0 0;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.spacer{flex:1}
+.xpbox{display:flex;align-items:center;gap:12px}
+.lvl{text-align:right}
+.lvl .n{font-family:var(--f-disp);font-size:15px;letter-spacing:.03em;line-height:1;text-transform:uppercase}
+.lvl .s{font-size:11px;color:var(--dim);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.ring{width:46px;height:46px;flex:0 0 auto}
+
+/* ---------- home ---------- */
+.hero{
+  border:1px solid var(--edge);border-radius:var(--r);padding:20px 22px;margin-bottom:18px;
+  background:linear-gradient(135deg,#1D242F 0%,#141A24 55%,#20242C 100%);position:relative;overflow:hidden
+}
+.hero h2{font-family:var(--f-disp);font-weight:400;font-size:clamp(28px,5.2vw,42px);line-height:.98;margin:0;text-transform:uppercase;text-wrap:balance;letter-spacing:.01em}
+.hero h2 em{font-style:normal;color:var(--amber)}
+.hero p{margin:8px 0 0;max-width:56ch;color:#C9D2DE;font-size:15px}
+.hero .stripe{position:absolute;right:-40px;top:-40px;width:220px;height:220px;opacity:.16}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(226px,1fr));gap:12px}
+.mission{
+  --mc:var(--cyan);
+  position:relative;text-align:left;border:1px solid var(--edge);border-radius:var(--r);
+  background:linear-gradient(180deg,var(--surf) 0%,#151B25 100%);
+  padding:16px 16px 14px;display:flex;flex-direction:column;gap:10px;min-height:158px;
+  transition:transform .18s cubic-bezier(.2,.8,.3,1),border-color .18s,box-shadow .18s;
+  animation:rise .5s cubic-bezier(.2,.8,.3,1) both;
+}
+.mission:hover,.mission:focus-visible{transform:translateY(-3px);border-color:var(--mc);box-shadow:0 12px 28px -18px var(--mc)}
+.mission .ico{width:46px;height:46px}
+.mission h3{font-family:var(--f-disp);font-weight:400;font-size:19px;margin:0;line-height:1;text-transform:uppercase;letter-spacing:.02em}
+.mission p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.35}
+.mission .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stars{display:flex;gap:3px}
+.stars i{width:13px;height:13px;display:block;background:currentColor;color:#333D4C;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.stars i.on{color:var(--amber)}
+.mission .go{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mc);font-weight:800}
+.mission.big{grid-column:span 2}
+@media (max-width:520px){.mission.big{grid-column:span 1}}
+.mission.big h3{font-size:24px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.foot-note{margin:16px 2px 0;font-size:12px;color:#78849A;text-align:right}
+.linky{color:#96A3B8;text-decoration:underline;text-underline-offset:3px;font-size:12px}
+.linky:hover{color:var(--amber)}
+.tip{margin-top:10px;border:1px dashed var(--edge);border-radius:var(--r-sm);padding:12px 14px;color:#B6C1CF;font-size:13.5px;display:flex;gap:10px;align-items:flex-start}
+.tip b{color:var(--line)}
+.tip .k{flex:0 0 auto;font-family:var(--f-disp);font-size:11px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase;padding-top:2px}
+
+/* ---------- session ---------- */
+.hide{display:none!important}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.back{border:1px solid var(--edge);border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#C9D2DE;transition:.15s}
+.back:hover{border-color:var(--line);color:var(--line)}
+.dots{display:flex;gap:5px;flex:1;justify-content:center}
+.dots i{width:26px;height:5px;border-radius:99px;background:#2C3644;display:block;transition:.3s}
+.dots i.ok{background:var(--go)}
+.dots i.ko{background:var(--stop)}
+.dots i.now{background:var(--line);transform:scaleY(1.8)}
+.mode{font-family:var(--f-disp);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+
+.play{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:16px;align-items:start}
+@media (max-width:860px){.play{grid-template-columns:1fr}}
+.stage{
+  border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,#19202A,#141A23);
+  padding:14px;position:relative;overflow:hidden
+}
+.stage svg{width:100%;height:auto;display:block;touch-action:none}
+.stage .cap{margin:8px 2px 0;font-size:12px;color:var(--dim);text-align:center;min-height:16px}
+
+.panel{display:flex;flex-direction:column;gap:12px}
+.q{border:1px solid var(--edge);border-radius:var(--r);background:var(--surf);padding:16px}
+.q .tag{font-family:var(--f-disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:6px}
+.q h3{margin:0;font-size:19px;line-height:1.25;font-weight:800;text-wrap:balance}
+.q .sub{margin:7px 0 0;font-size:13.5px;color:#B2BECD}
+
+.opts{display:grid;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:12px;border:1.5px solid var(--edge);border-radius:var(--r-sm);
+  background:#181F29;padding:12px 14px;text-align:left;font-size:16px;font-weight:600;transition:.15s;
+}
+.opt:hover:not(:disabled){border-color:var(--cyan);transform:translateX(2px)}
+.opt .l{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:#26313F;color:var(--dim);
+  display:grid;place-items:center;font-size:12.5px;font-weight:800}
+.opt.good{border-color:var(--go);background:#122B22}.opt.good .l{background:var(--go);color:#06231A}
+.opt.bad{border-color:var(--stop);background:#2A1512}.opt.bad .l{background:var(--stop);color:#2A1512}
+.opt:disabled{cursor:default;opacity:.75}
+.opt.sel{border-color:var(--amber);background:#2B1E14}
+.opt .box{width:24px;height:24px;flex:0 0 auto;border-radius:7px;border:2px solid #3A4658;display:grid;place-items:center;
+  font-size:14px;font-weight:900;color:transparent}
+.opt.sel .box{border-color:var(--amber);background:var(--amber);color:#20120A}
+.multihint{font-size:12.5px;color:var(--dim);margin:2px 2px 0}
+.opt.good,.opt.bad{opacity:1}
+
+.numline{display:flex;align-items:center;gap:10px}
+.numshow{
+  flex:1;border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#181F29;padding:10px 14px;
+  font-family:var(--f-disp);font-size:34px;line-height:1.1;letter-spacing:.02em;min-height:58px;
+  display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums
+}
+.numshow .cur{color:var(--amber)}
+.numshow .deg{font-size:20px;color:var(--dim)}
+.numshow.good{border-color:var(--go)}.numshow.bad{border-color:var(--stop)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.pad button{border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#181F29;padding:12px 0;
+  font-size:20px;font-weight:800;transition:.12s;font-variant-numeric:tabular-nums}
+.pad button:hover{border-color:var(--cyan);background:#1D2430}
+.pad button:active{transform:scale(.96)}
+.pad .ok{background:var(--go);border-color:var(--go);color:#06231A}
+.pad .ok:hover{background:#43dc8b;border-color:#43dc8b}
+.pad .del{color:var(--stop)}
+
+.slide{display:flex;flex-direction:column;gap:8px}
+.slide input[type=range]{width:100%;accent-color:var(--amber);height:30px}
+.slide .val{font-family:var(--f-disp);font-size:30px;line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+
+.fb{border-radius:var(--r-sm);padding:12px 14px;font-size:14px;display:none;animation:pop .3s cubic-bezier(.2,.8,.3,1)}
+.fb.on{display:block}
+.fb.good{background:#0F2A21;border:1.5px solid var(--go)}
+.fb.soft{background:#2B1E14;border:1.5px solid var(--amber)}
+.fb>b:first-child{display:block;font-family:var(--f-disp);font-weight:400;font-size:16px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px}
+.fb.good>b:first-child{color:var(--go)}.fb.soft>b:first-child{color:var(--amber)}
+.fb b{font-weight:800;color:var(--line)}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border-radius:99px;padding:12px 20px;font-weight:800;font-size:14.5px;letter-spacing:.02em;transition:.15s;border:1.5px solid transparent}
+.btn.pri{background:var(--amber);color:#221400}
+.btn.pri:hover{background:#ffc44e;transform:translateY(-1px)}
+.btn.ghost{border-color:var(--edge);color:#C9D2DE}
+.btn.ghost:hover{border-color:var(--line);color:var(--line)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+
+.shake{animation:shake .4s}
+@keyframes shake{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-4px)}}
+
+/* ---------- result ---------- */
+.res{border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,var(--surf),#151B25);padding:26px;text-align:center;max-width:560px;margin:6px auto}
+.res .big{font-family:var(--f-disp);font-size:clamp(34px,7vw,52px);line-height:1;text-transform:uppercase;margin:0}
+.res .score{font-family:var(--f-disp);font-size:64px;line-height:1;color:var(--amber);font-variant-numeric:tabular-nums;margin:10px 0 2px}
+.res .of{color:var(--dim);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.res .bigstars{display:flex;gap:10px;justify-content:center;margin:16px 0 6px}
+.res .bigstars i{width:38px;height:38px;display:block;background:#333D4C;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.res .bigstars i.on{background:var(--amber);animation:star .5s cubic-bezier(.2,1.6,.4,1) both}
+.res .bigstars i.on:nth-child(2){animation-delay:.12s}
+.res .bigstars i.on:nth-child(3){animation-delay:.24s}
+@keyframes star{from{transform:scale(.2) rotate(-40deg);opacity:0}to{transform:none;opacity:1}}
+.res p{color:#BEC8D6;font-size:15px;max-width:44ch;margin:12px auto 0}
+.res .learn{margin-top:16px;text-align:left;border-top:1px solid var(--edge);padding-top:14px}
+.res .learn h4{font-family:var(--f-disp);font-weight:400;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.res .learn li{font-size:13.5px;color:#BEC8D6;margin:5px 0}
+
+/* ---------- svg tokens ---------- */
+.ln{stroke:var(--line);stroke-width:3;stroke-linecap:round;fill:none}
+.ln.thin{stroke-width:2}
+.gh{stroke:#55627A;stroke-width:2.4;stroke-dasharray:3 7;stroke-linecap:round;fill:none}
+.ac{stroke:var(--amber)}.cy{stroke:var(--cyan)}.vi{stroke:var(--violet)}.gn{stroke:var(--go)}
+.sect{fill:rgba(255,176,32,.22);stroke:var(--amber);stroke-width:2.2}
+.sect.b{fill:rgba(76,201,240,.20);stroke:var(--cyan)}
+.sect.g{fill:rgba(52,199,123,.20);stroke:var(--go)}
+.sect.v{fill:rgba(183,156,255,.20);stroke:var(--violet)}
+.sect.mute{fill:rgba(232,237,230,.07);stroke:#4B586C}
+.hit{fill:rgba(232,237,230,.001);stroke:none;cursor:pointer;transition:fill .15s}
+.hit:hover{fill:rgba(232,237,230,.10)}
+.tx{font-family:var(--f-body);font-size:15px;font-weight:800;fill:var(--line);text-anchor:middle;dominant-baseline:middle}
+.tx.sm{font-size:12.5px;font-weight:600;fill:var(--dim)}
+.tx.am{fill:var(--amber)}.tx.cy{fill:var(--cyan)}.tx.gn{fill:var(--go)}.tx.vi{fill:var(--violet)}
+.dot{fill:var(--line)}
+.dot.am{fill:var(--amber)}
+.grass-r{fill:#111C2C;stroke:#2B3B57;stroke-width:2}
+.goal-r{stroke:var(--stop);stroke-width:5;stroke-linecap:round}
+.prot{fill:rgba(76,201,240,.09);stroke:var(--cyan);stroke-width:2}
+.tick{stroke:#6E7C93;stroke-width:1.2}
+.tick.maj{stroke:var(--line);stroke-width:1.8}
+.handle{fill:var(--amber);stroke:#0B1613;stroke-width:3;cursor:grab}
+.handle:active{cursor:grabbing}
+
+/* ---------- schermi stretti ---------- */
+@media (max-width:620px){
+  .wrap{padding:10px 12px 32px}
+  .top{flex-wrap:wrap;gap:10px;padding-bottom:10px}
+  .brand .mark{width:30px;height:30px}
+  .brand h1{font-size:17px}
+  .brand p{font-size:9.5px;letter-spacing:.12em}
+  .lvl .n{font-size:12px}.lvl .s{font-size:10px}
+  .ring{width:38px;height:38px}
+  .hero{padding:16px 15px}
+  .hero p{font-size:14px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .mission{min-height:0;padding:13px 13px 11px;gap:8px}
+  .mission .ico{width:34px;height:34px}
+  .mission h3{font-size:16px}
+  .mission p{font-size:11.5px}
+  .mode{display:none}
+  .bar{gap:8px}
+  .dots i{width:16px}
+  .q{padding:13px}
+  .q h3{font-size:17px}
+  .stage{padding:10px}
+  .numshow{font-size:28px;min-height:52px}
+  .pad button{padding:13px 0;font-size:19px}
+  .opt{font-size:15px;padding:11px 12px}
+  .res{padding:22px 16px}
+  .foot-note{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+#testout{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px;padding:12px;color:var(--line)}
+</style>
+<div class="pitch-bg" aria-hidden="true">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <g fill="none" stroke="#ECEFF4" stroke-opacity=".05" stroke-width="2">
+      <circle cx="220" cy="200" r="120"/><circle cx="220" cy="200" r="46"/>
+      <circle cx="430" cy="330" r="78"/><circle cx="430" cy="330" r="30"/>
+      <circle cx="980" cy="560" r="140"/><circle cx="980" cy="560" r="54"/>
+      <path d="M60 700 L1140 700"/><path d="M60 730 L1140 730"/>
+      <path d="M120 700 L120 730 M260 700 L260 730 M400 700 L400 730 M540 700 L540 730
+               M680 700 L680 730 M820 700 L820 730 M960 700 L960 730 M1100 700 L1100 730"/>
+      <path d="M700 120 L900 120 L900 240 L700 240 Z"/>
+      <path d="M760 120 L760 60 L840 60 L840 120"/>
+    </g>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="19" cy="19" r="10" fill="none" stroke="#ECEFF4" stroke-width="2.6"/>
+        <circle cx="19" cy="19" r="3.4" fill="#ECEFF4"/>
+        <circle cx="32" cy="31" r="7" fill="none" stroke="#E2703A" stroke-width="2.6"/>
+        <path d="M6 42 L42 42" stroke="#96A3B8" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>Fabbrica dei Numeri</h1>
+        <p><a href="./" style="color:inherit;text-decoration:none;border-bottom:1px solid #2C3644">↩ Torna alle palestre</a></p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="xpbox">
+      <div class="lvl">
+        <div class="n" id="lvlName">Garzone</div>
+        <div class="s"><span id="xpNow">0</span> / <span id="xpNext">150</span> XP</div>
+      </div>
+      <svg class="ring" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="19" fill="none" stroke="#2C3644" stroke-width="5"/>
+        <circle id="ringFill" cx="23" cy="23" r="19" fill="none" stroke="#E2703A" stroke-width="5"
+                stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"
+                transform="rotate(-90 23 23)" style="transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.3,1)"/>
+        <text id="ringTxt" x="23" y="24" text-anchor="middle" dominant-baseline="middle"
+              font-family="Anton,sans-serif" font-size="14" fill="#ECEFF4">1</text>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <main id="home">
+    <section class="hero">
+      <svg class="stripe" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#E2703A" stroke-width="1.6">
+          <circle cx="38" cy="38" r="26"/><circle cx="38" cy="38" r="9"/>
+          <circle cx="70" cy="68" r="17"/><circle cx="70" cy="68" r="6"/>
+          <path d="M6 92 L96 92"/>
+        </g>
+      </svg>
+      <h2>Otto reparti.<br>Un solo mestiere: <em>smontare i numeri</em>.</h2>
+      <p>Qui i numeri entrano interi ed escono in <b>fattori primi</b>; le figure entrano mute ed escono contate.
+      Scegli tu da dove partire e quante volte ripetere: sbagliare non toglie niente, ogni errore ti mostra la regola e ti fa riprovare subito.</p>
+    </section>
+
+    <div class="grid" id="grid"></div>
+
+    <p class="foot-note">I progressi restano su questo dispositivo. <button id="btnReset" class="linky">Azzera i progressi</button></p>
+    <div class="tip">
+      <span class="k">Regola della fabbrica</span>
+      <span>Il disegno ti dà <b>i pezzi</b>, mai il risultato: la risposta non è mai scritta da nessuna parte prima che tu l'abbia data.
+      Se ti serve una spinta c'è il pulsante <b>indizio</b>, che ti dice <u>dove guardare</u> senza dirti il numero.
+      La spiegazione completa arriva solo dopo che hai risposto.</span>
+    </div>
+  </main>
+
+  <!-- ============ SESSIONE ============ -->
+  <main id="game" class="hide">
+    <div class="bar">
+      <button class="back" id="btnBack">← Esci</button>
+      <div class="dots" id="dots"></div>
+      <div class="mode" id="modeName"></div>
+    </div>
+    <div class="play">
+      <div class="stage">
+        <div id="fig"></div>
+        <div class="cap" id="figCap"></div>
+      </div>
+      <div class="panel">
+        <div class="q">
+          <span class="tag" id="qTag">Domanda</span>
+          <h3 id="qText"></h3>
+          <p class="sub hide" id="qSub"></p>
+        </div>
+        <div id="answer"></div>
+        <div class="fb" id="fb"></div>
+        <div class="row">
+          <button class="btn ghost" id="btnHint">Dammi un indizio</button>
+          <button class="btn pri hide" id="btnNext">Continua →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ RISULTATO ============ -->
+  <main id="end" class="hide">
+    <div class="res">
+      <h2 class="big" id="endTitle"></h2>
+      <div class="score" id="endScore"></div>
+      <div class="of" id="endOf"></div>
+      <div class="bigstars" id="endStars"><i></i><i></i><i></i></div>
+      <p id="endMsg"></p>
+      <div class="learn" id="endLearn"></div>
+      <div class="row" style="justify-content:center;margin-top:18px">
+        <button class="btn pri" id="btnAgain">Ancora una serie</button>
+        <button class="btn ghost" id="btnHome">Torna ai reparti</button>
+      </div>
+    </div>
+  </main>
+</div>
+<pre id="testout" class="hide"></pre>
+
+<script>
+(function(){
+"use strict";
+/* ============================================================
+   FABBRICA DEI NUMERI — motore
+   ============================================================ */
+var NS="http://www.w3.org/2000/svg", $=function(s){return document.querySelector(s)};
+var PI=Math.PI;
+
+/* ---------- disegno ---------- */
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function R(n){return Math.round(n*100)/100}
+function pol(cx,cy,r,d){var t=d*PI/180;return[cx+r*Math.cos(t),cy-r*Math.sin(t)]}
+function ang(cx,cy,x,y){var d=Math.atan2(cy-y,x-cx)*180/PI;return(d+360)%360}
+
+function Board(w,h){
+  var s=E("svg",{viewBox:"0 0 "+w+" "+h,width:"100%"});
+  s.W=w;s.H=h;return s;
+}
+function line(s,x1,y1,x2,y2,cls){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"ln "+(cls||"")},s)}
+function seg(s,p1,p2,cls){return line(s,p1[0],p1[1],p2[0],p2[1],cls)}
+function ghost(s,x1,y1,x2,y2){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"gh"},s)}
+function ray(s,cx,cy,d,len,cls,tail){
+  var a=pol(cx,cy,len,d);line(s,cx,cy,a[0],a[1],cls);
+  if(tail!==0){var b=pol(cx,cy,len+(tail||18),d);ghost(s,a[0],a[1],b[0],b[1])}
+  return a;
+}
+function fullline(s,cx,cy,d,l1,l2,cls){
+  var a=pol(cx,cy,l1,d+180),b=pol(cx,cy,l2,d);
+  line(s,a[0],a[1],b[0],b[1],cls);
+  var a2=pol(cx,cy,l1+16,d+180),b2=pol(cx,cy,l2+16,d);
+  ghost(s,a[0],a[1],a2[0],a2[1]);ghost(s,b[0],b[1],b2[0],b2[1]);
+  return[a,b];
+}
+function sector(s,cx,cy,r,a,b,cls){
+  var sp=((b-a)%360+360)%360,p1=pol(cx,cy,r,a),p2=pol(cx,cy,r,b),lg=sp>180?1:0;
+  return E("path",{d:"M "+R(cx)+" "+R(cy)+" L "+R(p1[0])+" "+R(p1[1])+" A "+r+" "+r+" 0 "+lg+" 0 "+R(p2[0])+" "+R(p2[1])+" Z","class":"sect "+(cls||"")},s);
+}
+function txt(s,x,y,t,cls){var e=E("text",{x:R(x),y:R(y),"class":"tx "+(cls||"")},s);e.textContent=t;return e}
+function txtAt(s,cx,cy,r,d,t,cls){var p=pol(cx,cy,r,d);return txt(s,p[0],p[1],t,cls)}
+function dot(s,x,y,cls){return E("circle",{cx:R(x),cy:R(y),r:5,"class":"dot "+(cls||"")},s)}
+function rightMark(s,cx,cy,d,sz){
+  var p1=pol(cx,cy,sz,d),p3=pol(cx,cy,sz,d+90),px=p1[0]+p3[0]-cx,py=p1[1]+p3[1]-cy;
+  return E("polyline",{points:R(p1[0])+","+R(p1[1])+" "+R(px)+","+R(py)+" "+R(p3[0])+","+R(p3[1]),
+    fill:"none",stroke:"var(--amber)","stroke-width":2.2},s);
+}
+function arrow(s,x1,y1,x2,y2,col){
+  var c=col||"var(--amber)";
+  E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),stroke:c,"stroke-width":2.4,"stroke-linecap":"round"},s);
+  var a=Math.atan2(y1-y2,x2-x1)*180/PI,p=pol(x2,y2,10,a+202),q=pol(x2,y2,10,a+158);
+  E("polyline",{points:R(p[0])+","+R(p[1])+" "+R(x2)+","+R(y2)+" "+R(q[0])+","+R(q[1]),
+    fill:"none",stroke:c,"stroke-width":2.4,"stroke-linecap":"round"},s);
+}
+
+/* ---------- utilità ---------- */
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pickOne(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function kind(v){return v<90?"acuto":v===90?"retto":v<180?"ottuso":v===180?"piatto":v<360?"concavo":"giro"}
+function uniq(arr){var o=[],s={};arr.forEach(function(v){if(!s[v]){s[v]=1;o.push(v)}});return o}
+function opts(correct,wrongs,suffix){
+  var all=uniq([correct].concat(wrongs)).slice(0,4);
+  return shuffle(all.map(function(v){return{label:v+(suffix||""),ok:v===correct}}));
+}
+
+
+/* area invisibile cliccabile, per le domande "tocca la figura" */
+function hit(s,pts,idx){
+  var e=E("polygon",{points:pts.map(function(p){return R(p[0])+","+R(p[1])}).join(" "),"class":"hit"},s);
+  e.setAttribute("data-pick",String(idx));return e;
+}
+function hitLine(s,p1,p2,idx,w){
+  var dx=p2[0]-p1[0],dy=p2[1]-p1[1],L=Math.sqrt(dx*dx+dy*dy)||1,nx=-dy/L*(w||14),ny=dx/L*(w||14);
+  return hit(s,[[p1[0]+nx,p1[1]+ny],[p2[0]+nx,p2[1]+ny],[p2[0]-nx,p2[1]-ny],[p1[0]-nx,p1[1]-ny]],idx);
+}
+
+/* ============================================================
+   AGGIUNTE PER I TRIANGOLI
+   ============================================================ */
+function dist(A,B){return Math.sqrt((A[0]-B[0])*(A[0]-B[0])+(A[1]-B[1])*(A[1]-B[1]))}
+function mid(A,B){return[(A[0]+B[0])/2,(A[1]+B[1])/2]}
+function dir(V,P){return ang(V[0],V[1],P[0],P[1])}
+
+/* triangolo dagli angoli in A e in B, scalato dentro il riquadro */
+function triFit(W,H,angA,angB,o){
+  o=o||{};
+  var ml=(o.ml!=null?o.ml:(o.mx!=null?o.mx:46)), mr=(o.mr!=null?o.mr:(o.mx!=null?o.mx:46));
+  var mt=(o.mt!=null?o.mt:46), mb=(o.mb!=null?o.mb:46);
+  var ra=angA*PI/180, rb=angB*PI/180;
+  var h=1/(1/Math.tan(ra)+1/Math.tan(rb)), ax=h/Math.tan(ra);
+  var x1=Math.min(0,ax), x2=Math.max(1,ax), span=x2-x1;
+  var sc=Math.min((W-ml-mr)/span,(H-mt-mb)/h);
+  var x0=ml+(W-ml-mr-span*sc)/2-x1*sc;
+  var y0=mt+(H-mt-mb)/2+h*sc/2;                     /* centrato anche in verticale */
+  return{A:[x0,y0],B:[x0+sc,y0],C:[x0+ax*sc,y0-h*sc],base:sc,hh:h*sc};
+}
+/* disegna il triangolo; names:null per non etichettare i vertici */
+function triDraw(s,A,B,C,o){
+  o=o||{};
+  if(o.fill)E("path",{d:"M "+R(A[0])+" "+R(A[1])+" L "+R(B[0])+" "+R(B[1])+" L "+R(C[0])+" "+R(C[1])+" Z",
+    fill:o.fill,stroke:"none"},s);
+  seg(s,A,B,o.cls||"");seg(s,B,C,o.cls||"");seg(s,C,A,o.cls||"");
+  if(o.dots!==false){dot(s,A[0],A[1]);dot(s,B[0],B[1]);dot(s,C[0],C[1])}
+  var n=("names" in o)?o.names:["A","B","C"];
+  if(n){
+    var G=[(A[0]+B[0]+C[0])/3,(A[1]+B[1]+C[1])/3];
+    [A,B,C].forEach(function(V,i){
+      if(!n[i])return;
+      var dx=V[0]-G[0],dy=V[1]-G[1],L=Math.sqrt(dx*dx+dy*dy)||1,k=(o.nd||20)/L;
+      txt(s,V[0]+dx*k,V[1]+dy*k,n[i],o.ncls||"");
+    });
+  }
+  return{A:A,B:B,C:C};
+}
+/* settore dell'angolo interno nel vertice V, fra i lati verso P e verso Q */
+function angAt(s,V,P,Q,r,label,cls,lr){
+  var a=dir(V,P),b=dir(V,Q),sp=(b-a+360)%360;
+  var from=(sp<=180)?a:b, to=(sp<=180)?b:a, w=Math.min(sp,360-sp);
+  sector(s,V[0],V[1],r,from,to,cls||"");
+  if(label){
+    var tc=(cls||"").indexOf("b")>=0?"cy":(cls||"").indexOf("g")>=0?"gn":(cls||"").indexOf("v")>=0?"vi":"am";
+    /* lr negativo: etichetta FUORI dal triangolo, dalla parte opposta alla bisettrice */
+    if(lr<0)txtAt(s,V[0],V[1],-lr,from+w/2+180,label,tc);
+    else txtAt(s,V[0],V[1],lr||(r+19),from+w/2,label,tc);
+  }
+  return Math.round(w);
+}
+/* squadretta dell'angolo retto nel vertice V */
+function rightAt(s,V,P,Q,sz){
+  var a=dir(V,P),b=dir(V,Q),sp=(b-a+360)%360;
+  return rightMark(s,V[0],V[1],(sp<=180)?a:b,sz||15);
+}
+/* piede della perpendicolare da C sulla retta AB; ritorna [x,y,t] */
+function foot(A,B,C){
+  var vx=B[0]-A[0],vy=B[1]-A[1],L2=vx*vx+vy*vy;
+  var t=((C[0]-A[0])*vx+(C[1]-A[1])*vy)/L2;
+  return[A[0]+t*vx,A[1]+t*vy,t];
+}
+/* altezza da C su AB (prolunga la base se il piede cade fuori) */
+function heightTo(s,A,B,C,o){
+  o=o||{};var H=foot(A,B,C),t=H[2];
+  if(t<0)ghost(s,A[0],A[1],H[0],H[1]);
+  if(t>1)ghost(s,B[0],B[1],H[0],H[1]);
+  E("line",{x1:R(C[0]),y1:R(C[1]),x2:R(H[0]),y2:R(H[1]),
+    stroke:o.col||"var(--amber)","stroke-width":2.6,"stroke-dasharray":"5 5","stroke-linecap":"round"},s);
+  rightAt(s,[H[0],H[1]],(t<0?A:B),C,o.sq||13);
+  dot(s,H[0],H[1],"am");
+  if(o.label)txt(s,H[0]+(o.dx||0),H[1]+(o.dy||20),o.label,"sm");
+  if(o.h){var m=mid(C,[H[0],H[1]]);txt(s,m[0]+(o.hdx||36),m[1],o.h,"am")}
+  return[H[0],H[1]];
+}
+/* trattini di congruenza su un lato */
+function ticks(s,A,B,n,col){
+  var m=mid(A,B),a=Math.atan2(B[1]-A[1],B[0]-A[0])*180/PI;
+  for(var i=0;i<n;i++){
+    var off=(i-(n-1)/2)*6,c=pol(m[0],m[1],off,-a),p1=pol(c[0],c[1],7,-a+90),p2=pol(c[0],c[1],7,-a-90);
+    E("line",{x1:R(p1[0]),y1:R(p1[1]),x2:R(p2[0]),y2:R(p2[1]),stroke:col||"var(--line)","stroke-width":2,"stroke-linecap":"round"},s);
+  }
+}
+/* etichetta su un lato, spostata verso l'esterno rispetto al terzo vertice */
+function sideLab(s,A,B,C,t,cls,off){
+  var m=mid(A,B),dx=m[0]-C[0],dy=m[1]-C[1],L=Math.sqrt(dx*dx+dy*dy)||1,k=(off||20)/L;
+  return txt(s,m[0]+dx*k,m[1]+dy*k,t,cls||"sm");
+}
+/* barre proporzionali (modello di Singapore) */
+function bars(s,x,y,w,h,parts,total,under){
+  var sum=0;parts.forEach(function(p){sum+=p.u});
+  var cx=x;
+  parts.forEach(function(p){
+    var pw=w*p.u/sum;
+    E("rect",{x:R(cx),y:R(y),width:R(pw),height:h,rx:4,fill:p.f||"rgba(87,199,242,.20)",stroke:p.st||"var(--cyan)","stroke-width":2},s);
+    if(p.t)txt(s,cx+pw/2,y+h/2,p.t,p.tc||"");
+    cx+=pw;
+  });
+  if(total){
+    E("path",{d:"M "+R(x)+" "+R(y-7)+" L "+R(x)+" "+R(y-13)+" L "+R(x+w)+" "+R(y-13)+" L "+R(x+w)+" "+R(y-7),
+      fill:"none",stroke:"var(--dim)","stroke-width":1.8},s);
+    txt(s,x+w/2,y-25,total,"sm");
+  }
+  if(under){
+    E("path",{d:"M "+R(x)+" "+R(y+h+7)+" L "+R(x)+" "+R(y+h+13)+" L "+R(x+w)+" "+R(y+h+13)+" L "+R(x+w)+" "+R(y+h+7),
+      fill:"none",stroke:"var(--dim)","stroke-width":1.8},s);
+    txt(s,x+w/2,y+h+27,under,"sm");
+  }
+}
+/* bastoncino orizzontale con la misura scritta sopra (fase concreta) */
+function stick(s,x,y,len,label,col,fade){
+  E("line",{x1:R(x),y1:R(y),x2:R(x+len),y2:R(y),stroke:col||"var(--line)","stroke-width":9,
+    "stroke-linecap":"round",opacity:fade?.5:1},s);
+  txt(s,x+len/2,y-16,label,"sm");
+}
+
+
+/* ============================================================
+   AGGIUNTE PER LA FABBRICA (numeri e poligoni)
+   ============================================================ */
+/* cartellino con un numero grande */
+function card(s,x,y,w,h,t,cls,sub){
+  E("rect",{x:R(x),y:R(y),width:R(w),height:R(h),rx:10,fill:"#222B39",stroke:(cls||"var(--amber)"),"stroke-width":2.4},s);
+  var e=E("text",{x:R(x+w/2),y:R(y+h/2+(sub?-6:0)),"class":"tx"},s);
+  e.setAttribute("style","font-size:"+(t.length>4?22:28)+"px");
+  e.textContent=t;
+  if(sub){var u=E("text",{x:R(x+w/2),y:R(y+h/2+16),"class":"tx sm"},s);u.textContent=sub}
+  return {x:x,y:y,w:w,h:h};
+}
+/* ingranaggio: raggio r, denti n */
+function gear(s,cx,cy,r,teeth,cls,label){
+  var d="",n=teeth||9,ri=r*0.72;
+  for(var i=0;i<n;i++){
+    var a0=i*360/n, a1=a0+360/n*0.42, a2=a0+360/n*0.58, a3=a0+360/n;
+    var p0=pol(cx,cy,r,a0),p1=pol(cx,cy,r,a1),p2=pol(cx,cy,ri,a2),p3=pol(cx,cy,ri,a3);
+    d+=(i?" L ":"M ")+R(p0[0])+" "+R(p0[1])+" L "+R(p1[0])+" "+R(p1[1])+
+       " L "+R(p2[0])+" "+R(p2[1])+" L "+R(p3[0])+" "+R(p3[1]);
+  }
+  E("path",{d:d+" Z",fill:"none",stroke:cls||"var(--amber)","stroke-width":2.2,"stroke-linejoin":"round"},s);
+  E("circle",{cx:R(cx),cy:R(cy),r:R(r*0.30),fill:"none",stroke:cls||"var(--amber)","stroke-width":2},s);
+  if(label){var e=E("text",{x:R(cx),y:R(cy),"class":"tx"},s);e.textContent=label}
+  return {cx:cx,cy:cy,r:r};
+}
+/* nastro trasportatore orizzontale */
+function belt(s,x,y,w,h){
+  E("rect",{x:R(x),y:R(y),width:R(w),height:R(h),rx:R(h/2),fill:"#161C25",stroke:"#39445A","stroke-width":2},s);
+  for(var i=1;i<10;i++){
+    var xx=x+w*i/10;
+    E("line",{x1:R(xx),y1:R(y+4),x2:R(xx),y2:R(y+h-4),stroke:"#2C3644","stroke-width":2},s);
+  }
+  return {x:x,y:y,w:w,h:h};
+}
+/* freccia verso il basso, da una macchina alla successiva */
+function down(s,x,y1,y2,label,cls){
+  arrow(s,x,y1,x,y2,cls||"var(--dim)");
+  if(label){var e=E("text",{x:R(x+22),y:R((y1+y2)/2),"class":"tx sm"},s);e.textContent=label}
+}
+/* colonnina della scomposizione, disegnata riga per riga */
+function column(s,x,y,rows,step,showPrimes){
+  var h=24;
+  E("line",{x1:R(x),y1:R(y-14),x2:R(x),y2:R(y+rows.length*h-6),stroke:"var(--amber)","stroke-width":2},s);
+  rows.forEach(function(r,i){
+    var t=E("text",{x:R(x-12),y:R(y+i*h),"class":"tx"},s);
+    t.setAttribute("text-anchor","end");t.textContent=String(r[0]);
+    if(r[1]!=null&&(showPrimes===undefined||i<showPrimes)){
+      var p=E("text",{x:R(x+14),y:R(y+i*h),"class":"tx am"},s);
+      p.setAttribute("text-anchor","start");p.textContent=String(r[1]);
+    }
+  });
+  return rows.length*h;
+}
+/* poligono regolare */
+function regPoly(cx,cy,R2,n,rot){
+  var p=[];rot=(rot===undefined)?90:rot;
+  for(var i=0;i<n;i++)p.push(pol(cx,cy,R2,rot+i*360/n));
+  return p;
+}
+function polyDraw(s,pts,o){
+  o=o||{};
+  if(o.fill){
+    var d="M "+pts.map(function(p){return R(p[0])+" "+R(p[1])}).join(" L ")+" Z";
+    E("path",{d:d,fill:o.fill,stroke:"none"},s);
+  }
+  for(var i=0;i<pts.length;i++)seg(s,pts[i],pts[(i+1)%pts.length],o.cls||"");
+  if(o.dots!==false)pts.forEach(function(p){dot(s,p[0],p[1])});
+  return pts;
+}
+function polyDiag(s,pts,o){
+  o=o||{};var n=pts.length,c=0;
+  for(var i=0;i<n;i++)for(var j=i+2;j<n;j++){
+    if(i===0&&j===n-1)continue;
+    if(o.from!==undefined&&i!==o.from&&j!==o.from)continue;
+    ghost(s,pts[i][0],pts[i][1],pts[j][0],pts[j][1]);c++;
+  }
+  return c;
+}
+/* figura ortogonale a gradini, con le quote */
+function steps(s,x,y,W,H,pts,o){
+  o=o||{};
+  var abs=pts.map(function(p){return [x+p[0]*W,y+p[1]*H]});
+  polyDraw(s,abs,{names:null,dots:false,fill:o.fill||"rgba(47,182,168,.12)",cls:o.cls||""});
+  if(o.quote!==false){
+    arrow(s,x+W+24,y,x+W+24,y+H,"var(--stop)");arrow(s,x+W+24,y+H,x+W+24,y,"var(--stop)");
+    var a=E("text",{x:R(x+W+46),y:R(y+H/2),"class":"tx sm"},s);a.textContent=o.h||"";
+    arrow(s,x,y+H+24,x+W,y+H+24,"var(--stop)");arrow(s,x+W,y+H+24,x,y+H+24,"var(--stop)");
+    var b=E("text",{x:R(x+W/2),y:R(y+H+40),"class":"tx sm"},s);b.textContent=o.w||"";
+  }
+  return abs;
+}
+/* ---------- numeri: utilita' di calcolo ---------- */
+function isPrime(n){if(n<2)return false;for(var d=2;d*d<=n;d++)if(n%d===0)return false;return true}
+function factor(n){var f=[],d=2;while(d*d<=n){while(n%d===0){f.push(d);n/=d}d++}if(n>1)f.push(n);return f}
+function factorMap(n){var m={};factor(n).forEach(function(p){m[p]=(m[p]||0)+1});return m}
+function factorText(n){
+  var m=factorMap(n),out=[];
+  Object.keys(m).map(Number).sort(function(a,b){return a-b}).forEach(function(p){
+    out.push(m[p]>1?(p+"^"+m[p]):String(p));
+  });
+  return out.join(" x ");
+}
+function gcd(a,b){while(b){var t=a%b;a=b;b=t}return a}
+function gcdAll(list){return list.reduce(function(a,b){return gcd(a,b)})}
+function lcm(a,b){return a/gcd(a,b)*b}
+function lcmAll(list){return list.reduce(function(a,b){return lcm(a,b)})}
+function divisors(n){var d=[];for(var i=1;i<=n;i++)if(n%i===0)d.push(i);return d}
+function digits(n){return String(n).split("").map(Number)}
+function digitSum(n){return digits(n).reduce(function(a,b){return a+b},0)}
+function divisibleBy(n,k){
+  if(k===11){var d=digits(n),s1=0,s2=0;
+    for(var i=0;i<d.length;i++){if((d.length-i)%2===1)s1+=d[i];else s2+=d[i]}
+    return Math.abs(s1-s2)%11===0;}
+  return n%k===0;
+}
+
+/* ---------- stato / progresso ---------- */
+var KEY="fabbrica-numeri-v1";
+var P={xp:0,stars:{}};
+try{var raw=localStorage.getItem(KEY);if(raw)P=JSON.parse(raw)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+var LEVELS=[[0,"Garzone"],[150,"Operaio"],[350,"Tecnico"],[650,"Collaudatore"],[1000,"Capofabbrica"],[1500,"Ingegnere"]];
+function levelInfo(){
+  var i=0;for(var k=0;k<LEVELS.length;k++)if(P.xp>=LEVELS[k][0])i=k;
+  var base=LEVELS[i][0],next=(LEVELS[i+1]||[base+600])[0];
+  return{i:i,name:LEVELS[i][1],base:base,next:next,frac:Math.min(1,(P.xp-base)/(next-base))};
+}
+function paintXP(){
+  var L=levelInfo();
+  $("#lvlName").textContent=L.name;
+  $("#xpNow").textContent=P.xp;
+  $("#xpNext").textContent=L.next;
+  $("#ringTxt").textContent=String(L.i+1);
+  $("#ringFill").setAttribute("stroke-dashoffset",String(119.4*(1-L.frac)));
+}
+
+/* ---------- esporta ---------- */
+window.PA={E:E,R:R,pol:pol,ang:ang,Board:Board,line:line,seg:seg,ghost:ghost,ray:ray,fullline:fullline,
+  sector:sector,txt:txt,txtAt:txtAt,dot:dot,rightMark:rightMark,arrow:arrow,
+  rnd:rnd,pickOne:pickOne,shuffle:shuffle,kind:kind,opts:opts,uniq:uniq,
+  P:P,save:save,levelInfo:levelInfo,paintXP:paintXP,$:$,
+  dist:dist,mid:mid,dir:dir,triFit:triFit,triDraw:triDraw,angAt:angAt,rightAt:rightAt,foot:foot,
+  heightTo:heightTo,ticks:ticks,sideLab:sideLab,bars:bars,stick:stick,hit:hit,hitLine:hitLine,
+  card:card,gear:gear,belt:belt,down:down,column:column,regPoly:regPoly,polyDraw:polyDraw,polyDiag:polyDiag,steps:steps,
+  isPrime:isPrime,factor:factor,factorMap:factorMap,factorText:factorText,gcd:gcd,gcdAll:gcdAll,
+  lcm:lcm,lcmAll:lcmAll,divisors:divisors,digits:digits,digitSum:digitSum,divisibleBy:divisibleBy};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var A=window.PA,rnd=A.rnd,pick=A.pickOne,shuffle=A.shuffle;
+var W=430;
+
+/* ============================================================
+   REGOLA DELLA FABBRICA
+   La funzione draw() disegna soltanto i DATI del problema.
+   Il risultato (e il passo che si sta chiedendo) non compare mai:
+   arriva in drawAnswer(), cioe' dopo la risposta. L'autotest lo verifica.
+   ============================================================ */
+
+function mixOpts(correct,wrongs){
+  var seen={},out=[{label:correct,ok:true}];seen[correct]=1;
+  wrongs.forEach(function(w){if(!seen[w]&&out.length<4){seen[w]=1;out.push({label:w,ok:false})}});
+  return shuffle(out);
+}
+function fmt(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g," ")}
+
+/* ============================================================
+   1. IL SETACCIO — i criteri di divisibilita
+   ============================================================ */
+function tSetaccio(){
+  if(Math.random()<.32){                                   /* variante: la cifra mancante */
+    var d=9, pre=rnd(1,9), mid=rnd(0,9), post=rnd(1,9);
+    var r=(9-(pre+mid+post)%9)%9;
+    /* r = 0 darebbe due soluzioni (0 e 9): si rigenera. E la cifra non deve gia' essere sul tavolo. */
+    if(r===0||r===pre||r===mid||r===post)return tSetaccio();
+    var x=r;
+    var num=pre+" "+"?"+" "+mid+" "+post;
+    return{
+      w:W,h:210,tag:"Il setaccio",
+      text:"Su questo pezzo una cifra si &egrave; staccata. Il numero intero &egrave; divisibile per <b>"+d+"</b>: quale cifra manca?",
+      sub:"C'&egrave; una sola cifra che funziona. Il criterio giusto te la fa trovare senza provarle tutte.",
+      cap:"Il pezzo arrivato sul nastro, con il buco.",
+      kind:"number",unit:"",answer:x,
+      draw:function(s){
+        A.belt(s,26,150,378,26);
+        A.card(s,120,44,190,88,pre+"   ?   "+mid+" "+post,"var(--amber)");
+        A.txt(s,215,196,"la cifra mancante e' la seconda","sm");
+      },
+      hint:"Per il 9 conta solo la <b>somma delle cifre</b>: somma le tre che vedi e guarda quanto manca per arrivare al primo multiplo di 9.",
+      why:"Somma delle cifre = "+(pre+x+mid+post)+", che &egrave; multiplo di "+d+": per questo la cifra &egrave; <b>"+x+"</b>. "+
+          (d===9?"Nota che un numero divisibile per 9 lo &egrave; sempre anche per 3.":"Attenzione: divisibile per 3 non vuol dire divisibile per 9.")
+    };
+  }
+  var cands=[2,3,5,9,10,11], n, ok;
+  do{
+    n=rnd(11,99)*rnd(2,12);
+    ok=cands.filter(function(k){return A.divisibleBy(n,k)}).length;
+  }while(n<120||n>4000||ok===0||ok===cands.length);
+  return{
+    w:W,h:210,tag:"Il setaccio",
+    text:"Per quali di questi divisori passa il pezzo <b>"+fmt(n)+"</b>?",
+    sub:"Selezionane quanti servono: la risposta &egrave; giusta solo se l'insieme &egrave; esatto. Niente divisioni: usa i criteri.",
+    cap:"Il numero da controllare. I criteri li devi applicare tu.",
+    kind:"multi",
+    choices:cands.map(function(k){return{label:"divisibile per "+k,ok:A.divisibleBy(n,k)}}),
+    draw:function(s){
+      A.belt(s,26,152,378,26);
+      A.card(s,132,42,166,92,fmt(n),"var(--cyan)");
+      A.gear(s,64,88,30,9,"#4B586C");
+      A.gear(s,366,88,30,9,"#4B586C");
+      A.txt(s,215,196,"nessun conto e' gia' stato fatto per te","sm");
+    },
+    hint:"Vai in ordine e usa un criterio per volta: <b>ultima cifra</b> per 2, 5 e 10; <b>somma delle cifre</b> per 3 e 9; "+
+         "<b>differenza fra le somme alternate</b> per 11.",
+    why:"Somma delle cifre: "+A.digitSum(n)+". Ultima cifra: "+(n%10)+". "+
+        "Divisori giusti: <b>"+cands.filter(function(k){return A.divisibleBy(n,k)}).join(", ")+"</b>"+
+        (A.divisibleBy(n,9)?" &mdash; e ricorda: chi passa il 9 passa sempre anche il 3.":"")+"."
+  };
+}
+
+/* ============================================================
+   2. IL COLLAUDO DEI PRIMI
+   ============================================================ */
+function tPrimi(){
+  var primo=Math.random()<.4;
+  var pool=[3,7,11,13];
+  var n,div;
+  if(primo){
+    n=pick([53,59,61,67,71,73,79,83,89,97,101,103,107,109,113]);
+    div=null;
+  }else{
+    div=pick(pool);
+    var other=pick([7,11,13,17,19,23]);
+    n=div*other;
+    while(n>400||n<40){other=pick([7,11,13,17,19]);n=div*other}
+  }
+  var wrongs=shuffle(pool.filter(function(p){return p!==div&&n%p!==0})).slice(0,2);
+  var correct=primo?"S&igrave;: &egrave; primo":("No: si divide per "+div);
+  var alts=[];
+  if(primo){
+    var two=shuffle(pool.slice()).slice(0,2);
+    alts=two.map(function(p){return "No: si divide per "+p});
+    alts.push("No: si divide per 2");
+  }else{
+    alts=wrongs.map(function(p){return "No: si divide per "+p});
+    alts.push("S&igrave;: &egrave; primo");
+  }
+  return{
+    w:W,h:214,tag:"Il collaudo dei primi",
+    text:"Il pezzo <b>"+n+"</b> passa il collaudo?",
+    sub:"Un numero &egrave; primo se <u>nessuno</u> dei divisori di prova lo divide. Provali in ordine, dal pi&ugrave; piccolo.",
+    cap:"Il pezzo e la rastrelliera dei divisori di prova.",
+    kind:"choice",
+    choices:mixOpts(correct,alts),
+    draw:function(s){
+      A.card(s,150,26,130,74,String(n),"var(--cyan)");
+      A.belt(s,26,196,378,22);
+      [2,3,5,7,11,13].forEach(function(p,i){
+        A.gear(s,54+i*64,150,24,8,"#55627A",String(p));
+      });
+      A.txt(s,215,116,"la rastrelliera dei divisori di prova","sm");
+    },
+    hint:"Non serve provarli tutti: ci si ferma quando il divisore <b>moltiplicato per s&eacute; stesso</b> supera il numero. "+
+         "Per "+n+" basta arrivare a "+(function(){var d=2;while(d*d<=n)d++;return d-1})()+".",
+    why:primo?(n+" non si divide per nessun primo fino a "+(function(){var d=2;while(d*d<=n)d++;return d-1})()+
+               ": &egrave; <b>primo</b>. Attenzione: dispari non vuol dire primo.")
+             :(n+" = <b>"+div+" &times; "+(n/div)+"</b>, quindi &egrave; composto. "+
+               (n%2?"&Egrave; dispari, ma essere dispari non basta per essere primo.":""))
+  };
+}
+
+/* ============================================================
+   3. LA CATENA DI MONTAGGIO — scomposizione in fattori primi
+   ============================================================ */
+function tCatena(){
+  var n=pick([90,84,132,120,150,126,198,60,140,275,168,308]);
+  var f=A.factor(n), rows=[], cur=n;
+  f.forEach(function(p){rows.push([cur,p]);cur=cur/p});
+  rows.push([1,null]);
+  var steps=f.map(function(p,i){
+    return{
+      text:"Per quale numero primo si divide adesso <b>"+rows[i][0]+"</b>?",
+      answer:p,unit:"",
+      hint:"Prova nell'ordine: 2 (&egrave; pari?), 3 (somma delle cifre), 5 (finisce per 0 o 5), poi 7, 11, 13&hellip; "+
+           "Il primo che entra &egrave; quello giusto.",
+      why:rows[i][0]+" : "+p+" = "+rows[i+1][0]+"."
+    };
+  });
+  return{
+    w:W,h:250,tag:"La catena di montaggio",
+    text:"Smonta <b>"+n+"</b> in fattori primi, un passaggio per volta.",
+    sub:"A ogni passo scegli il <u>pi&ugrave; piccolo</u> primo che ci sta: la macchina divide e ti restituisce il pezzo pi&ugrave; piccolo.",
+    cap:"A sinistra i pezzi gia' usciti, a destra i primi gia' usati.",
+    kind:"chain",unit:"",steps:steps,
+    draw:function(s,st){
+      A.txt(s,215,16,"reparto scomposizione","sm");
+      var y0=64, h=24, nvis=Math.min(st+1,rows.length);
+      /* la sbarra della colonnina, sempre a tutta altezza: da' l'idea del lavoro che resta */
+      A.E("line",{x1:215,y1:y0-16,x2:215,y2:y0+rows.length*h-6,stroke:"var(--amber)","stroke-width":2},s);
+      A.txt(s,176,y0-28,"pezzo","sm");A.txt(s,256,y0-28,"primo","sm");
+      for(var i=0;i<nvis;i++){
+        var e=A.E("text",{x:203,y:y0+i*h,"class":"tx"},s);
+        e.setAttribute("text-anchor","end");e.textContent=String(rows[i][0]);
+        if(i<st&&rows[i][1]!=null){
+          var p=A.E("text",{x:227,y:y0+i*h,"class":"tx am"},s);
+          p.setAttribute("text-anchor","start");p.textContent=String(rows[i][1]);
+        }
+      }
+      if(st<f.length){
+        A.E("rect",{x:145,y:y0+st*h-15,width:64,height:26,rx:6,fill:"none",stroke:"var(--cyan)","stroke-width":2},s);
+        A.gear(s,268,y0+st*h-3,14,8,"#55627A");
+        A.txt(s,215,244,"la macchina aspetta il divisore del pezzo in azzurro","sm");
+      }else{
+        A.txt(s,215,244,"arrivato a 1: la catena e' finita","sm");
+      }
+    },
+    hint:"Il primo da provare &egrave; sempre il 2: se il numero &egrave; pari, entra di sicuro.",
+    why:"<b>"+n+" = "+A.factorText(n).replace(/\^/g,"^")+"</b>. Si scende sempre dal primo pi&ugrave; piccolo, "+
+        "e si finisce quando resta 1."
+  };
+}
+
+/* ============================================================
+   4. IL REPARTO M.C.D.
+   ============================================================ */
+var COPPIE_MCD=[[36,60],[45,75],[24,36],[48,72],[30,42],[21,40],[120,96],[42,70],[54,81],[28,49]];
+function tMcd(){
+  var c=pick(COPPIE_MCD), a=c[0], b=c[1], g=A.gcd(a,b);
+  var mostra=Math.random()<.5;
+  /* se il M.C.D. si leggerebbe gia' fra i fattori scritti, il banco resta coperto */
+  var visibile=(" "+A.factorText(a)+" "+A.factorText(b)+" ").indexOf(" "+g+" ")>=0;
+  if(visibile)mostra=false;
+  var leak=(g===a||g===b);
+  return{
+    w:W,h:mostra?232:200,tag:"Il reparto M.C.D.",
+    text:"Qual &egrave; il <b>M.C.D.</b> di <b>"+a+"</b> e <b>"+b+"</b>?",
+    sub:mostra?"Le due scomposizioni sono gi&agrave; sul banco: scegli tu quali fattori entrano nel M.C.D."
+              :"Qui le scomposizioni le devi fare tu: c'&egrave; carta e testa.",
+    cap:mostra?"I fattori dei due pezzi. Quali sono comuni?":"Solo i due pezzi da lavorare.",
+    kind:"number",unit:"",answer:g,leakOk:leak,
+    draw:function(s){
+      A.card(s,58,26,140,68,String(a),"var(--cyan)");
+      A.card(s,232,26,140,68,String(b),"var(--cyan)");
+      if(mostra){
+        A.txt(s,128,124,A.factorText(a),"am");
+        A.txt(s,302,124,A.factorText(b),"am");
+        A.txt(s,215,164,"comuni ? esponente ?","sm");
+        A.gear(s,215,206,26,9,"#55627A");
+      }else{
+        A.belt(s,26,150,378,24);
+        A.txt(s,215,192,"nessuna scomposizione gia' fatta","sm");
+      }
+    },
+    hint:"Si prendono <b>solo i fattori comuni</b>, ciascuno una volta sola, con l'esponente <u>pi&ugrave; piccolo</u>. "+
+         "Se un fattore sta in uno solo dei due, resta fuori.",
+    why:a+" = "+A.factorText(a)+" &nbsp; "+b+" = "+A.factorText(b)+". Comuni con esponente minore &rarr; <b>M.C.D. = "+g+"</b>. "+
+        "Controllo: "+a+" : "+g+" = "+(a/g)+" e "+b+" : "+g+" = "+(b/g)+", tutte e due esatte."
+  };
+}
+
+/* ============================================================
+   5. IL REPARTO m.c.m.
+   ============================================================ */
+var COPPIE_MCM=[[12,30],[8,12],[20,25],[6,8],[15,18],[9,12],[14,21],[10,15],[16,24],[18,24]];
+function tMcm(){
+  var c=pick(COPPIE_MCM), a=c[0], b=c[1], m=A.lcm(a,b);
+  var mostra=Math.random()<.5;
+  return{
+    w:W,h:mostra?232:200,tag:"Il reparto m.c.m.",
+    text:"Qual &egrave; il <b>m.c.m.</b> di <b>"+a+"</b> e <b>"+b+"</b>?",
+    sub:mostra?"Le due scomposizioni sono sul banco: decidi tu quali fattori entrano e con quale esponente."
+              :"Scomposizioni da fare a mano. Poi la regola.",
+    cap:mostra?"I fattori dei due pezzi.":"Solo i due pezzi da lavorare.",
+    kind:"number",unit:"",answer:m,
+    draw:function(s){
+      A.card(s,58,26,140,68,String(a),"var(--violet)");
+      A.card(s,232,26,140,68,String(b),"var(--violet)");
+      if(mostra){
+        A.txt(s,128,124,A.factorText(a),"am");
+        A.txt(s,302,124,A.factorText(b),"am");
+        A.txt(s,215,164,"tutti ? esponente ?","sm");
+        A.gear(s,215,206,26,9,"#55627A");
+      }else{
+        A.belt(s,26,150,378,24);
+        A.txt(s,215,192,"nessuna scomposizione gia' fatta","sm");
+      }
+    },
+    hint:"Si prendono <b>tutti</b> i fattori, comuni e non comuni, ciascuno con l'esponente <u>pi&ugrave; grande</u>. "+
+         "Il risultato non pu&ograve; essere pi&ugrave; piccolo del maggiore dei due numeri.",
+    why:a+" = "+A.factorText(a)+" &nbsp; "+b+" = "+A.factorText(b)+". Tutti i fattori con esponente maggiore &rarr; <b>m.c.m. = "+m+"</b>. "+
+        "Controllo: "+m+" : "+a+" = "+(m/a)+" e "+m+" : "+b+" = "+(m/b)+"."
+  };
+}
+
+/* ============================================================
+   6. LO SMISTAMENTO — quale sigla serve?
+   ============================================================ */
+var PROBLEMI=[
+  {t:"Tre rotoli di nastro lunghi <b>60</b>, <b>84</b> e <b>96 cm</b> vanno tagliati in pezzi tutti uguali, i pi&ugrave; lunghi possibile, senza scarti. Quanto misura ogni pezzo?",
+   nums:[60,84,96],sig:"mcd",ris:12,spia:"i pi&ugrave; lunghi possibile, senza scarti",um:" cm"},
+  {t:"Due autobus partono insieme: uno passa ogni <b>20</b> minuti, l'altro ogni <b>25</b>. Fra quanti minuti ripartiranno insieme?",
+   nums:[20,25],sig:"mcm",ris:100,spia:"ripartiranno insieme",um:" min"},
+  {t:"In una scatola ci sono <b>48</b> biglie e si vogliono fare sacchetti da <b>6</b> biglie. Quanti sacchetti vengono?",
+   nums:[48,6],sig:"div",ris:8,spia:"sacchetti <u>da 6</u>: la misura del gruppo &egrave; gi&agrave; decisa",um:""},
+  {t:"Due fari lampeggiano uno ogni <b>15</b> secondi e uno ogni <b>18</b>. Dopo quanti secondi lampeggiano di nuovo insieme?",
+   nums:[15,18],sig:"mcm",ris:90,spia:"di nuovo insieme",um:" s"},
+  {t:"Da due tavole lunghe <b>84</b> cm e <b>60</b> cm si ricavano pezzi uguali, i pi&ugrave; lunghi possibile. Quanto misura un pezzo?",
+   nums:[84,60],sig:"mcd",ris:12,spia:"i pi&ugrave; lunghi possibile",um:" cm"},
+  {t:"Al campo ci sono <b>36</b> maglie rosse, <b>48</b> gialle e <b>60</b> blu: si formano squadre uguali, le pi&ugrave; numerose possibile, con maglie di un solo colore. Quante maglie per squadra?",
+   nums:[36,48,60],sig:"mcd",ris:12,spia:"le pi&ugrave; numerose possibile",um:""},
+  {t:"Una giostra parte ogni <b>6</b> minuti e un trenino ogni <b>8</b>. Sono partiti insieme: fra quanti minuti succeder&agrave; di nuovo?",
+   nums:[6,8],sig:"mcm",ris:24,spia:"di nuovo",um:" min"},
+  {t:"Ci sono <b>72</b> caramelle da mettere in <b>9</b> sacchetti uguali. Quante caramelle per sacchetto?",
+   nums:[72,9],sig:"div",ris:8,spia:"il numero dei sacchetti &egrave; gi&agrave; dato",um:""}
+];
+function tSmista(){
+  var p=pick(PROBLEMI);
+  var chiedi=Math.random()<.5;                      /* meta' volte la sigla, meta' volte il risultato */
+  var nomi={mcd:"il M.C.D.",mcm:"il m.c.m.",div:"nessuno dei due: basta una divisione"};
+  function scena(s){
+    A.txt(s,215,24,"i numeri del problema","sm");
+    p.nums.forEach(function(v,i){
+      var w=Math.min(110,(378-(p.nums.length-1)*14)/p.nums.length);
+      var x=(430-(w*p.nums.length+(p.nums.length-1)*14))/2+i*(w+14);
+      A.card(s,x,44,w,66,String(v),"var(--cyan)");
+    });
+    A.belt(s,26,140,378,24);
+    A.gear(s,110,192,26,9,"#55627A");
+    A.gear(s,215,192,26,9,"#55627A");
+    A.gear(s,320,192,26,9,"#55627A");
+    A.txt(s,215,232,"il testo lo trovi nella domanda, non qui","sm");
+  }
+  if(chiedi){
+    return{
+      w:W,h:246,tag:"Lo smistamento",
+      text:p.t+"<br><b>Che cosa serve per risolverlo?</b>",
+      sub:"Prima si sceglie l'attrezzo, poi si calcola. Qui si chiede solo l'attrezzo.",
+      cap:"Solo i numeri: la scelta la fai tu leggendo il testo.",
+      kind:"choice",
+      choices:mixOpts(nomi[p.sig],shuffle(["il M.C.D.","il m.c.m.","nessuno dei due: basta una divisione"]
+        .filter(function(x){return x!==nomi[p.sig]}))),
+      draw:scena,
+      hint:"Chiediti che cosa succede ai numeri: qualcosa che <b>c'&egrave; gi&agrave;</b> e va spezzato in parti uguali, "+
+           "oppure qualcosa che <b>si ripete</b> e si aspetta l'incontro? E se la dimensione del gruppo &egrave; gi&agrave; data, non serve n&eacute; l'uno n&eacute; l'altro.",
+      why:"Parola spia: &laquo;"+p.spia+"&raquo; &rarr; serve <b>"+nomi[p.sig]+"</b>."+
+          (p.sig==="mcd"?" Qualcosa esiste gi&agrave; e va diviso.":p.sig==="mcm"?" Qualcosa si ripete e si cerca il primo incontro.":
+           " Il gruppo &egrave; gi&agrave; deciso: basta una divisione.")
+    };
+  }
+  return{
+    w:W,h:246,tag:"Lo smistamento",
+    text:p.t,
+    sub:"Scegli l'attrezzo giusto e poi calcola: nella risposta va solo il numero.",
+    cap:"Solo i numeri: il resto lo decidi tu.",
+    kind:"number",unit:p.um,answer:p.ris,
+    draw:scena,
+    hint:"Prima decidi: si <b>divide</b> qualcosa che c'&egrave; gi&agrave; (M.C.D.), si aspetta un <b>incontro</b> (m.c.m.), "+
+         "oppure la dimensione del gruppo &egrave; gi&agrave; data e basta una divisione?",
+    why:"Parola spia: &laquo;"+p.spia+"&raquo; &rarr; "+nomi[p.sig]+" &rarr; <b>"+p.ris+p.um+"</b>."+
+        (p.sig==="mcd"?" (M.C.D. di "+p.nums.join("; ")+")":p.sig==="mcm"?" (m.c.m. di "+p.nums.join("; ")+")":"")
+  };
+}
+
+/* ============================================================
+   7. IL BANCO DEI POLIGONI
+   ============================================================ */
+var NOMI={3:"triangolo",4:"quadrilatero",5:"pentagono",6:"esagono",7:"ettagono",8:"ottagono",9:"ennagono",10:"decagono",12:"dodecagono"};
+function tPoligoni(){
+  var tipo=pick(["diag","interni","regolare","esterno","inverso"]);
+  var n=pick([5,6,7,8,9,10,12]);
+  var testo,ris,perche,indiz,mostraN=true;
+  if(tipo==="diag"){
+    ris=n*(n-3)/2;
+    testo="Quante <b>diagonali</b> ha un poligono di <b>"+n+" lati</b>?";
+    indiz="Da ogni vertice partono n &minus; 3 diagonali (non verso s&eacute; stesso e non verso i due vicini). Poi attento a non contarle due volte.";
+    perche="Da ogni vertice partono "+(n-3)+" diagonali, i vertici sono "+n+": "+n+" &times; "+(n-3)+" = "+(n*(n-3))+
+           ", ma ogni diagonale &egrave; contata <u>due volte</u> &rarr; : 2 = <b>"+ris+"</b>.";
+  }else if(tipo==="interni"){
+    ris=(n-2)*180;
+    testo="Quanto vale la <b>somma degli angoli interni</b> di un poligono di <b>"+n+" lati</b>?";
+    indiz="Dal vertice si taglia il poligono in triangoli: quanti ne vengono? Ognuno porta 180&deg;.";
+    perche="Si taglia in "+(n-2)+" triangoli: ("+n+" &minus; 2) &times; 180&deg; = <b>"+ris+"&deg;</b>.";
+  }else if(tipo==="regolare"){
+    ris=(n-2)*180/n;
+    if(ris%1!==0)return tPoligoni();
+    testo="In un poligono <b>regolare</b> di <b>"+n+" lati</b>, quanto misura <u>ogni</u> angolo interno?";
+    indiz="Prima la somma di tutti gli angoli, poi ricorda che nel regolare sono tutti uguali.";
+    perche="Somma: ("+n+" &minus; 2) &times; 180 = "+((n-2)*180)+"&deg;. Divisa per "+n+" angoli uguali &rarr; <b>"+ris+"&deg;</b>.";
+  }else if(tipo==="esterno"){
+    ris=360/n;
+    if(ris%1!==0)return tPoligoni();
+    testo="In un poligono <b>regolare</b> di <b>"+n+" lati</b>, quanto misura <u>ogni</u> angolo esterno?";
+    indiz="La somma degli angoli esterni &egrave; sempre la stessa, per qualunque poligono: quanto vale? Poi dividi.";
+    perche="La somma degli esterni &egrave; sempre 360&deg;, e nel regolare si spartisce in parti uguali: 360 : "+n+" = <b>"+ris+"&deg;</b>.";
+  }else{
+    var somma=(n-2)*180;
+    ris=n;mostraN=false;
+    testo="La somma degli angoli interni di un poligono &egrave; <b>"+somma+"&deg;</b>. Quanti <b>lati</b> ha?";
+    indiz="Dividi la somma per 180: ottieni il numero dei triangoli. E i triangoli sono due meno dei lati.";
+    perche=somma+" : 180 = "+(n-2)+" triangoli, e i triangoli sono n &minus; 2 &rarr; n = <b>"+n+"</b> ("+(NOMI[n]||"poligono di "+n+" lati")+").";
+  }
+  var P=A.regPoly(215,112,78,mostraN?n:6,90);
+  return{
+    w:W,h:250,tag:"Il banco dei poligoni",
+    text:testo,
+    sub:mostraN?"La figura &egrave; sul banco: nessuna diagonale &egrave; ancora tracciata, nessun angolo &egrave; scritto."
+               :"Qui il poligono non te lo faccio nemmeno vedere: si ragiona sui numeri.",
+    cap:mostraN?("Un poligono di "+n+" lati, senza aiuti."):"Sagoma sconosciuta: il numero dei lati e' la domanda.",
+    kind:"number",unit:(tipo==="diag"||tipo==="inverso")?"":"°",answer:ris,leakOk:(tipo==="inverso"),
+    draw:function(s){
+      if(mostraN){
+        A.polyDraw(s,P,{cls:"",fill:"rgba(47,182,168,.10)"});
+      }else{
+        A.polyDraw(s,P,{cls:"gh",dots:false,fill:"rgba(150,163,184,.08)"});
+        A.txt(s,215,112,"?","");
+      }
+      A.txt(s,215,238,mostraN?"figura muta: i conti li fai tu":"nessun disegno: solo la formula","sm");
+    },
+    drawAnswer:function(s){
+      if(mostraN){
+        A.polyDraw(s,P,{cls:"",fill:"rgba(47,182,168,.10)"});
+        if(tipo==="diag"){A.polyDiag(s,P,{});A.txt(s,215,238,"eccole tutte: "+ris,"am")}
+        else{for(var j=2;j<P.length-1;j++)A.line(s,P[0][0],P[0][1],P[j][0],P[j][1],"thin");
+             A.txt(s,215,238,(n-2)+" triangoli dentro","am")}
+      }else{
+        var Q=A.regPoly(215,112,78,n,90);
+        A.polyDraw(s,Q,{cls:"",fill:"rgba(47,182,168,.10)"});
+        A.txt(s,215,238,"era un "+(NOMI[n]||"poligono di "+n+" lati"),"am");
+      }
+    },
+    hint:indiz,why:perche
+  };
+}
+
+/* ============================================================
+   8. IL PERIMETRO A GRADINI
+   ============================================================ */
+function tPerimetro(){
+  var Wm=rnd(8,16), Hm=rnd(6,13), fess=Math.random()<.45, dep=rnd(2,5);
+  var ris=2*(Wm+Hm)+(fess?2*dep:0);
+  var forma=fess
+    ? [[0,0],[1,0],[1,1],[0.68,1],[0.68,0.45],[0.42,0.45],[0.42,1],[0,1]]
+    : [[0,0],[1,0],[1,0.42],[0.46,0.42],[0.46,1],[0,1]];
+  return{
+    w:W,h:250,tag:"Il perimetro a gradini",
+    text:"Quanto misura il <b>perimetro</b> di questa figura, fatta di soli angoli retti?",
+    sub:fess?("La figura ha una <b>fessura</b> profonda "+dep+" cm: guarda bene che strada deve fare il filo.")
+            :"Conosci solo la larghezza e l'altezza totali: pu&ograve; bastare.",
+    cap:"Solo le due quote esterne"+(fess?" e la profondita' della fessura.":"."),
+    kind:"number",unit:" cm",answer:ris,
+    draw:function(s){
+      var abs=A.steps(s,74,32,246,150,forma,{h:Hm+" cm",w:Wm+" cm"});
+      if(fess){
+        A.arrow(s,197,140,197,110,"var(--stop)");
+        A.txt(s,197,164,dep+" cm","sm");
+      }
+      A.txt(s,215,244,"nessun lato interno e' quotato","sm");
+    },
+    drawAnswer:function(s){
+      A.steps(s,74,32,246,150,forma,{h:Hm+" cm",w:Wm+" cm"});
+      A.E("rect",{x:74,y:32,width:246,height:150,fill:"none",stroke:"var(--go)","stroke-width":2.4,"stroke-dasharray":"6 5"},s);
+      A.txt(s,215,244,fess?("rettangolo + 2 volte la fessura"):"esattamente il rettangolo che la contiene","am");
+    },
+    hint:"Prova a far scivolare ogni tratto orizzontale in alto o in basso, e ogni tratto verticale a destra o a sinistra: "+
+         "che figura si forma?"+(fess?" Poi guarda se il filo deve entrare e uscire da qualche parte.":""),
+    why:"I tratti orizzontali coprono due volte la larghezza e i verticali due volte l'altezza: 2 &times; ("+Wm+" + "+Hm+") = "+
+        (2*(Wm+Hm))+" cm."+(fess?(" Ma il filo deve <u>scendere e risalire</u> nella fessura: + 2 &times; "+dep+" = <b>"+ris+
+        " cm</b>. La larghezza della fessura non aggiunge nulla, era gi&agrave; contata."):" Nessuna fessura, quindi il perimetro &egrave; proprio quello del rettangolo che la contiene: <b>"+ris+" cm</b>.")
+  };
+}
+
+/* ============================================================
+   REPARTI
+   ============================================================ */
+var MISSIONS=[
+  {id:"setaccio",name:"Il setaccio",desc:"I criteri: si guarda, non si divide.",color:"#2FB6A8",n:6,make:tSetaccio,
+   icon:'<rect x="7" y="10" width="34" height="28" rx="4" fill="none" stroke="#2FB6A8" stroke-width="2.4"/><path d="M7 20 L41 20 M7 29 L41 29 M18 10 L18 38 M30 10 L30 38" stroke="#2FB6A8" stroke-width="1.6"/>'},
+  {id:"primi",name:"Collaudo dei primi",desc:"Primo o composto? E con quale divisore.",color:"#E2703A",n:6,make:tPrimi,
+   icon:'<circle cx="24" cy="24" r="14" fill="none" stroke="#E2703A" stroke-width="2.6"/><path d="M24 10 L24 38 M10 24 L38 24" stroke="#E2703A" stroke-width="2"/><circle cx="24" cy="24" r="4" fill="#E2703A"/>'},
+  {id:"catena",name:"La catena",desc:"Smonti un numero, un primo alla volta.",color:"#A78BFA",n:5,make:tCatena,
+   icon:'<circle cx="14" cy="16" r="7" fill="none" stroke="#A78BFA" stroke-width="2.4"/><circle cx="26" cy="26" r="7" fill="none" stroke="#A78BFA" stroke-width="2.4"/><circle cx="38" cy="36" r="7" fill="none" stroke="#A78BFA" stroke-width="2.4"/>'},
+  {id:"mcd",name:"Reparto M.C.D.",desc:"Solo i comuni, esponente minore.",color:"#3DD68C",n:6,make:tMcd,
+   icon:'<circle cx="19" cy="24" r="12" fill="none" stroke="#3DD68C" stroke-width="2.4"/><circle cx="31" cy="24" r="12" fill="none" stroke="#3DD68C" stroke-width="2.4"/><path d="M25 14 a12 12 0 0 0 0 20 a12 12 0 0 0 0 -20" fill="rgba(61,214,140,.35)"/>'},
+  {id:"mcm",name:"Reparto m.c.m.",desc:"Tutti i fattori, esponente maggiore.",color:"#57C7F2",n:6,make:tMcm,
+   icon:'<circle cx="19" cy="24" r="12" fill="rgba(87,199,242,.20)" stroke="#57C7F2" stroke-width="2.4"/><circle cx="31" cy="24" r="12" fill="rgba(87,199,242,.20)" stroke="#57C7F2" stroke-width="2.4"/>'},
+  {id:"smista",name:"Lo smistamento",desc:"M.C.D., m.c.m. o nessuno dei due?",color:"#E2703A",n:6,make:tSmista,
+   icon:'<path d="M24 8 L24 22" stroke="#E2703A" stroke-width="2.6"/><path d="M24 22 L12 38 M24 22 L36 38" stroke="#E2703A" stroke-width="2.6"/><circle cx="24" cy="8" r="4" fill="#E2703A"/><circle cx="12" cy="40" r="4" fill="#96A3B8"/><circle cx="36" cy="40" r="4" fill="#96A3B8"/>'},
+  {id:"poligoni",name:"Banco dei poligoni",desc:"Diagonali e angoli, senza contarli a occhio.",color:"#2FB6A8",n:6,make:tPoligoni,
+   icon:'<path d="M24 8 L40 20 L34 38 L14 38 L8 20 Z" fill="none" stroke="#2FB6A8" stroke-width="2.4" stroke-linejoin="round"/>'},
+  {id:"perimetro",name:"Perimetro a gradini",desc:"Il trucco del rettangolo, e quando non vale.",color:"#A78BFA",n:5,make:tPerimetro,
+   icon:'<path d="M8 12 L40 12 L40 24 L24 24 L24 38 L8 38 Z" fill="rgba(167,139,250,.18)" stroke="#A78BFA" stroke-width="2.4" stroke-linejoin="round"/>'}
+];
+var ALL=[tSetaccio,tPrimi,tCatena,tMcd,tMcm,tSmista,tPoligoni,tPerimetro];
+var PARTITA={id:"collaudo",name:"Il collaudo finale",desc:"Otto pezzi da tutti i reparti: come in verifica.",
+  color:"#E2703A",n:8,big:true,make:function(){return pick(ALL)()},
+  icon:'<circle cx="24" cy="24" r="17" fill="none" stroke="#E2703A" stroke-width="2.6"/><path d="M16 25 l6 6 l11 -14" fill="none" stroke="#3DD68C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'};
+
+window.PAGAME={MISSIONS:MISSIONS,PARTITA:PARTITA,ALL:ALL};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var A=window.PA,G=window.PAGAME,$=A.$;
+var MISSIONS=G.MISSIONS,PARTITA=G.PARTITA;
+var S={m:null,i:0,task:null,step:0,tries:0,score:0,wrong:[],cur:45,typed:"",sel:{}};
+/* unità del passo corrente: "°" se non specificata, "" per un numero puro */
+function unit(){
+  var t=S.task;if(!t)return "\u00B0";
+  if(t.kind==="chain"){var st=t.steps[S.step];if(st&&st.unit!=null)return st.unit}
+  return t.unit!=null?t.unit:"\u00B0";
+}
+
+/* ---------------- HOME ---------------- */
+function starsHTML(k){var h="";for(var i=0;i<3;i++)h+='<i class="'+(i<k?"on":"")+'"></i>';return h}
+function paintHome(){
+  var g=$("#grid");g.innerHTML="";
+  var list=MISSIONS.concat([PARTITA]);
+  list.forEach(function(m,i){
+    var b=document.createElement("button");
+    b.className="mission"+(m.big?" big":"");
+    b.style.setProperty("--mc",m.color);
+    b.style.animationDelay=(i*45)+"ms";
+    b.innerHTML='<svg class="ico" viewBox="0 0 48 48" aria-hidden="true">'+m.icon+'</svg>'+
+      '<h3>'+m.name+'</h3><p>'+m.desc+'</p>'+
+      '<div class="foot"><span class="stars">'+starsHTML(A.P.stars[m.id]||0)+'</span>'+
+      '<span class="go">'+m.n+' domande →</span></div>';
+    b.addEventListener("click",function(){start(m)});
+    g.appendChild(b);
+  });
+  A.paintXP();
+}
+
+/* ---------------- SESSIONE ---------------- */
+function show(id){
+  ["home","game","end"].forEach(function(s){$("#"+s).classList.toggle("hide",s!==id)});
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function start(m){
+  S={m:m,i:0,task:null,step:0,tries:0,score:0,wrong:[],cur:45,typed:"",sel:{}};
+  $("#modeName").textContent=m.name;
+  var d=$("#dots");d.innerHTML="";
+  for(var k=0;k<m.n;k++)d.appendChild(document.createElement("i"));
+  show("game");next();
+}
+function next(){
+  if(S.i>=S.m.n)return finish();
+  S.task=S.m.make();S.step=0;S.tries=0;S.cur=45;S.typed="";S.sel={};S.locked=false;
+  var dots=$("#dots").children;
+  for(var k=0;k<dots.length;k++)dots[k].classList.toggle("now",k===S.i);
+  $("#qTag").textContent=S.task.tag;
+  $("#qText").innerHTML=S.task.text;
+  var sub=$("#qSub");
+  if(S.task.sub){sub.innerHTML=S.task.sub;sub.classList.remove("hide")}else sub.classList.add("hide");
+  $("#figCap").textContent=S.task.cap||"";
+  $("#fb").className="fb";$("#fb").innerHTML="";
+  $("#btnNext").classList.add("hide");
+  $("#btnHint").classList.remove("hide");$("#btnHint").disabled=false;
+  drawFig();renderAnswer();
+}
+function drawFig(rev){
+  var t=S.task,host=$("#fig");host.innerHTML="";
+  var s=A.Board(t.w||420,t.h||300);
+  try{
+    if(rev!==undefined&&t.drawAnswer)t.drawAnswer(s,rev);
+    else if(t.kind==="drag")t.draw(s,S.cur);
+    else if(t.kind==="chain")t.draw(s,S.step);
+    else t.draw(s);
+  }catch(e){}
+  host.appendChild(s);
+}
+/* interazioni delegate al contenitore, che non viene mai sostituito */
+(function(){
+  var host=$("#fig"),dragging=false;
+  function svgEl(){return host.firstChild}
+  function toAngle(ev){
+    var t=S.task,el=svgEl();if(!el||!t)return null;
+    var r=el.getBoundingClientRect();if(!r.width)return null;
+    var sc=(t.w||420)/r.width;
+    var x=(ev.clientX-r.left)*sc,y=(ev.clientY-r.top)*sc;
+    return Math.max(2,Math.min(178,Math.round(A.ang(t.cx,t.cy,x,y))));
+  }
+  host.addEventListener("click",function(ev){
+    var el=ev.target.closest?ev.target.closest("[data-pick]"):null;
+    if(el&&S.task&&S.task.kind==="pick"&&!S.locked)answer(parseInt(el.getAttribute("data-pick"),10));
+  });
+  host.addEventListener("pointerdown",function(ev){
+    if(!S.task||S.task.kind!=="drag"||S.locked)return;
+    dragging=true;var a=toAngle(ev);if(a!==null){S.cur=a;drawFig()}
+    ev.preventDefault();
+  });
+  window.addEventListener("pointermove",function(ev){
+    if(!dragging)return;var a=toAngle(ev);if(a!==null){S.cur=a;drawFig()}
+  },{passive:true});
+  window.addEventListener("pointerup",function(){dragging=false});
+  window.addEventListener("pointercancel",function(){dragging=false});
+})();
+
+/* ---------------- input ---------------- */
+function renderAnswer(){
+  var t=S.task,a=$("#answer");a.innerHTML="";
+  if(t.kind==="choice"){
+    var box=document.createElement("div");box.className="opts";
+    t.choices.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";
+      b.innerHTML='<span class="l">'+"ABCD"[i]+'</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(b.disabled)return;
+        b.classList.add(c.ok?"good":"bad");
+        if(!c.ok)b.disabled=true;
+        answer(c.ok);
+      });
+      box.appendChild(b);
+    });
+    a.appendChild(box);
+  }
+  else if(t.kind==="number"||t.kind==="chain"){
+    var st=t.kind==="chain"?t.steps[S.step]:null;
+    if(st){var h=document.createElement("div");h.className="q";
+      h.innerHTML='<span class="tag">Passo '+(S.step+1)+' di '+t.steps.length+'</span><h3>'+st.text+'</h3>';
+      a.appendChild(h)}
+    var line=document.createElement("div");line.className="numline";
+    line.innerHTML='<div class="numshow" id="nshow"><span class="cur">–</span><span class="deg">'+unit()+'</span></div>';
+    a.appendChild(line);
+    var pad=document.createElement("div");pad.className="pad";
+    ["1","2","3","4","5","6","7","8","9","←","0","✓"].forEach(function(k){
+      var b=document.createElement("button");b.textContent=k;
+      if(k==="✓")b.className="ok";if(k==="←")b.className="del";
+      b.addEventListener("click",function(){typeKey(k)});
+      pad.appendChild(b);
+    });
+    a.appendChild(pad);
+  }
+  else if(t.kind==="slider"){
+    var w=document.createElement("div");w.className="slide";
+    w.innerHTML='<div class="val"><span id="sval">'+S.cur+'</span>°</div>'+
+      '<input type="range" id="srange" min="5" max="'+(t.max||180)+'" step="1" value="'+S.cur+'" aria-label="La tua stima">';
+    a.appendChild(w);
+    var btn=document.createElement("button");btn.className="btn pri";btn.textContent="È questo";
+    btn.addEventListener("click",function(){answer(S.cur)});
+    a.appendChild(btn);
+    var r=w.querySelector("#srange");
+    r.addEventListener("input",function(){S.cur=parseInt(r.value,10);$("#sval").textContent=S.cur});
+  }
+  else if(t.kind==="drag"){
+    var b2=document.createElement("button");b2.className="btn pri";b2.textContent="È questa la posizione";
+    b2.addEventListener("click",function(){answer(S.cur)});
+    a.appendChild(b2);
+    var p=document.createElement("p");p.className="sub";p.style.marginTop="10px";
+    p.textContent="Trascina il pallino arancione sul vertice C: i tre angoli si aggiornano mentre muovi.";
+    a.appendChild(p);
+  }
+  else if(t.kind==="pick"){
+    var p2=document.createElement("div");p2.className="q";
+    p2.innerHTML='<span class="tag">Tocca la figura</span><h3 style="font-size:16px;font-weight:600">Clicca direttamente sulla figura qui accanto.</h3>';
+    a.appendChild(p2);
+  }
+  else if(t.kind==="multi"){
+    var box2=document.createElement("div");box2.className="opts";
+    t.choices.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";
+      b.innerHTML='<span class="box">&#10003;</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(S.locked)return;
+        S.sel[i]=!S.sel[i];
+        b.classList.toggle("sel",!!S.sel[i]);
+      });
+      box2.appendChild(b);
+    });
+    a.appendChild(box2);
+    var note=document.createElement("p");note.className="multihint";
+    note.textContent="Puoi sceglierne quante vuoi: la risposta e' giusta solo se l'insieme e' esatto.";
+    a.appendChild(note);
+    var okb=document.createElement("button");okb.className="btn pri";okb.style.marginTop="10px";
+    okb.textContent="Confermo la selezione";
+    okb.addEventListener("click",function(){
+      if(S.locked)return;
+      var right=true;
+      t.choices.forEach(function(c,i){if(!!S.sel[i]!==!!c.ok)right=false});
+      document.querySelectorAll(".opt").forEach(function(b,i){
+        if(t.choices[i].ok)b.classList.add("good");
+        else if(S.sel[i])b.classList.add("bad");
+      });
+      answer(right);
+    });
+    a.appendChild(okb);
+  }
+}
+function typeKey(k){
+  var t=S.task;
+  if(k==="←"){S.typed=S.typed.slice(0,-1)}
+  else if(k==="✓"){
+    if(S.typed==="")return;
+    var v=parseInt(S.typed,10);S.typed="";paintNum();
+    var target=(t.kind==="chain")?t.steps[S.step].answer:t.answer;
+    answer(v===target,v);
+    return;
+  }
+  else if(S.typed.length<3)S.typed+=k;
+  paintNum();
+}
+function paintNum(){
+  var n=$("#nshow");if(!n)return;
+  n.innerHTML='<span class="cur">'+(S.typed||"–")+'</span><span class="deg">'+unit()+'</span>';
+}
+
+/* ---------------- valutazione ---------------- */
+function fb(cls,title,body){
+  var f=$("#fb");f.className="fb on "+cls;
+  f.innerHTML="<b>"+title+"</b>"+body;
+}
+function dotSet(cls){
+  var d=$("#dots").children[S.i];if(!d)return;
+  d.classList.remove("now");d.classList.add(cls);
+}
+function answer(val,typed){
+  var t=S.task,ok;
+  if(t.kind==="choice"||t.kind==="multi")ok=(val===true);
+  else if(t.kind==="pick")ok=(val===t.answer);
+  else if(t.kind==="slider"||t.kind==="drag")ok=Math.abs(val-t.answer)<=t.tol;
+  else ok=(val===true);
+  S.tries++;
+
+  if(t.kind==="chain"){
+    var st=t.steps[S.step];
+    if(ok){
+      if(S.step<t.steps.length-1){
+        S.step++;S.tries=0;
+        fb("good","Anello trovato",st.why+" Ora il passo successivo.");
+        drawFig();renderAnswer();return;
+      }
+      close(true,st.why);
+    }else if(S.tries<2){
+      fb("soft","Non ancora",st.hint);shake();
+    }else{
+      fb("soft","Guarda qui","La risposta era <b style='display:inline;font-size:15px'>"+st.answer+unit()+"</b>. "+st.why);
+      if(S.step<t.steps.length-1){
+        S.step++;S.tries=0;S.wrong.push(t.why);
+        setTimeout(function(){drawFig();renderAnswer()},60);
+        return;
+      }
+      close(false,st.why);
+    }
+    return;
+  }
+
+  if(ok){
+    var extra="";
+    if(t.kind==="slider"||t.kind==="drag"){
+      var diff=Math.abs(val-t.answer);
+      extra=diff<=3?" Praticamente esatto: "+t.answer+"°.":" Il valore giusto era "+t.answer+"°: eri fuori di "+diff+"°.";
+      drawFig(val);
+    }
+    close(true,(t.why||"")+extra);
+  }else if(S.tries<2){
+    if(t.kind==="slider"||t.kind==="drag")fb("soft","Ci sei quasi","Sei ancora fuori di più di "+t.tol+"°. "+t.hint);
+    else fb("soft","Non ancora",t.hint);
+    shake();
+  }else{
+    var sol=(t.kind==="choice"||t.kind==="multi")?"":(" La risposta era <b style='display:inline;font-size:15px'>"+
+      (t.kind==="pick"?("il n. "+t.answer):(t.answer+unit()))+"</b>.");
+    if(t.kind==="choice"||t.kind==="multi"){
+      document.querySelectorAll(".opt").forEach(function(b,i){
+        if(t.choices[i].ok){b.classList.add("good")}b.disabled=true;
+      });
+    }
+    if(t.kind==="slider"||t.kind==="drag")drawFig(val);
+    if(t.kind==="pick")drawFig(0);
+    fb("soft","Impariamo questa",sol+" "+t.why);
+    close(false,null,true);
+  }
+}
+function shake(){var st=document.querySelector(".stage");st.classList.remove("shake");void st.offsetWidth;st.classList.add("shake")}
+function close(good,why,silent){
+  var t=S.task;S.locked=true;
+  if(good){
+    var pts=S.tries<=1?10:5;
+    if((t.kind==="slider"||t.kind==="drag")&&S.tries<=1)pts+=2;
+    A.P.xp+=pts;A.save();A.paintXP();
+    S.score+=S.tries<=1?1:0.5;
+    dotSet(S.tries<=1?"ok":"ko");
+    if(!silent)fb("good",S.tries<=1?"Esatto!":"Giusto, al secondo colpo",(why||"")+" <b style='display:inline;color:var(--amber);font-size:13px'>+"+pts+" XP</b>");
+  }else{
+    dotSet("ko");S.wrong.push(t.why);
+  }
+  $("#btnHint").classList.add("hide");
+  var b=$("#btnNext");b.classList.remove("hide");
+  b.textContent=(S.i===S.m.n-1)?"Vedi il risultato →":"Continua →";
+  document.querySelectorAll(".opt").forEach(function(x){x.disabled=true});
+  var pd=document.querySelector(".pad");if(pd)pd.querySelectorAll("button").forEach(function(x){x.disabled=true});
+  S.i++;
+}
+
+/* ---------------- fine ---------------- */
+function finish(){
+  var frac=S.score/S.m.n,stars=frac>=.9?3:frac>=.7?2:frac>=.5?1:0;
+  var prev=A.P.stars[S.m.id]||0;
+  if(stars>prev){A.P.stars[S.m.id]=stars}
+  if(stars===3){A.P.xp+=20}
+  A.save();A.paintXP();
+  $("#endTitle").textContent=(S.score===S.m.n)?"Perfetto":stars===3?"Quasi perfetto":stars===2?"Ci siamo":stars===1?"Buon lavoro":"Riproviamo";
+  $("#endScore").textContent=Math.round(S.score*10)/10;
+  $("#endOf").textContent="su "+S.m.n+" · "+S.m.name;
+  var st=$("#endStars").children;
+  for(var i=0;i<3;i++)st[i].className=i<stars?"on":"";
+  $("#endMsg").textContent=
+    stars===3?(S.score===S.m.n?"Serie perfetta, tutte al primo colpo. +20 XP di bonus: puoi passare a un altro allenamento.":"Quasi tutte al primo colpo: +20 XP di bonus. Rifalla una volta per chiuderla a punteggio pieno."):
+    stars===2?"Manca poco: quasi tutte al primo colpo. Rifai la serie e guarda se scendi a zero errori.":
+    stars===1?"Il metodo c'è, serve solo ripetizione. Rifai questa serie: i numeri cambiano ogni volta.":
+    "Nessun problema: è così che si impara. Rifai la serie con calma, leggendo ogni indizio prima di rispondere.";
+  var learn=$("#endLearn"),w=[];
+  S.wrong.forEach(function(x){if(x&&w.indexOf(x)<0)w.push(x)});
+  if(w.length){
+    learn.innerHTML='<h4>Da tenere a mente</h4><ul>'+w.map(function(x){return"<li>"+x+"</li>"}).join("")+'</ul>';
+  }else{
+    learn.innerHTML='<h4>Da tenere a mente</h4><ul><li>Non hai lasciato niente indietro: continua a cambiare allenamento per non abituarti a una sola figura.</li></ul>';
+  }
+  show("end");
+}
+
+/* ---------------- eventi ---------------- */
+$("#btnNext").addEventListener("click",next);
+$("#btnBack").addEventListener("click",function(){paintHome();show("home")});
+$("#btnHome").addEventListener("click",function(){paintHome();show("home")});
+$("#btnAgain").addEventListener("click",function(){start(S.m)});
+$("#btnReset").addEventListener("click",function(){
+  A.P.xp=0;A.P.stars={};A.save();paintHome();
+  this.textContent="Fatto: si riparte da zero";
+});
+$("#btnHint").addEventListener("click",function(){
+  var t=S.task,h=(t.kind==="chain")?t.steps[S.step].hint:t.hint;
+  fb("soft","Indizio",h);$("#btnHint").disabled=true;
+});
+document.addEventListener("keydown",function(e){
+  if($("#game").classList.contains("hide"))return;
+  var t=S.task;if(!t)return;
+  if(t.kind==="number"||t.kind==="chain"){
+    if(/^[0-9]$/.test(e.key))typeKey(e.key);
+    else if(e.key==="Backspace")typeKey("←");
+    else if(e.key==="Enter")typeKey("✓");
+  }else if(e.key==="Enter"&&!$("#btnNext").classList.contains("hide"))next();
+});
+
+/* ---------------- self-test ---------------- */
+function selftest(){
+  var out=[],n=0,bad=0;
+  var makers=G.ALL.concat([PARTITA.make]);
+  function fig(t){return A.Board(t.w||420,t.h||300)}
+  makers.forEach(function(mk,idx){
+    for(var k=0;k<40;k++){
+      n++;
+      try{
+        var t=mk();
+        var s=A.Board(t.w||420,t.h||300);
+        if(t.kind==="chain"){for(var q=0;q<t.steps.length;q++)t.draw(A.Board(t.w||420,t.h||300),q)}
+        else if(t.kind==="drag"){for(var g=15;g<=140;g+=25)t.draw(A.Board(t.w||420,t.h||300),g)}
+        else t.draw(s);
+        if(t.drawAnswer)t.drawAnswer(A.Board(t.w||420,t.h||300),t.kind==="drag"?t.answer:40);
+        if(!t.text||!t.why||!t.hint)throw new Error("testo mancante");
+        if(t.kind==="choice"){
+          var ok=t.choices.filter(function(c){return c.ok});
+          if(ok.length!==1)throw new Error("scelte corrette = "+ok.length);
+          if(t.choices.length<3)throw new Error("poche scelte");
+          var labs={};t.choices.forEach(function(c){if(labs[c.label])throw new Error("scelta doppia");labs[c.label]=1});
+        }else if(t.kind==="chain"){
+          t.steps.forEach(function(st){
+            if(!(st.answer>0&&st.answer<=999&&st.answer%1===0))throw new Error("step "+st.answer);
+            if(!st.text||!st.hint||!st.why)throw new Error("passo senza testo");
+          });
+        }else if(t.kind==="multi"){
+          if(t.choices.length<3)throw new Error("poche scelte");
+          if(!t.choices.filter(function(c){return c.ok}).length)throw new Error("nessuna scelta giusta");
+        }else if(t.kind==="pick"){
+          if(!(t.answer>=1&&t.answer<=9))throw new Error("pick "+t.answer);
+        }else{
+          if(!(t.answer>0&&t.answer<=9999&&t.answer%1===0))throw new Error("answer "+t.answer);
+        }
+        /* REGOLA DELLA FABBRICA: la figura mostra i DATI, mai il risultato chiesto.
+           Qui si legge il testo disegnato e si controlla che non contenga gia' la risposta. */
+        if(t.kind==="number"||t.kind==="choice"||t.kind==="multi"){
+          var sv=A.Board(t.w||420,t.h||300);t.draw(sv);
+          var words=[];
+          Array.prototype.forEach.call(sv.querySelectorAll("text"),function(e){
+            (e.textContent||"").split(/[^0-9A-Za-zÀ-ÿ]+/).forEach(function(w){if(w)words.push(w.toLowerCase())});
+          });
+          if(!t.leakOk){
+            if(t.kind==="number"){
+              if(words.indexOf(String(t.answer))>=0)throw new Error("la figura mostra la risposta "+t.answer);
+            }else{
+              t.choices.forEach(function(c){
+                if(!c.ok)return;
+                var key=String(c.label).toLowerCase().split(/[^0-9a-zà-ÿ]+/).filter(function(w){return w.length>3});
+                if(key.length&&key.every(function(w){return words.indexOf(w)>=0}))
+                  throw new Error("la figura mostra la scelta giusta");
+              });
+            }
+          }
+        }
+      }catch(err){bad++;out.push("["+idx+"] "+err.message)}
+    }
+  });
+  $("#testout").classList.remove("hide");
+  $("#testout").textContent=(bad===0?"TUTTO OK — ":"ERRORI ")+n+" test, "+bad+" falliti\n"+out.slice(0,20).join("\n");
+}
+
+/* ---------------- boot ---------------- */
+paintHome();
+if(location.search.indexOf("test=1")>=0)selftest();
+var dm=/demo=(\d+)/.exec(location.search);
+if(dm)start(MISSIONS.concat([PARTITA])[parseInt(dm[1],10)]||MISSIONS[0]);
+if(/end=1/.test(location.search)){S.m=MISSIONS[4];S.score=5.5;S.wrong=[MISSIONS[4].make().why];finish()}
+if(dm&&/auto=1/.test(location.search))setTimeout(function(){
+  var t=S.task;if(!t)return;
+  if(t.kind==="choice"){var idx=0;t.choices.forEach(function(c,i){if(c.ok)idx=i});
+    var bs=document.querySelectorAll(".opt");if(bs[idx])bs[idx].click()}
+  else if(t.kind==="multi"){
+    var bs2=document.querySelectorAll(".opt");
+    t.choices.forEach(function(c,i){if(c.ok&&bs2[i])bs2[i].click()});
+    var conf=document.querySelector("#answer .btn.pri");if(conf)conf.click()}
+  else if(t.kind==="chain"||t.kind==="number")answer(true);
+  else if(t.kind==="pick")answer(t.answer);
+  else answer(t.answer);
+},400);
+})();
+</script>

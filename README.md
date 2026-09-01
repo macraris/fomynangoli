@@ -1,8 +1,8 @@
 # Le palestre di matematica
 
 Giochi didattici di matematica per la scuola media: due sugli **angoli**, costruiti su impostazioni
-pedagogiche opposte, uno sui **triangoli**, uno sulle **potenze** e uno sui **numeri naturali e le quattro
-operazioni**. Una pagina d'ingresso li presenta e mette a confronto i metodi.
+pedagogiche opposte, uno sui **triangoli**, uno sulle **potenze**, uno sui **numeri naturali e le quattro
+operazioni** e uno su **divisibilità e poligoni**. Una pagina d'ingresso li presenta e mette a confronto i metodi.
 
 **Vai al sito:** https://fomynangoli.vercel.app
 
@@ -14,6 +14,7 @@ operazioni**. Una pagina d'ingresso li presenta e mette a confronto i metodi.
 | `triangoli.html` | **Cantiere dei Triangoli** — otto allenamenti liberi (metodo finlandese) |
 | `potenze.html` | **Laboratorio delle Potenze** — otto allenamenti liberi (metodo finlandese) |
 | `naturali.html` | **Officina dei Numeri** — otto banchi di lavoro sui naturali (metodo finlandese) |
+| `fabbrica.html` | **Fabbrica dei Numeri** — otto reparti su divisibilità e poligoni (metodo finlandese) |
 
 ## Le due impostazioni
 
@@ -25,6 +26,21 @@ operazioni**. Una pagina d'ingresso li presenta e mette a confronto i metodi.
 | Esercizi | generati a caso | variazione sistematica: cambia un elemento per volta |
 | Errore | indizio e si prosegue | la scheda torna in coda fino alla padronanza |
 | Domanda tipica | «quanto misura?» | «come lo sai?» |
+
+## La fabbrica dei numeri
+
+Copre il capitolo su **divisibilità e poligoni** e segue il corso stampabile `Corso-Divisibilita-Poligoni.html`.
+Otto reparti: i criteri di divisibilità (selezione multipla: si sceglie *l'insieme* dei divisori giusti),
+il collaudo dei numeri primi, la catena di montaggio che smonta un numero un primo alla volta,
+M.C.D. e m.c.m., lo smistamento dei problemi (prima si sceglie l'attrezzo, poi si calcola),
+il banco dei poligoni e il perimetro delle figure a gradini.
+
+**La regola della fabbrica — il disegno non anticipa mai la risposta.** Nei giochi precedenti capitava che la figura
+mostrasse un passaggio già svolto (per esempio «il lato più lungo è 16 cm»), cioè metà del lavoro. Qui vale una regola
+esplicita: `draw()` disegna **solo i dati**, la soluzione compare in `drawAnswer()`, cioè dopo la risposta.
+Non è una promessa: l'autotest, su ogni domanda generata, rende la figura, ne legge tutte le stringhe di testo
+e **fallisce se contiene la risposta**. Dove il risultato si leggerebbe comunque fra i dati (per esempio un M.C.D.
+che è uno dei fattori già scritti sul banco), il gioco copre da solo le scomposizioni e le fa fare a mano.
 
 ## Il cantiere dei triangoli
 
@@ -90,8 +106,9 @@ l'intruso), traduzione figura → modello → numero fino al problema in più pa
 - `potenze.html?test=1` → 360 domande generate e verificate
 - `naturali.html?test=1` → 405 domande generate e verificate
 - `triangoli.html?test=1` → 360 domande generate e verificate
-- `finlandia.html?demo=N&auto=1`, `triangoli.html?demo=N&auto=1`, `singapore.html?unit=N`,
-  `potenze.html?mod=N` e `naturali.html?mod=N` aprono direttamente un modulo
+- `fabbrica.html?test=1` → 360 domande generate e verificate, **compreso il controllo anti-anticipazione**
+- `finlandia.html?demo=N&auto=1`, `triangoli.html?demo=N&auto=1`, `fabbrica.html?demo=N&auto=1`,
+  `singapore.html?unit=N`, `potenze.html?mod=N` e `naturali.html?mod=N` aprono direttamente un modulo
 
 ## Licenza
 
