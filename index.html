@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Le palestre di matematica</title>
-<meta name="description" content="Sei giochi interattivi di matematica per la scuola media: due sugli angoli (metodo finlandese e metodo di Singapore), uno sui triangoli, uno sulle potenze, uno sui numeri naturali e uno su divisibilità e poligoni.">
+<meta name="description" content="Sette giochi interattivi di matematica per la scuola media: due sugli angoli (metodo finlandese e metodo di Singapore), uno sui triangoli, uno sulle potenze, uno sui numeri naturali, uno su divisibilità e poligoni e uno sulle frazioni.">
 <meta name="theme-color" content="#0F1216">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Le palestre di matematica">
-<meta property="og:description" content="Angoli, triangoli, potenze, numeri naturali, divisibilità e poligoni: sei palestre, ognuna con la sua idea di come si impara.">
+<meta property="og:description" content="Angoli, triangoli, potenze, numeri naturali, divisibilità e poligoni, frazioni: sette palestre, ognuna con la sua idea di come si impara.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%230F1216'/%3E%3Cpath d='M8 34 L40 34' stroke='%23E8EDE6' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L33 13' stroke='%23FFB020' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M8 34 L36 26' stroke='%232A6FB0' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,6 +94,19 @@ h1 em{font-style:normal;background:linear-gradient(90deg,var(--fin-amber),var(--
 .tri ul{grid-template-columns:1fr}
 @media (min-width:761px){.tri ul{grid-template-columns:1fr 1fr;gap:8px 18px}.tri li:last-child{grid-column:span 2}}
 
+/* porta cucina (frazioni) */
+.cuc{background:linear-gradient(150deg,#2A2036 0%,#191320 60%,#241C30 100%);border-color:#3B3049;color:#F5F0FA}
+.cuc:hover{box-shadow:0 20px 44px -28px #FFC94D}
+.cuc .kicker{color:#FFC94D}
+.cuc h2{font-family:"Anton",Haettenschweiler,"Arial Narrow",sans-serif;font-weight:400;font-size:33px;
+  line-height:.96;text-transform:uppercase;letter-spacing:.01em;margin:6px 0 8px}
+.cuc .desc{color:#C2B6D2;max-width:64ch}
+.cuc li span{background:rgba(79,209,182,.16);color:#4FD1B6}
+.cuc .enter{color:#FFC94D}
+.cuc .art{opacity:.24;right:-10px;top:-12px;width:158px;height:158px}
+.cuc ul{grid-template-columns:1fr}
+@media (min-width:761px){.cuc ul{grid-template-columns:1fr 1fr;gap:8px 18px}.cuc li:last-child{grid-column:span 2}}
+
 /* porta fabbrica (divisibilita e poligoni) */
 .fab{background:linear-gradient(150deg,#1D242F 0%,#12161F 62%,#241C17 100%);border-color:#2C3644;color:#ECEFF4}
 .fab:hover{box-shadow:0 20px 44px -28px #E2703A}
@@ -160,10 +173,11 @@ footer a:hover{color:var(--fg)}
 <body>
 <div class="wrap">
   <p class="eyebrow">Matematica · scuola media · per Fomyn</p>
-  <h1>Cinque argomenti,<br><em>sei palestre</em>.</h1>
+  <h1>Sei argomenti,<br><em>sette palestre</em>.</h1>
   <p class="intro">Sugli <b>angoli</b> ci sono due palestre costruite su idee opposte di come si impara: una dove scegli tu e l'errore non toglie niente,
   una dove si sale un gradino per volta. Sui <b>triangoli</b> c'è il cantiere, dove si costruisce col dito; sulle <b>potenze</b> il laboratorio,
-  sui <b>numeri naturali</b> l'officina e su <b>divisibilità e poligoni</b> la fabbrica, dove il disegno non regala mai la risposta.</p>
+  sui <b>numeri naturali</b> l'officina e su <b>divisibilità e poligoni</b> la fabbrica, dove il disegno non regala mai la risposta.
+  Sulle <b>frazioni</b> c'è la cucina: si taglia, si pesa, si confronta.</p>
 
   <h3 class="sech"><span>Angoli</span> due metodi a confronto</h3>
   <div class="doors">
@@ -290,6 +304,29 @@ footer a:hover{color:var(--fg)}
       <li><span>★</span><div><b>Lo smistamento</b> — prima scegli l'attrezzo (M.C.D., m.c.m. o una semplice divisione), poi calcoli.</div></li>
     </ul>
     <div class="enter">Entra in fabbrica →</div>
+  </a>
+
+  <h3 class="sech"><span>Frazioni</span> la cucina</h3>
+  <a class="door cuc" href="frazioni.html">
+    <svg class="art" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="34" fill="none" stroke="#FFC94D" stroke-width="2"/>
+      <path d="M50 50 L50 16 A34 34 0 0 1 79 67 Z" fill="rgba(255,201,77,.30)" stroke="none"/>
+      <path d="M50 16 L50 84 M16 50 L84 50 M26 26 L74 74 M26 74 L74 26" stroke="#4FD1B6" stroke-width="1.8"/>
+    </svg>
+    <div class="kicker">Frazioni · metodo finlandese</div>
+    <h2>Cucina<br>delle Frazioni</h2>
+    <p class="desc">Otto postazioni: leggere una frazione da una figura, trovarla sulla retta, ridurla ai minimi termini,
+    confrontarla sulla bilancia, sommare e sottrarre nel pentolone, moltiplicare e dividere col mattarello,
+    le porzioni di un numero e i problemi del sabato con il modello a barre.</p>
+    <ul>
+      <li><span>★</span><div><b>Si scrive la frazione, non si sceglie fra quattro</b> — c'è una tastiera a due piani:
+        sopra il numeratore, sotto il denominatore. E la risposta va data ai minimi termini.</div></li>
+      <li><span>★</span><div><b>Il disegno non regala la risposta</b> — la stessa regola della fabbrica, verificata da un test
+        automatico su 360 domande a ogni modifica.</div></li>
+      <li><span>★</span><div><b>Due passi, non uno</b> — nel pentolone e nelle porzioni prima si trova il denominatore comune
+        (o quanto vale una parte), e solo dopo si calcola.</div></li>
+    </ul>
+    <div class="enter">Entra in cucina →</div>
   </a>
 
   <section class="compare">

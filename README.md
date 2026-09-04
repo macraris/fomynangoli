@@ -2,7 +2,8 @@
 
 Giochi didattici di matematica per la scuola media: due sugli **angoli**, costruiti su impostazioni
 pedagogiche opposte, uno sui **triangoli**, uno sulle **potenze**, uno sui **numeri naturali e le quattro
-operazioni** e uno su **divisibilità e poligoni**. Una pagina d'ingresso li presenta e mette a confronto i metodi.
+operazioni**, uno su **divisibilità e poligoni** e uno sulle **frazioni**. Una pagina d'ingresso li presenta
+e mette a confronto i metodi.
 
 **Vai al sito:** https://fomynangoli.vercel.app
 
@@ -15,6 +16,7 @@ operazioni** e uno su **divisibilità e poligoni**. Una pagina d'ingresso li pre
 | `potenze.html` | **Laboratorio delle Potenze** — otto allenamenti liberi (metodo finlandese) |
 | `naturali.html` | **Officina dei Numeri** — otto banchi di lavoro sui naturali (metodo finlandese) |
 | `fabbrica.html` | **Fabbrica dei Numeri** — otto reparti su divisibilità e poligoni (metodo finlandese) |
+| `frazioni.html` | **Cucina delle Frazioni** — otto postazioni sulle frazioni (metodo finlandese) |
 
 ## Le due impostazioni
 
@@ -26,6 +28,24 @@ operazioni** e uno su **divisibilità e poligoni**. Una pagina d'ingresso li pre
 | Esercizi | generati a caso | variazione sistematica: cambia un elemento per volta |
 | Errore | indizio e si prosegue | la scheda torna in coda fino alla padronanza |
 | Domanda tipica | «quanto misura?» | «come lo sai?» |
+
+## La cucina delle frazioni
+
+Segue il corso stampabile `Corso-Frazioni.html`. Otto postazioni: **il tagliere** (leggere una frazione da una
+figura, comprese le improprie e le apparenti), **il metro del banco** (la frazione come punto sulla retta,
+con la trappola delle tacche contate al posto dei passi), **la riduzione** (equivalenti e minimi termini),
+**la bilancia** (confronto, denominatore comune, il riferimento di un mezzo), **il pentolone** (addizione e
+sottrazione in due passi), **il mattarello** (moltiplicazione, divisione, reciproco e il controllo «cresce o
+cala?»), **le porzioni** (la frazione di un numero, anche al contrario) e **il menu del sabato** (problemi con
+il modello a barre: stadio, album di figurine, minuti di partita).
+
+Due scelte di impianto:
+
+- **Si scrive la frazione, non si sceglie fra quattro.** La risposta si dà su una tastiera a due piani
+  (numeratore sopra, denominatore sotto) e va data **ai minimi termini**. Se il valore è giusto ma la scrittura
+  no, il gioco lo dice con parole diverse — «giusto il valore, non la scrittura» — e fa riprovare senza penalità.
+- **Due passi, non uno.** Nel pentolone e nelle porzioni al contrario la domanda è spezzata: prima il
+  denominatore comune (o quanto vale una parte), poi il risultato. È il passaggio che nei compiti salta sempre.
 
 ## La fabbrica dei numeri
 
@@ -107,7 +127,10 @@ l'intruso), traduzione figura → modello → numero fino al problema in più pa
 - `naturali.html?test=1` → 405 domande generate e verificate
 - `triangoli.html?test=1` → 360 domande generate e verificate
 - `fabbrica.html?test=1` → 360 domande generate e verificate, **compreso il controllo anti-anticipazione**
+- `frazioni.html?test=1` → 360 domande generate e verificate, con il controllo anti-anticipazione esteso
+  alle frazioni disegnate (nessuna figura può contenere la frazione chiesta) e ai singoli passi delle catene
 - `finlandia.html?demo=N&auto=1`, `triangoli.html?demo=N&auto=1`, `fabbrica.html?demo=N&auto=1`,
+  `frazioni.html?demo=N&auto=1`,
   `singapore.html?unit=N`, `potenze.html?mod=N` e `naturali.html?mod=N` aprono direttamente un modulo
 
 ## Licenza

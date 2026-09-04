@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Otto postazioni interattive sulle frazioni: leggerle da una figura, metterle sulla retta, ridurle ai minimi termini, confrontarle, sommarle, moltiplicarle, dividerle e usarle nei problemi. La risposta non e' mai gia' scritta nel disegno.">
+<meta name="theme-color" content="#191320">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cucina delle Frazioni">
+<meta property="og:description" content="Otto postazioni: si taglia, si pesa, si confronta. Ogni errore mostra la regola e ti fa riprovare subito.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%23191320'/%3E%3Ctext x='24' y='19' text-anchor='middle' font-family='Arial' font-size='16' font-weight='bold' fill='%23FFC94D'%3E3%3C/text%3E%3Cpath d='M12 24 L36 24' stroke='%23F5F0FA' stroke-width='3' stroke-linecap='round'/%3E%3Ctext x='24' y='42' text-anchor='middle' font-family='Arial' font-size='16' font-weight='bold' fill='%234FD1B6'%3E4%3C/text%3E%3C/svg%3E">
+<style>html{background:#191320}</style>
+<title>Cucina delle Frazioni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;600;800&display=swap">
+<style>
+:root{
+  --grass:#191320; --grass2:#1F1729; --surf:#241C30; --surf2:#2E2440; --line:#F5F0FA;
+  --dim:#AC9FBD; --edge:#3B3049;
+  --amber:#FFC94D; --cyan:#4FD1B6; --go:#63E08A; --stop:#FF6B5A; --violet:#C39BFF;
+  --r:18px; --r-sm:12px;
+  --f-disp:"Anton","Haettenschweiler","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1100px 620px at 50% -12%, #FFC94D14 0%, transparent 62%),
+    var(--grass);
+  color:var(--line); font-family:var(--f-body); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; min-height:100vh; overflow-x:hidden;
+}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2.5px solid var(--amber);outline-offset:3px;border-radius:6px}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1120px;margin:0 auto;padding:14px 16px 40px;position:relative;z-index:1}
+.pitch-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+.pitch-bg svg{width:100%;height:100%}
+
+.top{display:flex;align-items:center;gap:14px;padding:6px 2px 14px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand .mark{width:38px;height:38px;flex:0 0 auto}
+.brand h1{font-family:var(--f-disp);font-weight:400;font-size:23px;letter-spacing:.02em;margin:0;line-height:1;text-transform:uppercase}
+.brand p{margin:2px 0 0;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.spacer{flex:1}
+.xpbox{display:flex;align-items:center;gap:12px}
+.lvl{text-align:right}
+.lvl .n{font-family:var(--f-disp);font-size:15px;letter-spacing:.03em;line-height:1;text-transform:uppercase}
+.lvl .s{font-size:11px;color:var(--dim);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.ring{width:46px;height:46px;flex:0 0 auto}
+
+/* ---------- home ---------- */
+.hero{
+  border:1px solid var(--edge);border-radius:var(--r);padding:20px 22px;margin-bottom:18px;
+  background:linear-gradient(135deg,#2A2036 0%,#1D1526 55%,#2A2233 100%);position:relative;overflow:hidden
+}
+.hero h2{font-family:var(--f-disp);font-weight:400;font-size:clamp(28px,5.2vw,42px);line-height:.98;margin:0;text-transform:uppercase;text-wrap:balance;letter-spacing:.01em}
+.hero h2 em{font-style:normal;color:var(--amber)}
+.hero p{margin:8px 0 0;max-width:56ch;color:#D8CDE4;font-size:15px}
+.hero .stripe{position:absolute;right:-40px;top:-40px;width:220px;height:220px;opacity:.16}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(226px,1fr));gap:12px}
+.mission{
+  --mc:var(--cyan);
+  position:relative;text-align:left;border:1px solid var(--edge);border-radius:var(--r);
+  background:linear-gradient(180deg,var(--surf) 0%,#1E1728 100%);
+  padding:16px 16px 14px;display:flex;flex-direction:column;gap:10px;min-height:158px;
+  transition:transform .18s cubic-bezier(.2,.8,.3,1),border-color .18s,box-shadow .18s;
+  animation:rise .5s cubic-bezier(.2,.8,.3,1) both;
+}
+.mission:hover,.mission:focus-visible{transform:translateY(-3px);border-color:var(--mc);box-shadow:0 12px 28px -18px var(--mc)}
+.mission .ico{width:46px;height:46px}
+.mission h3{font-family:var(--f-disp);font-weight:400;font-size:19px;margin:0;line-height:1;text-transform:uppercase;letter-spacing:.02em}
+.mission p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.35}
+.mission .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stars{display:flex;gap:3px}
+.stars i{width:13px;height:13px;display:block;background:currentColor;color:#453757;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.stars i.on{color:var(--amber)}
+.mission .go{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mc);font-weight:800}
+.mission.big{grid-column:span 2}
+@media (max-width:520px){.mission.big{grid-column:span 1}}
+.mission.big h3{font-size:24px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.foot-note{margin:16px 2px 0;font-size:12px;color:#8B7EA0;text-align:right}
+.linky{color:#AC9FBD;text-decoration:underline;text-underline-offset:3px;font-size:12px}
+.linky:hover{color:var(--amber)}
+.tip{margin-top:10px;border:1px dashed var(--edge);border-radius:var(--r-sm);padding:12px 14px;color:#C6BBD6;font-size:13.5px;display:flex;gap:10px;align-items:flex-start}
+.tip b{color:var(--line)}
+.tip .k{flex:0 0 auto;font-family:var(--f-disp);font-size:11px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase;padding-top:2px}
+
+/* ---------- session ---------- */
+.hide{display:none!important}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.back{border:1px solid var(--edge);border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#D8CDE4;transition:.15s}
+.back:hover{border-color:var(--line);color:var(--line)}
+.dots{display:flex;gap:5px;flex:1;justify-content:center}
+.dots i{width:26px;height:5px;border-radius:99px;background:#3B3049;display:block;transition:.3s}
+.dots i.ok{background:var(--go)}
+.dots i.ko{background:var(--stop)}
+.dots i.now{background:var(--line);transform:scaleY(1.8)}
+.mode{font-family:var(--f-disp);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+
+.play{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:16px;align-items:start}
+@media (max-width:860px){.play{grid-template-columns:1fr}}
+.stage{
+  border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,#251D31,#141A23);
+  padding:14px;position:relative;overflow:hidden
+}
+.stage svg{width:100%;height:auto;display:block;touch-action:none}
+.stage .cap{margin:8px 2px 0;font-size:12px;color:var(--dim);text-align:center;min-height:16px}
+
+.panel{display:flex;flex-direction:column;gap:12px}
+.q{border:1px solid var(--edge);border-radius:var(--r);background:var(--surf);padding:16px}
+.q .tag{font-family:var(--f-disp);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:6px}
+.q h3{margin:0;font-size:19px;line-height:1.25;font-weight:800;text-wrap:balance}
+.q .sub{margin:7px 0 0;font-size:13.5px;color:#C2B6D2}
+
+.opts{display:grid;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:12px;border:1.5px solid var(--edge);border-radius:var(--r-sm);
+  background:#221A2E;padding:12px 14px;text-align:left;font-size:16px;font-weight:600;transition:.15s;
+}
+.opt:hover:not(:disabled){border-color:var(--cyan);transform:translateX(2px)}
+.opt .l{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:#35293F;color:var(--dim);
+  display:grid;place-items:center;font-size:12.5px;font-weight:800}
+.opt.good{border-color:var(--go);background:#13301F}.opt.good .l{background:var(--go);color:#08240F}
+.opt.bad{border-color:var(--stop);background:#331519}.opt.bad .l{background:var(--stop);color:#331519}
+.opt:disabled{cursor:default;opacity:.75}
+.opt.sel{border-color:var(--amber);background:#332A18}
+.opt .box{width:24px;height:24px;flex:0 0 auto;border-radius:7px;border:2px solid #4C3F5F;display:grid;place-items:center;
+  font-size:14px;font-weight:900;color:transparent}
+.opt.sel .box{border-color:var(--amber);background:var(--amber);color:#2A2007}
+.multihint{font-size:12.5px;color:var(--dim);margin:2px 2px 0}
+.opt.good,.opt.bad{opacity:1}
+
+.numline{display:flex;align-items:center;gap:10px}
+.numshow{
+  flex:1;border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#221A2E;padding:10px 14px;
+  font-family:var(--f-disp);font-size:34px;line-height:1.1;letter-spacing:.02em;min-height:58px;
+  display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums
+}
+.numshow .cur{color:var(--amber)}
+.numshow .deg{font-size:20px;color:var(--dim)}
+.numshow.good{border-color:var(--go)}.numshow.bad{border-color:var(--stop)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.pad button{border:1.5px solid var(--edge);border-radius:var(--r-sm);background:#221A2E;padding:12px 0;
+  font-size:20px;font-weight:800;transition:.12s;font-variant-numeric:tabular-nums}
+.pad button:hover{border-color:var(--cyan);background:#271F33}
+.pad button:active{transform:scale(.96)}
+.pad .ok{background:var(--go);border-color:var(--go);color:#08240F}
+.pad .ok:hover{background:#7ae89c;border-color:#7ae89c}
+.pad .del{color:var(--stop)}
+
+.slide{display:flex;flex-direction:column;gap:8px}
+.slide input[type=range]{width:100%;accent-color:var(--amber);height:30px}
+.slide .val{font-family:var(--f-disp);font-size:30px;line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+
+.fb{border-radius:var(--r-sm);padding:12px 14px;font-size:14px;display:none;animation:pop .3s cubic-bezier(.2,.8,.3,1)}
+.fb.on{display:block}
+.fb.good{background:#12301F;border:1.5px solid var(--go)}
+.fb.soft{background:#332A18;border:1.5px solid var(--amber)}
+.fb>b:first-child{display:block;font-family:var(--f-disp);font-weight:400;font-size:16px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px}
+.fb.good>b:first-child{color:var(--go)}.fb.soft>b:first-child{color:var(--amber)}
+.fb b{font-weight:800;color:var(--line)}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border-radius:99px;padding:12px 20px;font-weight:800;font-size:14.5px;letter-spacing:.02em;transition:.15s;border:1.5px solid transparent}
+.btn.pri{background:var(--amber);color:#2A2007}
+.btn.pri:hover{background:#ffd977;transform:translateY(-1px)}
+.btn.ghost{border-color:var(--edge);color:#D8CDE4}
+.btn.ghost:hover{border-color:var(--line);color:var(--line)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+
+.shake{animation:shake .4s}
+@keyframes shake{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-4px)}}
+
+/* ---------- result ---------- */
+.res{border:1px solid var(--edge);border-radius:var(--r);background:linear-gradient(180deg,var(--surf),#1E1728);padding:26px;text-align:center;max-width:560px;margin:6px auto}
+.res .big{font-family:var(--f-disp);font-size:clamp(34px,7vw,52px);line-height:1;text-transform:uppercase;margin:0}
+.res .score{font-family:var(--f-disp);font-size:64px;line-height:1;color:var(--amber);font-variant-numeric:tabular-nums;margin:10px 0 2px}
+.res .of{color:var(--dim);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.res .bigstars{display:flex;gap:10px;justify-content:center;margin:16px 0 6px}
+.res .bigstars i{width:38px;height:38px;display:block;background:#453757;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.res .bigstars i.on{background:var(--amber);animation:star .5s cubic-bezier(.2,1.6,.4,1) both}
+.res .bigstars i.on:nth-child(2){animation-delay:.12s}
+.res .bigstars i.on:nth-child(3){animation-delay:.24s}
+@keyframes star{from{transform:scale(.2) rotate(-40deg);opacity:0}to{transform:none;opacity:1}}
+.res p{color:#CCC1DA;font-size:15px;max-width:44ch;margin:12px auto 0}
+.res .learn{margin-top:16px;text-align:left;border-top:1px solid var(--edge);padding-top:14px}
+.res .learn h4{font-family:var(--f-disp);font-weight:400;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.res .learn li{font-size:13.5px;color:#CCC1DA;margin:5px 0}
+
+/* ---------- svg tokens ---------- */
+.ln{stroke:var(--line);stroke-width:3;stroke-linecap:round;fill:none}
+.ln.thin{stroke-width:2}
+.gh{stroke:#6A5C80;stroke-width:2.4;stroke-dasharray:3 7;stroke-linecap:round;fill:none}
+.ac{stroke:var(--amber)}.cy{stroke:var(--cyan)}.vi{stroke:var(--violet)}.gn{stroke:var(--go)}
+.sect{fill:rgba(255,201,77,.22);stroke:var(--amber);stroke-width:2.2}
+.sect.b{fill:rgba(79,209,182,.20);stroke:var(--cyan)}
+.sect.g{fill:rgba(99,224,138,.20);stroke:var(--go)}
+.sect.v{fill:rgba(195,155,255,.20);stroke:var(--violet)}
+.sect.mute{fill:rgba(245,240,250,.07);stroke:#5E5175}
+.hit{fill:rgba(245,240,250,.001);stroke:none;cursor:pointer;transition:fill .15s}
+.hit:hover{fill:rgba(245,240,250,.10)}
+.tx{font-family:var(--f-body);font-size:15px;font-weight:800;fill:var(--line);text-anchor:middle;dominant-baseline:middle}
+.tx.sm{font-size:12.5px;font-weight:600;fill:var(--dim)}
+.tx.am{fill:var(--amber)}.tx.cy{fill:var(--cyan)}.tx.gn{fill:var(--go)}.tx.vi{fill:var(--violet)}
+.dot{fill:var(--line)}
+.dot.am{fill:var(--amber)}
+.grass-r{fill:#1C1526;stroke:#392D4C;stroke-width:2}
+.goal-r{stroke:var(--stop);stroke-width:5;stroke-linecap:round}
+.prot{fill:rgba(76,201,240,.09);stroke:var(--cyan);stroke-width:2}
+.tick{stroke:#8477A0;stroke-width:1.2}
+.tick.maj{stroke:var(--line);stroke-width:1.8}
+.handle{fill:var(--amber);stroke:#0B1613;stroke-width:3;cursor:grab}
+.handle:active{cursor:grabbing}
+
+/* ---------- schermi stretti ---------- */
+@media (max-width:620px){
+  .wrap{padding:10px 12px 32px}
+  .top{flex-wrap:wrap;gap:10px;padding-bottom:10px}
+  .brand .mark{width:30px;height:30px}
+  .brand h1{font-size:17px}
+  .brand p{font-size:9.5px;letter-spacing:.12em}
+  .lvl .n{font-size:12px}.lvl .s{font-size:10px}
+  .ring{width:38px;height:38px}
+  .hero{padding:16px 15px}
+  .hero p{font-size:14px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .mission{min-height:0;padding:13px 13px 11px;gap:8px}
+  .mission .ico{width:34px;height:34px}
+  .mission h3{font-size:16px}
+  .mission p{font-size:11.5px}
+  .mode{display:none}
+  .bar{gap:8px}
+  .dots i{width:16px}
+  .q{padding:13px}
+  .q h3{font-size:17px}
+  .stage{padding:10px}
+  .numshow{font-size:28px;min-height:52px}
+  .pad button{padding:13px 0;font-size:19px}
+  .opt{font-size:15px;padding:11px 12px}
+  .res{padding:22px 16px}
+  .foot-note{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+#testout{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:12px;padding:12px;color:var(--line)}
+
+/* ---------- frazioni: scrittura in linea ---------- */
+.fq{display:inline-block;vertical-align:-0.52em;text-align:center;line-height:1.06;font-weight:800;
+  margin:0 3px;font-variant-numeric:tabular-nums}
+.fq i{display:block;font-style:normal;padding:0 3px}
+.fq i+i{border-top:2.4px solid currentColor;margin-top:1px}
+.fq.a{color:var(--amber)}.fq.c{color:var(--cyan)}.fq.g{color:var(--go)}.fq.v{color:var(--violet)}.fq.r{color:var(--stop)}
+.q h3 .fq{font-size:.92em}
+
+/* ---------- frazioni: tastiera a due piani ---------- */
+.fracin{display:flex;align-items:center;gap:12px;border:1.5px solid var(--edge);border-radius:var(--r-sm);
+  background:#221A2E;padding:10px 14px}
+.fracin .stack{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:104px}
+.fracin .fb2{width:104px;border:1.5px solid transparent;border-radius:9px;background:#2A2138;
+  font-family:var(--f-disp);font-size:29px;line-height:1.15;padding:2px 0;color:var(--line);
+  font-variant-numeric:tabular-nums;transition:.15s}
+.fracin .fb2.act{border-color:var(--amber);background:#332A18;color:var(--amber)}
+.fracin .rule{width:104px;height:3px;border-radius:2px;background:var(--line)}
+.fracin .say{font-size:12.5px;color:var(--dim);line-height:1.35}
+.fracin .say b{color:var(--line)}
+.fracin.good{border-color:var(--go)}.fracin.bad{border-color:var(--stop)}
+.pad.four{grid-template-columns:repeat(4,1fr)}
+.pad .wide{grid-column:span 4}
+.pad .sw{color:var(--amber);font-family:var(--f-disp);font-size:17px;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="pitch-bg" aria-hidden="true">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <g fill="none" stroke="#F5F0FA" stroke-opacity=".05" stroke-width="2">
+      <circle cx="230" cy="210" r="120"/>
+      <path d="M230 90 L230 330 M110 210 L350 210 M145 125 L315 295 M145 295 L315 125"/>
+      <circle cx="960" cy="250" r="86"/><path d="M874 250 L1046 250 M960 164 L960 336"/>
+      <rect x="120" y="600" width="420" height="90" rx="10"/>
+      <path d="M225 600 L225 690 M330 600 L330 690 M435 600 L435 690"/>
+      <rect x="700" y="600" width="400" height="90" rx="10"/>
+      <path d="M780 600 L780 690 M860 600 L860 690 M940 600 L940 690 M1020 600 L1020 690"/>
+      <path d="M620 100 L620 470"/>
+      <path d="M600 140 L640 140 M606 200 L634 200 M600 260 L640 260 M606 320 L634 320 M600 380 L640 380"/>
+    </g>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="17" fill="none" stroke="#F5F0FA" stroke-width="2.4"/>
+        <path d="M24 7 L24 41" stroke="#F5F0FA" stroke-width="2"/>
+        <path d="M24 24 L24 7 A17 17 0 0 1 38.7 32.5 Z" fill="#FFC94D" fill-opacity=".85" stroke="none"/>
+        <path d="M24 24 L38.7 32.5 A17 17 0 0 1 9.3 32.5 Z" fill="#4FD1B6" fill-opacity=".35" stroke="none"/>
+        <path d="M9.3 32.5 L38.7 15.5" stroke="#F5F0FA" stroke-width="2"/>
+        <path d="M9.3 15.5 L38.7 32.5" stroke="#F5F0FA" stroke-width="2"/>
+      </svg>
+      <div>
+        <h1>Cucina delle Frazioni</h1>
+        <p><a href="./" style="color:inherit;text-decoration:none;border-bottom:1px solid #3B3049">&#8617; Torna alle palestre</a></p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="xpbox">
+      <div class="lvl">
+        <div class="n" id="lvlName">Sguattero</div>
+        <div class="s"><span id="xpNow">0</span> / <span id="xpNext">150</span> XP</div>
+      </div>
+      <svg class="ring" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="19" fill="none" stroke="#3B3049" stroke-width="5"/>
+        <circle id="ringFill" cx="23" cy="23" r="19" fill="none" stroke="#FFC94D" stroke-width="5"
+                stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"
+                transform="rotate(-90 23 23)" style="transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.3,1)"/>
+        <text id="ringTxt" x="23" y="24" text-anchor="middle" dominant-baseline="middle"
+              font-family="Anton,sans-serif" font-size="14" fill="#F5F0FA">1</text>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <main id="home">
+    <section class="hero">
+      <svg class="stripe" viewBox="0 0 100 100" aria-hidden="true">
+        <g fill="none" stroke="#FFC94D" stroke-width="1.6">
+          <circle cx="50" cy="50" r="34"/>
+          <path d="M50 16 L50 84 M16 50 L84 50 M26 26 L74 74 M26 74 L74 26"/>
+          <circle cx="50" cy="50" r="8"/>
+        </g>
+      </svg>
+      <h2>Otto postazioni.<br>Una sola idea: <em>parti uguali</em>.</h2>
+      <p>Qui una frazione non &egrave; due numeri messi uno sopra l'altro: &egrave; <b>un numero solo</b>, e ha un posto preciso sulla retta.
+      Si taglia, si pesa, si confronta, si somma. Scegli tu da dove partire e quante volte ripetere: sbagliare non toglie niente,
+      ogni errore ti mostra la regola e ti fa riprovare subito.</p>
+    </section>
+
+    <div class="grid" id="grid"></div>
+
+    <p class="foot-note">I progressi restano su questo dispositivo. <button id="btnReset" class="linky">Azzera i progressi</button></p>
+    <div class="tip">
+      <span class="k">Regola della cucina</span>
+      <span>Il disegno ti d&agrave; <b>gli ingredienti</b>, mai il piatto finito: la frazione che stai cercando non &egrave; mai gi&agrave; scritta da nessuna parte.
+      Se ti serve una spinta c'&egrave; il pulsante <b>indizio</b>, che ti dice <u>dove guardare</u> senza darti il numero.
+      La spiegazione completa arriva solo dopo che hai risposto.</span>
+    </div>
+  </main>
+
+  <!-- ============ SESSIONE ============ -->
+  <main id="game" class="hide">
+    <div class="bar">
+      <button class="back" id="btnBack">&larr; Esci</button>
+      <div class="dots" id="dots"></div>
+      <div class="mode" id="modeName"></div>
+    </div>
+    <div class="play">
+      <div class="stage">
+        <div id="fig"></div>
+        <div class="cap" id="figCap"></div>
+      </div>
+      <div class="panel">
+        <div class="q">
+          <span class="tag" id="qTag">Domanda</span>
+          <h3 id="qText"></h3>
+          <p class="sub hide" id="qSub"></p>
+        </div>
+        <div id="answer"></div>
+        <div class="fb" id="fb"></div>
+        <div class="row">
+          <button class="btn ghost" id="btnHint">Dammi un indizio</button>
+          <button class="btn pri hide" id="btnNext">Continua &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ RISULTATO ============ -->
+  <main id="end" class="hide">
+    <div class="res">
+      <h2 class="big" id="endTitle"></h2>
+      <div class="score" id="endScore"></div>
+      <div class="of" id="endOf"></div>
+      <div class="bigstars" id="endStars"><i></i><i></i><i></i></div>
+      <p id="endMsg"></p>
+      <div class="learn" id="endLearn"></div>
+      <div class="row" style="justify-content:center;margin-top:18px">
+        <button class="btn pri" id="btnAgain">Ancora una serie</button>
+        <button class="btn ghost" id="btnHome">Torna alle postazioni</button>
+      </div>
+    </div>
+  </main>
+</div>
+<pre id="testout" class="hide"></pre>
+
+<script>
+(function(){
+"use strict";
+/* ============================================================
+   CUCINA DELLE FRAZIONI — libreria di disegno e di calcolo
+   ============================================================ */
+var NS="http://www.w3.org/2000/svg", $=function(s){return document.querySelector(s)};
+var PI=Math.PI;
+
+/* ---------- disegno di base ---------- */
+function E(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function R(n){return Math.round(n*100)/100}
+function pol(cx,cy,r,d){var t=d*PI/180;return[cx+r*Math.cos(t),cy-r*Math.sin(t)]}
+function ang(cx,cy,x,y){var d=Math.atan2(cy-y,x-cx)*180/PI;return(d+360)%360}
+
+/* la lavagna tiene nota delle frazioni disegnate: serve al collaudo anti-spoiler */
+function Board(w,h){
+  var s=E("svg",{viewBox:"0 0 "+w+" "+h,width:"100%"});
+  s.W=w;s.H=h;s.__fr=[];return s;
+}
+function line(s,x1,y1,x2,y2,cls){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"ln "+(cls||"")},s)}
+function seg(s,p1,p2,cls){return line(s,p1[0],p1[1],p2[0],p2[1],cls)}
+function ghost(s,x1,y1,x2,y2){return E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),"class":"gh"},s)}
+function txt(s,x,y,t,cls){var e=E("text",{x:R(x),y:R(y),"class":"tx "+(cls||"")},s);e.textContent=t;return e}
+function dot(s,x,y,cls){return E("circle",{cx:R(x),cy:R(y),r:5,"class":"dot "+(cls||"")},s)}
+function arrow(s,x1,y1,x2,y2,col){
+  var c=col||"var(--amber)";
+  E("line",{x1:R(x1),y1:R(y1),x2:R(x2),y2:R(y2),stroke:c,"stroke-width":2.4,"stroke-linecap":"round"},s);
+  var a=Math.atan2(y1-y2,x2-x1)*180/PI,p=pol(x2,y2,10,a+202),q=pol(x2,y2,10,a+158);
+  E("polyline",{points:R(p[0])+","+R(p[1])+" "+R(x2)+","+R(y2)+" "+R(q[0])+","+R(q[1]),
+    fill:"none",stroke:c,"stroke-width":2.4,"stroke-linecap":"round"},s);
+}
+/* graffa orizzontale sotto (v=1) o sopra (v=-1) un tratto */
+function brace(s,x1,x2,y,v,label,cls){
+  var d=(v<0?-1:1)*7;
+  E("path",{d:"M "+R(x1)+" "+R(y)+" L "+R(x1)+" "+R(y+d)+" L "+R(x2)+" "+R(y+d)+" L "+R(x2)+" "+R(y),
+    fill:"none",stroke:"var(--dim)","stroke-width":1.8},s);
+  if(label)txt(s,(x1+x2)/2,y+d+(v<0?-14:16),label,"sm "+(cls||""));
+}
+/* area invisibile cliccabile ("tocca la figura") */
+function hit(s,pts,idx){
+  var e=E("polygon",{points:pts.map(function(p){return R(p[0])+","+R(p[1])}).join(" "),"class":"hit"},s);
+  e.setAttribute("data-pick",String(idx));return e;
+}
+function hitBox(s,x,y,w,h,idx){return hit(s,[[x,y],[x+w,y],[x+w,y+h],[x,y+h]],idx)}
+
+/* ---------- colori ---------- */
+var COL={a:"var(--amber)",c:"var(--cyan)",g:"var(--go)",v:"var(--violet)",r:"var(--stop)",n:"var(--line)"};
+var FILL={a:"rgba(255,201,77,.42)",c:"rgba(79,209,182,.38)",g:"rgba(99,224,138,.36)",
+          v:"rgba(195,155,255,.38)",r:"rgba(255,107,90,.34)",n:"rgba(245,240,250,.16)"};
+var TCLS={a:"am",c:"cy",g:"gn",v:"vi",r:"rd",n:""};
+
+/* ---------- la frazione disegnata ---------- */
+function fracTxt(s,x,y,n,d,col,size){
+  size=size||20;col=col||"n";
+  var c=COL[col]||COL.n, w=Math.max(String(n).length,String(d).length)*size*0.33+6;
+  var a=E("text",{x:R(x),y:R(y-size*0.34),"class":"tx","text-anchor":"middle","dominant-baseline":"middle"},s);
+  a.setAttribute("style","font-size:"+size+"px;fill:"+c);a.textContent=String(n);
+  E("line",{x1:R(x-w),y1:R(y),x2:R(x+w),y2:R(y),stroke:c,"stroke-width":2.4,"stroke-linecap":"round"},s);
+  var b=E("text",{x:R(x),y:R(y+size*0.72),"class":"tx","text-anchor":"middle","dominant-baseline":"middle"},s);
+  b.setAttribute("style","font-size:"+size+"px;fill:"+c);b.textContent=String(d);
+  if(s.__fr)s.__fr.push([Number(n),Number(d)]);
+  return {x:x,y:y,w:w};
+}
+
+/* ---------- la barra tagliata in parti uguali ---------- */
+/* o: {which:[indici], lab:function(i), top:"", under:"", cls:'a'|'c'|..., open:true} */
+function bar(s,x,y,w,h,n,k,o){
+  o=o||{};var cls=o.cls||"c",st=w/n;
+  for(var i=0;i<n;i++){
+    var on=o.which?(o.which.indexOf(i)>=0):(i<k);
+    E("rect",{x:R(x+i*st),y:R(y),width:R(st),height:R(h),
+      fill:on?FILL[cls]:"rgba(245,240,250,.04)",stroke:"var(--line)","stroke-width":2},s);
+    if(o.lab){var t=o.lab(i);if(t)txt(s,x+i*st+st/2,y+h/2,t,"sm")}
+  }
+  if(o.top)txt(s,x+w/2,y-14,o.top,"sm "+(TCLS[cls]||""));
+  if(o.under)brace(s,x,x+w,y+h+4,1,o.under);
+  return {x:x,y:y,w:w,h:h,st:st};
+}
+/* più barre incolonnate, stessa larghezza: il confronto si vede a occhio */
+function barStack(s,x,y,w,h,rows,gap){
+  gap=gap||16;
+  rows.forEach(function(r,i){bar(s,x,y+i*(h+gap),w,h,r.n,r.k,{cls:r.cls,top:r.top,which:r.which,lab:r.lab})});
+  return {x:x,y:y,w:w,h:h,gap:gap};
+}
+/* ---------- la torta ---------- */
+function pie(s,cx,cy,r,n,k,o){
+  o=o||{};var cls=o.cls||"a";
+  for(var i=0;i<n;i++){
+    var a1=90-i*360/n,a2=90-(i+1)*360/n,p1=pol(cx,cy,r,a1),p2=pol(cx,cy,r,a2),lg=(360/n)>180?1:0;
+    var on=o.which?(o.which.indexOf(i)>=0):(i<k);
+    E("path",{d:"M "+R(cx)+" "+R(cy)+" L "+R(p1[0])+" "+R(p1[1])+" A "+r+" "+r+" 0 "+lg+" 1 "+R(p2[0])+" "+R(p2[1])+" Z",
+      fill:on?FILL[cls]:"rgba(245,240,250,.04)",stroke:"var(--line)","stroke-width":2},s);
+  }
+  if(o.under)txt(s,cx,cy+r+20,o.under,"sm");
+  return {cx:cx,cy:cy,r:r};
+}
+/* ---------- la retta dei numeri ---------- */
+/* o: {marks:[{k:passi,lab:"",cls:"a"}], picks:[passi], showTicks:true} */
+function numline(s,x,y,w,max,den,o){
+  o=o||{};var st=w/(max*den);
+  E("line",{x1:R(x-14),y1:R(y),x2:R(x+w+22),y2:R(y),stroke:"var(--line)","stroke-width":2.6,"stroke-linecap":"round"},s);
+  var head=pol(x+w+22,y,9,200),head2=pol(x+w+22,y,9,160);
+  E("polyline",{points:R(head[0])+","+R(head[1])+" "+R(x+w+22)+","+R(y)+" "+R(head2[0])+","+R(head2[1]),
+    fill:"none",stroke:"var(--line)","stroke-width":2.2,"stroke-linecap":"round"},s);
+  for(var i=0;i<=max*den;i++){
+    var xx=x+i*st,big=(i%den===0);
+    E("line",{x1:R(xx),y1:R(y-(big?12:7)),x2:R(xx),y2:R(y+(big?12:7)),
+      stroke:big?"var(--line)":"#8477A0","stroke-width":big?2:1.4},s);
+    if(big)txt(s,xx,y+28,String(i/den),"sm");
+  }
+  (o.marks||[]).forEach(function(m){
+    var mx=x+m.k*st;
+    E("circle",{cx:R(mx),cy:R(y),r:6.5,fill:COL[m.cls||"a"],stroke:"var(--grass)","stroke-width":2},s);
+    if(m.lab)txt(s,mx,y-26,m.lab,TCLS[m.cls||"a"]);
+  });
+  (o.picks||[]).forEach(function(k,i){
+    var px=x+k*st;
+    E("circle",{cx:R(px),cy:R(y),r:6.5,fill:"none",stroke:"var(--amber)","stroke-width":2.4},s);
+    txt(s,px,y-28,String(i+1),"sm am");
+    var e=E("circle",{cx:R(px),cy:R(y),r:17,"class":"hit"},s);
+    e.setAttribute("data-pick",String(i+1));
+  });
+  return {x:x,y:y,w:w,st:st};
+}
+/* ---------- il rettangolo tagliato nei due versi: la moltiplicazione ---------- */
+function areaGrid(s,x,y,w,h,cols,rows,a,b,o){
+  o=o||{};var sw=w/cols,sh=h/rows;
+  for(var i=0;i<cols;i++)for(var j=0;j<rows;j++){
+    var on=(i<a&&j<b);
+    E("rect",{x:R(x+i*sw),y:R(y+j*sh),width:R(sw),height:R(sh),
+      fill:on?FILL[o.cls||"v"]:"rgba(245,240,250,.04)",stroke:"var(--line)","stroke-width":1.8},s);
+  }
+  if(o.left)txt(s,x-26,y+h/2,o.left,"sm cy");
+  if(o.top)txt(s,x+w/2,y-14,o.top,"sm am");
+  return {x:x,y:y,w:w,h:h};
+}
+/* ---------- il modello a barre (Singapore) ---------- */
+function bars(s,x,y,w,h,parts,total,under){
+  var sum=0;parts.forEach(function(p){sum+=p.u});
+  var cx=x;
+  parts.forEach(function(p){
+    var pw=w*p.u/sum;
+    E("rect",{x:R(cx),y:R(y),width:R(pw),height:h,rx:4,fill:p.f||FILL.c,stroke:p.st||COL.c,"stroke-width":2},s);
+    if(p.t)txt(s,cx+pw/2,y+h/2,p.t,p.tc||"");
+    cx+=pw;
+  });
+  if(total)brace(s,x,x+w,y-6,-1,total);
+  if(under)brace(s,x,x+w,y+h+6,1,under);
+  return {x:x,y:y,w:w,h:h};
+}
+/* ---------- il cartellino con un numero grande ---------- */
+function card(s,x,y,w,h,t,col,sub){
+  E("rect",{x:R(x),y:R(y),width:R(w),height:R(h),rx:10,fill:"#2E2440",stroke:COL[col||"a"],"stroke-width":2.4},s);
+  var e=E("text",{x:R(x+w/2),y:R(y+h/2+(sub?-8:0)),"class":"tx","text-anchor":"middle","dominant-baseline":"middle"},s);
+  e.setAttribute("style","font-size:"+(String(t).length>4?22:29)+"px");e.textContent=String(t);
+  if(sub){var u=E("text",{x:R(x+w/2),y:R(y+h/2+16),"class":"tx sm","text-anchor":"middle","dominant-baseline":"middle"},s);u.textContent=sub}
+  return {x:x,y:y,w:w,h:h};
+}
+/* ---------- il piatto: cerchio con bordo, per gli sfondi ---------- */
+function plate(s,cx,cy,r){
+  E("circle",{cx:R(cx),cy:R(cy),r:R(r),fill:"rgba(245,240,250,.03)",stroke:"#5E5175","stroke-width":2},s);
+  E("circle",{cx:R(cx),cy:R(cy),r:R(r*0.86),fill:"none",stroke:"#4A3E5C","stroke-width":1.4},s);
+}
+
+/* ---------- utilità ---------- */
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pickOne(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function uniq(arr){var o=[],s={};arr.forEach(function(v){if(!s[v]){s[v]=1;o.push(v)}});return o}
+function mixOpts(correct,wrongs){
+  var seen={},out=[{label:correct,ok:true}];seen[correct]=1;
+  (wrongs||[]).forEach(function(w){if(!seen[w]&&out.length<4){seen[w]=1;out.push({label:w,ok:false})}});
+  return shuffle(out);
+}
+
+/* ---------- calcolo con le frazioni ---------- */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t}return a}
+function lcm(a,b){return a/gcd(a,b)*b}
+function red(n,d){var g=gcd(n,d)||1;return[n/g,d/g]}
+function isRed(n,d){return gcd(n,d)===1}
+function fAdd(a,b,c,e){return red(a*e+c*b,b*e)}
+function fSub(a,b,c,e){return red(a*e-c*b,b*e)}
+function fMul(a,b,c,e){return red(a*c,b*e)}
+function fDiv(a,b,c,e){return red(a*e,b*c)}
+function cmp(a,b,c,e){var l=a*e,r=c*b;return l>r?1:l<r?-1:0}
+function txtF(n,d){return n+"/"+d}
+/* la frazione scritta in HTML, dentro il testo delle domande */
+function F(n,d,cls){return '<span class="fq '+(cls||"")+'"><i>'+n+'</i><i>'+d+'</i></span>'}
+function factor(n){var f=[],d=2;while(d*d<=n){while(n%d===0){f.push(d);n/=d}d++}if(n>1)f.push(n);return f}
+function factorText(n){
+  var m={},out=[];factor(n).forEach(function(p){m[p]=(m[p]||0)+1});
+  Object.keys(m).map(Number).sort(function(a,b){return a-b}).forEach(function(p){out.push(m[p]>1?(p+"^"+m[p]):String(p))});
+  return out.join(" x ");
+}
+
+/* ---------- stato / progresso ---------- */
+var KEY="cucina-frazioni-v1";
+var P={xp:0,stars:{}};
+try{var raw=localStorage.getItem(KEY);if(raw)P=JSON.parse(raw)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+var LEVELS=[[0,"Sguattero"],[150,"Aiuto cuoco"],[350,"Cuoco"],[650,"Capopartita"],[1000,"Chef"],[1500,"Chef stellato"]];
+function levelInfo(){
+  var i=0;for(var k=0;k<LEVELS.length;k++)if(P.xp>=LEVELS[k][0])i=k;
+  var base=LEVELS[i][0],next=(LEVELS[i+1]||[base+600])[0];
+  return{i:i,name:LEVELS[i][1],base:base,next:next,frac:Math.min(1,(P.xp-base)/(next-base))};
+}
+function paintXP(){
+  var L=levelInfo();
+  $("#lvlName").textContent=L.name;
+  $("#xpNow").textContent=P.xp;
+  $("#xpNext").textContent=L.next;
+  $("#ringTxt").textContent=String(L.i+1);
+  $("#ringFill").setAttribute("stroke-dashoffset",String(119.4*(1-L.frac)));
+}
+
+/* ---------- esporta ---------- */
+window.PA={E:E,R:R,pol:pol,ang:ang,Board:Board,line:line,seg:seg,ghost:ghost,txt:txt,dot:dot,arrow:arrow,
+  brace:brace,hit:hit,hitBox:hitBox,fracTxt:fracTxt,bar:bar,barStack:barStack,pie:pie,numline:numline,
+  areaGrid:areaGrid,bars:bars,card:card,plate:plate,COL:COL,FILL:FILL,
+  rnd:rnd,pickOne:pickOne,shuffle:shuffle,uniq:uniq,mixOpts:mixOpts,
+  gcd:gcd,lcm:lcm,red:red,isRed:isRed,fAdd:fAdd,fSub:fSub,fMul:fMul,fDiv:fDiv,cmp:cmp,txtF:txtF,F:F,
+  factor:factor,factorText:factorText,
+  P:P,save:save,levelInfo:levelInfo,paintXP:paintXP,$:$};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var A=window.PA,rnd=A.rnd,pick=A.pickOne,shuffle=A.shuffle,F=A.F,red=A.red,gcd=A.gcd;
+var W=430;
+
+/* ============================================================
+   REGOLA DELLA CUCINA
+   draw() disegna soltanto gli INGREDIENTI del problema.
+   La frazione chiesta non compare mai nel disegno: arriva in
+   drawAnswer(), cioe' dopo la risposta. L'autotest lo verifica.
+   ============================================================ */
+
+/* la bilancia: due frazioni nei piatti, in equilibrio finche' non si risponde */
+function bilancia(s,cx,cy,tilt,fa,fb){
+  var E=A.E;
+  E("path",{d:"M "+(cx-28)+" "+(cy+96)+" L "+(cx+28)+" "+(cy+96)+" L "+(cx+13)+" "+(cy+74)+" L "+(cx-13)+" "+(cy+74)+" Z",
+    fill:"#2E2440",stroke:"#5E5175","stroke-width":2},s);
+  E("line",{x1:cx,y1:cy+74,x2:cx,y2:cy,stroke:"#5E5175","stroke-width":4,"stroke-linecap":"round"},s);
+  var dy=tilt*13, lx=cx-120, ly=cy+dy, rx=cx+120, ry=cy-dy;
+  E("line",{x1:lx,y1:ly,x2:rx,y2:ry,stroke:"var(--line)","stroke-width":4,"stroke-linecap":"round"},s);
+  E("circle",{cx:cx,cy:(ly+ry)/2,r:5,fill:"var(--line)"},s);
+  [[lx,ly,fa],[rx,ry,fb]].forEach(function(p){
+    E("line",{x1:p[0],y1:p[1],x2:p[0],y2:p[1]+26,stroke:"#8477A0","stroke-width":2},s);
+    E("path",{d:"M "+(p[0]-42)+" "+(p[1]+26)+" L "+(p[0]+42)+" "+(p[1]+26)+" L "+(p[0]+29)+" "+(p[1]+40)+" L "+(p[0]-29)+" "+(p[1]+40)+" Z",
+      fill:"rgba(245,240,250,.06)",stroke:"#8477A0","stroke-width":2},s);
+    A.fracTxt(s,p[0],p[1]-8,p[2][0],p[2][1],p[2][2]||"n",21);
+  });
+}
+/* una coppia ridotta a caso, con denominatore fra 2 e max */
+function coppiaRidotta(max,proper){
+  var d,n,g=0;
+  do{ d=rnd(2,max||9); n=rnd(1,proper===false?(2*d-1):(d-1)); g=gcd(n,d); }while(g!==1||n===0||n===d);
+  return [n,d];
+}
+
+/* ============================================================
+   1. IL TAGLIERE — leggere la frazione da una figura
+   ============================================================ */
+function tTagliere(){
+  var v=Math.random();
+
+  if(v<.30){                                   /* frazione propria: barra o torta */
+    var f=coppiaRidotta(pick([4,5,6,8,9,10,12])), n=f[0], d=f[1];
+    var tondo=Math.random()<.42;
+    var sel=[];for(var i=0;i<n;i++)sel.push(i);
+    return{
+      w:W,h:232,tag:"Il tagliere",
+      text:"Che frazione della merenda &egrave; <b>colorata</b>?",
+      sub:"Scrivi il numero di sopra e quello di sotto. Nel disegno non c'&egrave; scritto nessun numero: li conti tu.",
+      cap:tondo?"Una focaccia tagliata in parti uguali.":"Una tavoletta tagliata in parti uguali.",
+      kind:"frac",answer:{n:n,d:d},
+      draw:function(s){
+        if(tondo){A.plate(s,215,110,84);A.pie(s,215,110,72,d,0,{which:sel,cls:"a"})}
+        else A.bar(s,42,74,346,66,d,0,{which:sel,cls:"a"});
+        A.txt(s,215,214,"le parti sono tutte della stessa misura","sm");
+      },
+      drawAnswer:function(s){
+        if(tondo){A.plate(s,150,104,80);A.pie(s,150,104,68,d,0,{which:sel,cls:"a"});A.fracTxt(s,330,104,n,d,"a",30)}
+        else{A.bar(s,42,64,346,56,d,0,{which:sel,cls:"a"});A.fracTxt(s,215,168,n,d,"a",30)}
+        A.txt(s,215,222,"parti colorate sopra, parti in tutto sotto","sm am");
+      },
+      hint:"Il numero <u>di sotto</u> dice in quante parti uguali &egrave; tagliata <b>tutta</b> la merenda, comprese quelle bianche. "+
+           "Il numero <u>di sopra</u> conta solo le parti colorate.",
+      why:"La merenda &egrave; divisa in <b>"+d+"</b> parti uguali, quindi ogni parte vale "+F(1,d)+"; "+
+          "le parti prese sono <b>"+n+"</b>. La frazione &egrave; "+F(n,d,"a")+", ed &egrave; <b>propria</b> perch&eacute; "+n+" &lt; "+d+"."
+    };
+  }
+
+  if(v<.55){                                   /* frazione impropria: piu' interi */
+    var d2=pick([2,3,4,5,6,8]), interi=(d2<=4)?3:2;
+    var k;do{k=rnd(d2+1,interi*d2-1)}while(gcd(k,d2)!==1);
+    var pieni=Math.floor(k/d2), resto=k%d2;
+    return{
+      w:W,h:246,tag:"Il tagliere",
+      text:"Qui c'&egrave; <b>pi&ugrave; di una</b> merenda. Che frazione &egrave; colorata in tutto?",
+      sub:"Ogni merenda &egrave; tagliata allo stesso modo. Il numero di sotto resta quello di <u>una</u> merenda sola.",
+      cap:interi+" tavolette identiche, tagliate allo stesso modo.",
+      kind:"frac",answer:{n:k,d:d2},
+      draw:function(s){
+        var w=(interi===3)?110:168, gap=(interi===3)?14:22, x0=215-(interi*w+(interi-1)*gap)/2;
+        for(var j=0;j<interi;j++){
+          var rest=k-j*d2, fill=Math.max(0,Math.min(d2,rest)), sel2=[];
+          for(var q=0;q<fill;q++)sel2.push(q);
+          A.bar(s,x0+j*(w+gap),84,w,60,d2,0,{which:sel2,cls:"c"});
+        }
+        A.txt(s,215,192,"conta i pezzi colorati, uno per uno","sm");
+        A.txt(s,215,224,"attenzione: il numero di sotto non e' il totale dei pezzi disegnati","sm");
+      },
+      drawAnswer:function(s){
+        var w=(interi===3)?110:168, gap=(interi===3)?14:22, x0=215-(interi*w+(interi-1)*gap)/2;
+        for(var j=0;j<interi;j++){
+          var rest=k-j*d2, fill=Math.max(0,Math.min(d2,rest)), sel2=[];
+          for(var q=0;q<fill;q++)sel2.push(q);
+          A.bar(s,x0+j*(w+gap),64,w,54,d2,0,{which:sel2,cls:"c"});
+        }
+        A.fracTxt(s,215,168,k,d2,"c",30);
+        A.txt(s,215,228,pieni+" merende intere"+(resto?(" e "+resto+" pezzi"):"")+": e' una frazione impropria","sm cy");
+      },
+      hint:"Il numero di sotto non cambia: &egrave; in quante parti hai tagliato <u>una</u> merenda. "+
+           "Il numero di sopra invece continua a crescere anche oltre l'intero.",
+      why:"Ogni pezzo vale "+F(1,d2)+" e i pezzi colorati sono <b>"+k+"</b>: la frazione &egrave; "+F(k,d2,"c")+". "+
+          "Il numero di sopra &egrave; maggiore di quello di sotto, quindi &egrave; una frazione <b>impropria</b>: vale pi&ugrave; di un intero ("+
+          pieni+" "+(pieni===1?"intero":"interi")+(resto?(" e "+F(resto,d2)):"")+")."
+    };
+  }
+
+  if(v<.78){                                   /* riconoscere il tipo */
+    var tipo=pick(["propria","impropria","apparente"]), n3,d3;
+    if(tipo==="propria"){d3=pick([5,6,7,8,9,10,12]);n3=rnd(1,d3-1)}
+    else if(tipo==="impropria"){d3=pick([3,4,5,6,7,8]);do{n3=rnd(d3+1,d3*2+3)}while(n3%d3===0)}
+    else{d3=pick([2,3,4,5,6]);n3=d3*rnd(1,4)}
+    var corr={propria:"Propria: vale meno di un intero",
+              impropria:"Impropria: vale pi&ugrave; di un intero",
+              apparente:"Apparente: vale un numero intero"}[tipo];
+    var alt=["Propria: vale meno di un intero","Impropria: vale pi&ugrave; di un intero","Apparente: vale un numero intero"]
+            .filter(function(x){return x!==corr});
+    return{
+      w:W,h:214,tag:"Il tagliere",
+      text:"Guarda la frazione sul tagliere: che tipo di frazione &egrave;?",
+      sub:"Non serve calcolare niente: basta confrontare il numero di sopra con quello di sotto.",
+      cap:"La frazione da riconoscere.",
+      kind:"choice",choices:A.mixOpts(corr,alt),
+      draw:function(s){
+        A.card(s,140,44,150,110,"","a");
+        A.fracTxt(s,215,99,n3,d3,"a",36);
+        A.txt(s,215,190,"sopra e sotto: chi e' piu' grande?","sm");
+      },
+      hint:"Confronta i due numeri. Sopra <u>minore</u> di sotto &rarr; non arrivi all'intero. Sopra <u>uguale o multiplo</u> di sotto &rarr; fai interi esatti. "+
+           "Sopra <u>maggiore</u> &rarr; hai superato l'intero.",
+      why:F(n3,d3,"a")+": "+(tipo==="propria"?("il numero di sopra &egrave; minore di quello di sotto, quindi non si arriva all'intero: &egrave; <b>propria</b>.")
+        :tipo==="apparente"?("il numero di sopra &egrave; un multiplo esatto di quello di sotto ("+n3+" : "+d3+" = "+(n3/d3)+
+          "), quindi vale un numero intero: &egrave; <b>apparente</b>.")
+        :("il numero di sopra &egrave; maggiore di quello di sotto ma non &egrave; un suo multiplo: &egrave; <b>impropria</b>, vale pi&ugrave; di un intero."))
+    };
+  }
+
+  /* scegliere la figura giusta */
+  var f4=coppiaRidotta(pick([4,5,6,8])), n4=f4[0], d4=f4[1];
+  var opzioni=shuffle([{n:n4,d:d4,ok:true},{n:d4-n4,d:d4},{n:n4,d:d4+1},{n:n4+1,d:d4}]).slice(0,3);
+  if(!opzioni.filter(function(o){return o.ok}).length)opzioni[rnd(0,2)]={n:n4,d:d4,ok:true};
+  var giusta=0;opzioni.forEach(function(o,i){if(o.ok)giusta=i+1});
+  return{
+    w:W,h:250,tag:"Il tagliere",
+    text:"Quale di questi vassoi mostra "+F(n4,d4,"a")+"?",
+    sub:"Clicca direttamente sul vassoio giusto. Guarda prima <u>in quante parti</u> &egrave; tagliato, poi quante ne sono colorate.",
+    cap:"Tre vassoi, tagliati in modo diverso.",
+    kind:"pick",answer:giusta,
+    draw:function(s){
+      opzioni.forEach(function(o,i){
+        var y=30+i*72, sel=[];for(var q=0;q<o.n;q++)sel.push(q);
+        A.txt(s,26,y+24,String(i+1),"sm am");
+        A.bar(s,50,y,330,46,o.d,0,{which:sel,cls:"c"});
+        A.hitBox(s,44,y-6,344,58,i+1);
+      });
+      A.txt(s,215,244,"nessuno dei vassoi ha la sua frazione scritta","sm");
+    },
+    drawAnswer:function(s){
+      opzioni.forEach(function(o,i){
+        var y=30+i*72, sel=[];for(var q=0;q<o.n;q++)sel.push(q);
+        A.txt(s,26,y+24,String(i+1),"sm "+(o.ok?"gn":""));
+        A.bar(s,50,y,300,46,o.d,0,{which:sel,cls:o.ok?"g":"n"});
+        A.fracTxt(s,392,y+23,o.n,o.d,o.ok?"g":"n",17);
+      });
+      A.txt(s,215,244,"eccole scritte, adesso che hai risposto","sm gn");
+    },
+    hint:"Parti dal numero <u>di sotto</u>: elimina subito i vassoi che non sono tagliati in "+d4+" parti. Poi conta le parti colorate.",
+    why:"Serviva un vassoio tagliato in <b>"+d4+"</b> parti uguali con <b>"+n4+"</b> parti colorate: &egrave; il numero <b>"+giusta+"</b>. "+
+        "Gli altri hanno il taglio giusto ma il numero di parti colorate sbagliato, oppure il taglio sbagliato."
+  };
+}
+
+/* ============================================================
+   2. IL METRO DEL BANCO — le frazioni sulla retta
+   ============================================================ */
+function tMetro(){
+  var v=Math.random();
+
+  if(v<.40){                                   /* leggere il punto */
+    var d=pick([3,4,5,6,8]), max=2, k;
+    do{k=rnd(2,max*d-1)}while(gcd(k,d)!==1||k%d===0);
+    return{
+      w:W,h:210,tag:"Il metro del banco",
+      text:"Che frazione &egrave; il <b>punto giallo</b>?",
+      sub:"Guarda quanto &egrave; lungo un passo, poi conta i passi da zero. Le tacche piccole non sono numerate apposta.",
+      cap:"Il metro del banco: da 0 a 2.",
+      kind:"frac",answer:{n:k,d:d},
+      draw:function(s){
+        A.numline(s,40,96,336,max,d,{marks:[{k:k,cls:"a"}]});
+        A.txt(s,215,178,"un passo = una tacca piccola","sm");
+      },
+      drawAnswer:function(s){
+        A.numline(s,40,96,336,max,d,{marks:[{k:k,cls:"a"}]});
+        A.fracTxt(s,215,52,k,d,"a",26);
+        A.txt(s,215,178,k+" passi da un "+(d===2?"mezzo":d===3?"terzo":d===4?"quarto":"/"+d),"sm am");
+      },
+      hint:"Conta in quante parti uguali &egrave; diviso il tratto <u>da 0 a 1</u>: quello &egrave; il numero di sotto. "+
+           "Poi conta i passi (non le tacche!) da 0 fino al punto.",
+      why:"Ogni intero &egrave; diviso in <b>"+d+"</b> parti, quindi un passo vale "+F(1,d)+". Dallo zero al punto ci sono <b>"+k+"</b> passi da un "+(d===3?"terzo":d===4?"quarto":d===5?"quinto":d===6?"sesto":"ottavo")+": "+
+          F(k,d,"a")+(k>d?(", cio&egrave; pi&ugrave; di un intero."):"."),
+      leakOk:false
+    };
+  }
+
+  if(v<.72){                                   /* scegliere il punto giusto */
+    var d2=pick([3,4,5,6,8]), k2;
+    do{k2=rnd(2,2*d2-2)}while(gcd(k2,d2)!==1);
+    var cand=shuffle([k2,k2+1,Math.max(1,k2-1),(k2+d2)%(2*d2)||1]);
+    cand=A.uniq(cand).slice(0,4);
+    if(cand.indexOf(k2)<0)cand[0]=k2;
+    var idx=cand.indexOf(k2)+1;
+    return{
+      w:W,h:214,tag:"Il metro del banco",
+      text:"Dove sta "+F(k2,d2,"a")+"? Clicca il punto giusto.",
+      sub:"Il tranello classico &egrave; contare le <u>tacche</u> invece dei <u>passi</u>: fra 0 e 1 le tacche sono una in pi&ugrave; dei passi.",
+      cap:"Quattro punti numerati sul metro.",
+      kind:"pick",answer:idx,
+      draw:function(s){
+        A.numline(s,40,110,336,2,d2,{picks:cand});
+        A.txt(s,215,182,"i numeri 1-4 servono solo per rispondere","sm");
+      },
+      drawAnswer:function(s){
+        A.numline(s,40,110,336,2,d2,{marks:[{k:k2,cls:"g"}]});
+        A.fracTxt(s,215,54,k2,d2,"g",24);
+        A.txt(s,215,182,"era il punto n. "+idx,"sm gn");
+      },
+      hint:"Parti da 0 e conta <b>"+k2+"</b> passi da "+F(1,d2)+" ciascuno. Se sbagli di una tacca, hai contato il trattino dello zero.",
+      why:"Da 0 si fanno "+k2+" passi da "+F(1,d2)+": si arriva a "+F(k2,d2,"g")+
+          (k2>d2?(", che sta <u>oltre</u> l'1 perch&eacute; il numero di sopra ha superato quello di sotto."):", prima dell'1.")+
+          " Il punto giusto era il <b>n. "+idx+"</b>."
+    };
+  }
+
+  /* fra quali due interi cade */
+  var d3=pick([3,4,5,6,7,8]), k3;
+  do{k3=rnd(d3+2,d3*4-1)}while(k3%d3===0);
+  var basso=Math.floor(k3/d3);
+  var corr3="fra "+basso+" e "+(basso+1);
+  var alt3=[ "fra "+(basso+1)+" e "+(basso+2), "fra "+Math.max(0,basso-1)+" e "+basso, "esattamente su "+(basso+1) ];
+  return{
+    w:W,h:210,tag:"Il metro del banco",
+    text:"Fra quali due numeri interi cade "+F(k3,d3,"a")+"?",
+    sub:"Qui il metro &egrave; vuoto: si ragiona con la divisione, non con il disegno.",
+    cap:"Il metro senza tacche intermedie.",
+    kind:"choice",choices:A.mixOpts(corr3,alt3),
+    draw:function(s){
+      A.numline(s,40,100,336,5,1,{});
+      A.txt(s,215,176,"nessuna tacca piccola: il posto lo calcoli","sm");
+    },
+    drawAnswer:function(s){
+      A.numline(s,40,100,336,5,1,{marks:[{k:k3/d3,cls:"g"}]});
+      A.txt(s,215,176,k3+" : "+d3+" = "+basso+" con il resto di "+(k3%d3),"sm gn");
+    },
+    hint:"Dividi il numero di sopra per quello di sotto: il <b>quoziente</b> ti dice quanti interi hai gi&agrave; fatto, il resto quanto avanzi.",
+    why:k3+" : "+d3+" = <b>"+basso+"</b> con resto "+(k3%d3)+", quindi "+F(k3,d3,"a")+" = "+basso+" interi e "+F(k3%d3,d3)+
+        ": cade <b>fra "+basso+" e "+(basso+1)+"</b>."
+  };
+}
+
+/* ============================================================
+   3. LA RIDUZIONE — equivalenti e minimi termini
+   ============================================================ */
+function tRiduzione(){
+  var v=Math.random();
+
+  if(v<.38){                                   /* ridurre ai minimi termini */
+    var b=coppiaRidotta(9), a=b[0], q=b[1], m=rnd(2,8);
+    var n=a*m, d=q*m;
+    if(n>90||d>96)return tRiduzione();
+    return{
+      w:W,h:222,tag:"La riduzione",
+      text:"Riduci "+F(n,d,"c")+" ai <b>minimi termini</b>.",
+      sub:"Scrivi la frazione pi&ugrave; semplice che vale esattamente la stessa cosa.",
+      cap:"La frazione da ridurre, cosi' com'e' arrivata.",
+      kind:"frac",answer:{n:a,d:q},
+      draw:function(s){
+        A.card(s,138,40,154,116,"","c");
+        A.fracTxt(s,215,98,n,d,"c",34);
+        A.txt(s,215,196,"dividi sopra e sotto per lo stesso numero","sm");
+      },
+      drawAnswer:function(s){
+        A.fracTxt(s,110,80,n,d,"n",26);
+        A.txt(s,215,80,": "+m+"  su e giu'","sm am");
+        A.fracTxt(s,330,80,a,q,"g",30);
+        A.bar(s,60,150,150,34,d,0,{which:(function(){var z=[];for(var i=0;i<n;i++)z.push(i);return z})(),cls:"n"});
+        A.bar(s,232,150,150,34,q,0,{which:(function(){var z=[];for(var i=0;i<a;i++)z.push(i);return z})(),cls:"g"});
+        A.txt(s,215,212,"stessa quantita', meno tagli","sm gn");
+      },
+      hint:"Cerca il numero pi&ugrave; grande che divide <b>tutti e due</b> (il M.C.D.). Se non lo vedi subito: dividi per 2 finch&eacute; puoi, poi prova 3, poi 5.",
+      why:"M.C.D.("+n+", "+d+") = <b>"+m+"</b>. Dividendo sopra e sotto per "+m+": "+n+" : "+m+" = "+a+" e "+d+" : "+m+" = "+q+", cio&egrave; "+
+          F(a,q,"g")+". Adesso "+a+" e "+q+" non hanno pi&ugrave; divisori comuni: &egrave; finita."
+    };
+  }
+
+  if(v<.62){                                   /* completare l'equivalente */
+    var e=coppiaRidotta(9), a2=e[0], b2=e[1], m2=rnd(2,7);
+    var sopra=Math.random()<.5;
+    var ris=sopra?(a2*m2):(b2*m2);
+    /* se il numero cercato e' gia' scritto da qualche parte, si rigenera */
+    if(ris===a2||ris===b2||ris===(sopra?b2*m2:a2*m2))return tRiduzione();
+    return{
+      w:W,h:214,tag:"La riduzione",
+      text:"Completa l'uguaglianza: quale numero va al posto del <b>punto interrogativo</b>?",
+      sub:"Le due frazioni devono valere la <u>stessa</u> quantit&agrave;.",
+      cap:"Un'uguaglianza a cui manca un pezzo.",
+      kind:"number",unit:"",answer:ris,
+      draw:function(s){
+        A.fracTxt(s,120,96,a2,b2,"c",30);
+        A.txt(s,215,96,"=","");
+        if(sopra)A.fracTxt(s,310,96,"?",b2*m2,"a",30);
+        else A.fracTxt(s,310,96,a2*m2,"?","a",30);
+        A.txt(s,215,180,"guarda che cosa e' successo al numero che conosci","sm");
+      },
+      drawAnswer:function(s){
+        A.fracTxt(s,120,96,a2,b2,"c",30);
+        A.txt(s,215,80,"x "+m2+" sopra","sm am");
+        A.txt(s,215,112,"x "+m2+" sotto","sm am");
+        A.fracTxt(s,310,96,a2*m2,b2*m2,"g",30);
+        A.txt(s,215,180,"lo stesso numero da tutte e due le parti","sm gn");
+      },
+      hint:"Confronta i due numeri che <u>conosci</u>: per quanto &egrave; stato moltiplicato l'uno per diventare l'altro? "+
+           "Poi fai la stessa identica cosa dall'altra parte.",
+      why:(sopra?(b2+" &rarr; "+(b2*m2)+" vuol dire <b>&times; "+m2+"</b>. Allora anche sopra: "+a2+" &times; "+m2+" = <b>"+ris+"</b>.")
+                :(a2+" &rarr; "+(a2*m2)+" vuol dire <b>&times; "+m2+"</b>. Allora anche sotto: "+b2+" &times; "+m2+" = <b>"+ris+"</b>."))+
+          " La propriet&agrave; invariantiva vale solo con moltiplicazione e divisione: aggiungere lo stesso numero <u>non</u> funziona."
+    };
+  }
+
+  if(v<.82){                                   /* quali sono equivalenti: multi */
+    var f3=coppiaRidotta(7), a3=f3[0], b3=f3[1];
+    var buone=shuffle([2,3,4,5]).slice(0,2).map(function(m){return[a3*m,b3*m]});
+    var cattive=[[a3+1,b3+1],[a3+2,b3+2],[a3*2,b3*3],[a3*3,b3*2]];
+    cattive=shuffle(cattive).slice(0,2);
+    var tutte=shuffle(buone.map(function(p){return{p:p,ok:true}}).concat(cattive.map(function(p){return{p:p,ok:false}})));
+    return{
+      w:W,h:206,tag:"La riduzione",
+      text:"Quali di queste valgono esattamente "+F(a3,b3,"c")+"?",
+      sub:"Possono essere pi&ugrave; di una. La risposta &egrave; giusta solo se l'insieme &egrave; esatto.",
+      cap:"La frazione di partenza, sul tagliere.",
+      kind:"multi",
+      choices:tutte.map(function(t){return{label:F(t.p[0],t.p[1]),ok:t.ok}}),
+      draw:function(s){
+        A.card(s,150,40,130,104,"","c");
+        A.fracTxt(s,215,92,a3,b3,"c",32);
+        A.txt(s,215,178,"la prova del nove: il prodotto in croce","sm");
+      },
+      hint:"Prova in croce: moltiplica il sopra della prima per il sotto della seconda, e viceversa. Se i due prodotti sono uguali, le frazioni lo sono.",
+      why:"Sono equivalenti solo quelle ottenute moltiplicando <u>sopra e sotto per lo stesso numero</u>: "+
+          buone.map(function(p){return F(p[0],p[1],"g")}).join(" e ")+". "+
+          "Aggiungere lo stesso numero sopra e sotto (per esempio "+F(a3+1,b3+1,"r")+") <b>cambia</b> il valore: il controllo in croce lo smaschera.",
+      leakOk:true
+    };
+  }
+
+  /* e' gia' ai minimi termini? */
+  var ridotta=Math.random()<.5, a4,b4,div=0;
+  if(ridotta){var f4=coppiaRidotta(12);a4=f4[0];b4=f4[1];if(a4<2)a4=Math.max(2,b4-1)}
+  else{div=pick([2,3,5]);var f5=coppiaRidotta(9);a4=f5[0]*div;b4=f5[1]*div}
+  var corr4=ridotta?("S&igrave;: "+a4+" e "+b4+" non hanno divisori comuni"):("No: si semplifica per "+div);
+  var alt4=ridotta?["No: si semplifica per 2","No: si semplifica per 3","No: si semplifica per 5"]
+                  :["S&igrave;: "+a4+" e "+b4+" non hanno divisori comuni",
+                    "No: si semplifica per "+pick([2,3,5].filter(function(x){return x!==div&&(a4%x||b4%x)}))];
+  return{
+    w:W,h:206,tag:"La riduzione",
+    text:"La frazione sul tagliere &egrave; gi&agrave; ai <b>minimi termini</b>?",
+    sub:"Una frazione &egrave; ai minimi termini quando sopra e sotto non hanno pi&ugrave; nessun divisore comune oltre l'1.",
+    cap:"La frazione da controllare.",
+    kind:"choice",choices:A.mixOpts(corr4,shuffle(alt4).slice(0,3)),
+    draw:function(s){
+      A.card(s,150,36,130,104,"","a");
+      A.fracTxt(s,215,88,a4,b4,"a",32);
+      A.txt(s,215,174,"controlla 2, poi 3, poi 5","sm");
+    },
+    hint:"Passa in rassegna i divisori piccoli: sono <u>tutti e due</u> pari? La somma delle cifre di tutti e due &egrave; divisibile per 3? Finiscono tutti e due per 0 o 5?",
+    why:ridotta?("M.C.D.("+a4+", "+b4+") = 1: non c'&egrave; nessun numero (oltre l'1) che li divide tutti e due, quindi &egrave; <b>gi&agrave; ridotta</b>.")
+               :(a4+" e "+b4+" sono tutti e due divisibili per <b>"+div+"</b>: "+F(a4,b4,"a")+" = "+F(a4/div,b4/div,"g")+
+                 (gcd(a4/div,b4/div)>1?" e si pu&ograve; ancora semplificare.":", e adesso &egrave; finita."))
+  };
+}
+
+/* ============================================================
+   4. LA BILANCIA — confrontare
+   ============================================================ */
+function tBilancia(){
+  var v=Math.random();
+
+  if(v<.50){                                   /* chi e' piu' grande */
+    var caso=pick(["denom","numer","misto","uguali"]), a,b,c,e;
+    if(caso==="denom"){b=pick([5,7,8,9,11,12]);e=b;a=rnd(1,b-2);do{c=rnd(1,b-1)}while(c===a)}
+    else if(caso==="numer"){a=rnd(2,5);c=a;b=rnd(3,7);do{e=rnd(3,9)}while(e===b)}
+    else if(caso==="uguali"){var f=coppiaRidotta(6),m1=rnd(2,4),m2=rnd(2,5);
+      if(m1===m2)m2=m1+1;a=f[0]*m1;b=f[1]*m1;c=f[0]*m2;e=f[1]*m2}
+    else{do{var f2=coppiaRidotta(9),f3=coppiaRidotta(9);a=f2[0];b=f2[1];c=f3[0];e=f3[1]}while(a*e===c*b||b===e||a===c)}
+    var seg=A.cmp(a,b,c,e);
+    var corr=seg>0?"La prima &egrave; pi&ugrave; grande":seg<0?"La seconda &egrave; pi&ugrave; grande":"Valgono esattamente uguale";
+    var alt=["La prima &egrave; pi&ugrave; grande","La seconda &egrave; pi&ugrave; grande","Valgono esattamente uguale"]
+            .filter(function(x){return x!==corr});
+    var L=A.lcm(b,e);
+    return{
+      w:W,h:250,tag:"La bilancia",
+      text:"Quale delle due pesa di pi&ugrave;?",
+      sub:caso==="denom"?"Stesso numero di sotto: le fette sono uguali."
+          :caso==="numer"?"Stesso numero di sopra: cambia solo la misura delle fette."
+          :"Qui non si assomigliano in niente: serve il denominatore comune.",
+      cap:"La bilancia e' ferma: non ti sta suggerendo niente.",
+      kind:"choice",choices:A.mixOpts(corr,alt),
+      draw:function(s){bilancia(s,215,96,0,[a,b,"c"],[c,e,"a"]);
+        A.txt(s,215,238,"decidi tu da che parte deve pendere","sm")},
+      drawAnswer:function(s){bilancia(s,215,96,seg>0?-1:seg<0?1:0,[a,b,"c"],[c,e,"a"]);
+        A.txt(s,215,238,seg===0?"in equilibrio: sono equivalenti":("vince "+(seg>0?"la prima":"la seconda")),"sm gn")},
+      hint:caso==="denom"?"Le fette hanno la stessa misura: conta solo <u>quante</u> ne hai."
+          :caso==="numer"?"Il numero di fette &egrave; lo stesso: allora vince chi ha le fette <u>pi&ugrave; grandi</u>. Fette pi&ugrave; grandi vuol dire denominatore pi&ugrave; <u>piccolo</u>."
+          :"Portale allo stesso denominatore (il m.c.m. di "+b+" e "+e+"), oppure usa il prodotto in croce.",
+      why:caso==="denom"?("Stesso denominatore: le fette sono identiche, quindi vince chi ne ha di pi&ugrave;. "+a+(seg>0?" &gt; ":" &lt; ")+c+
+            " &rarr; "+(seg>0?F(a,b,"g"):F(c,e,"g"))+" &egrave; maggiore.")
+          :caso==="numer"?("Stesso numeratore: "+a+" fette in tutti e due i casi, ma i "+Math.min(b,e)+"-esimi sono pi&ugrave; grandi dei "+
+            Math.max(b,e)+"-esimi. Denominatore pi&ugrave; piccolo &rarr; fette pi&ugrave; grandi &rarr; frazione maggiore.")
+          :("Denominatore comune "+L+": "+F(a,b,"c")+" = "+F(a*L/b,L)+" e "+F(c,e,"a")+" = "+F(c*L/e,L)+". "+
+            (seg===0?"Stesso numeratore: sono <b>equivalenti</b>.":("Confronto i numeratori: "+(seg>0?(a*L/b)+" &gt; "+(c*L/e):(a*L/b)+" &lt; "+(c*L/e))+"."))+
+            " Ricorda: una frazione &egrave; <u>un solo numero</u>, non si confrontano sopra con sopra e sotto con sotto.")
+    };
+  }
+
+  if(v<.78){                                   /* il denominatore comune */
+    var b2,e2,a2,c2;
+    do{b2=rnd(3,12);e2=rnd(3,12)}while(b2===e2||A.lcm(b2,e2)>72);
+    do{a2=rnd(1,b2-1)}while(gcd(a2,b2)!==1);
+    do{c2=rnd(1,e2-1)}while(gcd(c2,e2)!==1);
+    return{
+      w:W,h:240,tag:"La bilancia",
+      text:"Per confrontare "+F(a2,b2,"c")+" e "+F(c2,e2,"a")+", qual &egrave; il <b>pi&ugrave; piccolo</b> denominatore comune?",
+      sub:"&Egrave; il m.c.m. dei due denominatori: il primo numero in cui si incontrano tutti e due.",
+      cap:"Le due frazioni da mettere d'accordo.",
+      kind:"number",unit:"",answer:A.lcm(b2,e2),
+      /* caso legittimo: se un denominatore e' multiplo dell'altro, il m.c.m. e' proprio quello */
+      leakOk:[a2,b2,c2,e2].indexOf(A.lcm(b2,e2))>=0,
+      draw:function(s){bilancia(s,215,90,0,[a2,b2,"c"],[c2,e2,"a"]);
+        A.txt(s,215,230,"stesso taglio per tutte e due: quale?","sm")},
+      hint:"Scrivi la tabellina del denominatore pi&ugrave; <u>grande</u> e fermati al primo numero che sta anche nella tabellina dell'altro.",
+      why:"Multipli di "+Math.max(b2,e2)+": "+[1,2,3,4].map(function(i){return Math.max(b2,e2)*i}).join(", ")+"&hellip; "+
+          "Il primo che &egrave; anche multiplo di "+Math.min(b2,e2)+" &egrave; <b>"+A.lcm(b2,e2)+"</b>. "+
+          "Va bene anche il prodotto "+b2+" &times; "+e2+" = "+(b2*e2)+", ma poi i numeri diventano pi&ugrave; grandi e alla fine devi semplificare."
+    };
+  }
+
+  /* piu' o meno di un mezzo */
+  var d3=pick([5,7,9,11,13,8,10,12]), n3;
+  do{n3=rnd(1,d3-1)}while(n3*2===d3);
+  var sopra=(n3*2>d3);
+  var corr3=sopra?"&Egrave; maggiore di un mezzo":"&Egrave; minore di un mezzo";
+  return{
+    w:W,h:226,tag:"La bilancia",
+    text:F(n3,d3,"a")+" &egrave; maggiore o minore di "+F(1,2,"c")+"?",
+    sub:"Il riferimento del mezzo &egrave; il colpo d'occhio pi&ugrave; utile che c'&egrave;: si risponde senza calcoli.",
+    cap:"Il confronto con la meta'.",
+    kind:"choice",
+    choices:A.mixOpts(corr3,["&Egrave; "+(sopra?"minore":"maggiore")+" di un mezzo","Vale esattamente un mezzo","Non si pu&ograve; sapere senza calcolare"]),
+    draw:function(s){bilancia(s,215,84,0,[n3,d3,"a"],[1,2,"c"]);
+      A.txt(s,215,214,"meta' di "+d3+": quanto fa?","sm")},
+    drawAnswer:function(s){bilancia(s,215,84,sopra?-1:1,[n3,d3,"a"],[1,2,"c"]);
+      A.txt(s,215,214,"meta' di "+d3+" e' "+(d3/2)+", e "+n3+(sopra?" e' di piu'":" e' di meno"),"sm gn")},
+    hint:"Calcola la <u>met&agrave; del denominatore</u> e confrontala con il numeratore: se il numeratore la supera, la frazione supera un mezzo.",
+    why:"Met&agrave; di "+d3+" &egrave; "+(d3/2)+". Il numeratore &egrave; "+n3+", che &egrave; <b>"+(sopra?"di pi&ugrave;":"di meno")+"</b>: "+
+        "quindi "+F(n3,d3,"a")+" &egrave; <b>"+(sopra?"maggiore":"minore")+"</b> di "+F(1,2,"c")+". "+
+        "Controllo in croce: "+n3+" &times; 2 = "+(n3*2)+" e "+d3+" &times; 1 = "+d3+"."
+  };
+}
+
+/* ============================================================
+   5. IL PENTOLONE — addizione e sottrazione
+   ============================================================ */
+function tPentolone(){
+  var v=Math.random();
+
+  if(v<.34){                                   /* stesso denominatore */
+    var d=pick([5,6,7,8,9,10,12]), piu=Math.random()<.55, a,c;
+    if(piu){a=rnd(1,d-2);c=rnd(1,d-1-a)}
+    else{a=rnd(2,d-1);c=rnd(1,a-1)}
+    var r=piu?[a+c,d]:[a-c,d], rr=red(r[0],r[1]);
+    return{
+      w:W,h:236,tag:"Il pentolone",
+      text:"Quanto fa "+F(a,d,"c")+(piu?" + ":" &minus; ")+F(c,d,"a")+"?",
+      sub:"Le fette sono gi&agrave; della stessa misura. Scrivi il risultato <b>ai minimi termini</b>.",
+      cap:"Le due quantita', disegnate: sopra la prima, sotto la seconda.",
+      kind:"frac",answer:{n:rr[0],d:rr[1]},
+      draw:function(s){
+        A.bar(s,44,52,342,44,d,a,{cls:"c"});
+        A.bar(s,44,124,342,44,d,c,{cls:"a"});
+        A.txt(s,215,214,piu?"si mettono insieme":"si toglie la seconda dalla prima","sm");
+      },
+      drawAnswer:function(s){
+        A.bar(s,44,46,342,42,d,0,{which:(function(){var z=[];for(var i=0;i<r[0];i++)z.push(i);return z})(),cls:"g"});
+        A.fracTxt(s,150,148,r[0],r[1],"g",26);
+        if(rr[0]!==r[0]){A.txt(s,215,148,"= (ridotta)","sm");A.fracTxt(s,300,148,rr[0],rr[1],"g",26)}
+        A.txt(s,215,214,"il denominatore non si tocca","sm gn");
+      },
+      hint:"Il denominatore dice la <u>misura</u> delle fette: non cambia. Si opera solo sui numeratori. Alla fine guarda se si pu&ograve; semplificare.",
+      why:"Fette uguali: "+a+(piu?" + ":" &minus; ")+c+" = "+r[0]+" fette da "+F(1,d)+", cio&egrave; "+F(r[0],r[1],"g")+
+          (rr[0]!==r[0]?(", che ridotta ai minimi termini fa "+F(rr[0],rr[1],"g")+"."):".")+
+          (piu?(" <b>Mai</b> sommare i denominatori: "+F(a,d)+" + "+F(c,d)+" non fa "+F(a+c,2*d,"r")+".")
+                :(" Il denominatore <b>non si tocca</b>: resta "+d+". Chi sottrae anche i numeri di sotto ottiene una scrittura che non vuol dire niente."))
+    };
+  }
+
+  /* denominatori diversi: catena in due passi */
+  var b,e;
+  do{b=rnd(2,9);e=rnd(2,9)}while(b===e||A.lcm(b,e)>36||A.lcm(b,e)===b*e&&b*e>30);
+  var L=A.lcm(b,e), piu2=Math.random()<.55, a2,c2,num;
+  var giri=0;
+  do{
+    a2=rnd(1,b-1);c2=rnd(1,e-1);
+    num=piu2?(a2*L/b+c2*L/e):(a2*L/b-c2*L/e);
+    giri++;
+  }while((num<=0||num>=(piu2?2*L:L))&&giri<40);
+  if(num<=0)return tPentolone();
+  var fin=red(num,L);
+  return{
+    w:W,h:236,tag:"Il pentolone",
+    text:"Quanto fa "+F(a2,b,"c")+(piu2?" + ":" &minus; ")+F(c2,e,"a")+"?",
+    sub:"Fette di misura diversa: prima si tagliano tutte allo stesso modo. Si va in due passi.",
+    cap:"Le due quantita': guarda come sono diverse le fette.",
+    kind:"chain",
+    steps:[
+      {text:"Primo passo: qual &egrave; il <b>denominatore comune</b>?",answer:L,unit:"",
+       hint:"&Egrave; il m.c.m. di "+b+" e "+e+": il primo numero che sta in tutte e due le tabelline.",
+       why:"m.c.m.("+b+", "+e+") = <b>"+L+"</b>: adesso tutte le fette hanno la stessa misura."},
+      {text:"Secondo passo: le frazioni sono diventate "+F(a2*L/b,L,"c")+" e "+F(c2*L/e,L,"a")+
+            ". Quanto vale il <b>numeratore</b> del risultato?",answer:num,unit:"",
+       hint:"Adesso le fette sono uguali: si "+(piu2?"sommano":"sottraggono")+" soltanto i numeratori.",
+       why:(a2*L/b)+(piu2?" + ":" &minus; ")+(c2*L/e)+" = <b>"+num+"</b>."}
+    ],
+    draw:function(s,step){
+      A.bar(s,44,52,342,44,b,a2,{cls:"c"});
+      A.bar(s,44,124,342,44,e,c2,{cls:"a"});
+      if(step>0){A.txt(s,215,190,"stesso taglio trovato: adesso i numeratori","sm am")}
+      A.txt(s,215,216,step>0?"le fette adesso sono confrontabili":"fette di misura diversa: non si possono ancora sommare","sm");
+    },
+    drawAnswer:function(s){
+      A.bar(s,44,46,342,40,L,a2*L/b,{cls:"c"});
+      A.bar(s,44,104,342,40,L,c2*L/e,{cls:"a"});
+      A.fracTxt(s,150,190,num,L,"g",24);
+      if(fin[0]!==num){A.txt(s,215,190,"=","");A.fracTxt(s,290,190,fin[0],fin[1],"g",24)}
+      A.txt(s,215,228,"stesso taglio, adesso si contano le fette","sm gn");
+    },
+    hint:"Prima si trova il denominatore comune, poi si trasformano le due frazioni, e solo alla fine si toccano i numeratori.",
+    why:"Denominatore comune "+L+": "+F(a2,b,"c")+" = "+F(a2*L/b,L)+" e "+F(c2,e,"a")+" = "+F(c2*L/e,L)+". "+
+        "Poi "+(a2*L/b)+(piu2?" + ":" &minus; ")+(c2*L/e)+" = "+num+", cio&egrave; "+F(num,L,"g")+
+        (fin[0]!==num?(" = "+F(fin[0],fin[1],"g")+" ai minimi termini."):".")
+  };
+}
+
+/* ============================================================
+   6. IL MATTARELLO — moltiplicare e dividere
+   ============================================================ */
+function tMattarello(){
+  var v=Math.random();
+
+  if(v<.30){                                   /* moltiplicazione fra frazioni */
+    var a=rnd(1,4),b=rnd(2,6),c=rnd(1,4),e=rnd(2,6);
+    if(a>=b)a=b-1; if(c>=e)c=e-1;
+    var r=A.fMul(a,b,c,e);
+    return{
+      w:W,h:250,tag:"Il mattarello",
+      text:"Quanto fa "+F(a,b,"c")+" &times; "+F(c,e,"a")+"?",
+      sub:"Scrivi il risultato ai minimi termini. Ricorda che &laquo;di&raquo; e &laquo;per&raquo; sono la stessa cosa.",
+      cap:"I due fogli di pasta, ancora separati.",
+      kind:"frac",answer:{n:r[0],d:r[1]},
+      draw:function(s){
+        var sel1=[];for(var i=0;i<a;i++)sel1.push(i);
+        var sel2=[];for(var j=0;j<c;j++)sel2.push(j);
+        A.bar(s,32,54,170,58,b,0,{which:sel1,cls:"c",top:"il primo foglio"});
+        A.bar(s,228,54,170,58,e,0,{which:sel2,cls:"a",top:"il secondo foglio"});
+        A.txt(s,215,164,"x","");
+        A.txt(s,215,204,"il taglio incrociato non e' ancora stato fatto","sm");
+        A.txt(s,215,232,"sopra con sopra, sotto con sotto","sm");
+      },
+      drawAnswer:function(s){
+        A.areaGrid(s,120,32,190,150,e,b,c,a,{cls:"v",top:"secondo foglio",left:"primo foglio"});
+        A.fracTxt(s,362,108,a*c,b*e,"v",22);
+        A.txt(s,215,208,(a*c)+" caselle colorate su "+(b*e)+" caselle in tutto","sm vi");
+        if(r[0]!==a*c)A.txt(s,215,234,"ridotta ai minimi termini: "+r[0]+"/"+r[1],"sm gn");
+      },
+      hint:"Qui non serve nessun denominatore comune: si moltiplicano i numeratori fra loro e i denominatori fra loro. "+
+           "Se puoi, semplifica <u>prima</u> di moltiplicare: i numeri restano piccoli.",
+      why:a+" &times; "+c+" = "+(a*c)+" sopra, "+b+" &times; "+e+" = "+(b*e)+" sotto: "+F(a*c,b*e)+
+          (r[0]!==a*c?(" = "+F(r[0],r[1],"g")+" ai minimi termini."):".")+
+          " Il disegno lo spiega: tagliando il foglio in un verso e nell'altro nascono "+(b*e)+" caselle uguali, e quelle comuni sono "+(a*c)+"."
+    };
+  }
+
+  if(v<.52){                                   /* divisione fra frazioni */
+    var a2=rnd(1,5),b2=rnd(2,8),c2=rnd(1,5),e2=rnd(2,8);
+    if(a2>=b2)a2=b2-1; if(c2>=e2)c2=e2-1;
+    var r2=A.fDiv(a2,b2,c2,e2);
+    if(r2[1]>60)return tMattarello();
+    /* se il risultato coincide con una delle due frazioni in tavola, si cambia esercizio */
+    if((r2[0]===a2&&r2[1]===b2)||(r2[0]===c2&&r2[1]===e2))return tMattarello();
+    return{
+      w:W,h:230,tag:"Il mattarello",
+      text:"Quanto fa "+F(a2,b2,"c")+" : "+F(c2,e2,"a")+"?",
+      sub:"Dividere per una frazione vuol dire chiedersi quante volte ci sta dentro. Risultato ai minimi termini.",
+      cap:"La divisione, prima di essere trasformata.",
+      kind:"frac",answer:{n:r2[0],d:r2[1]},
+      draw:function(s){
+        A.fracTxt(s,120,92,a2,b2,"c",30);
+        A.txt(s,215,92,":","");
+        A.fracTxt(s,310,92,c2,e2,"a",30);
+        A.txt(s,215,164,"una delle due va girata: quale?","sm");
+        A.txt(s,215,200,"il divisore e' la seconda","sm");
+      },
+      drawAnswer:function(s){
+        A.fracTxt(s,86,80,a2,b2,"c",26);
+        A.txt(s,150,80,"x","");
+        A.fracTxt(s,214,80,e2,c2,"g",26);
+        A.arrow(s,300,64,268,64,"var(--go)");
+        A.txt(s,340,64,"girata","sm gn");
+        A.txt(s,150,140,"=","");
+        A.fracTxt(s,230,150,r2[0],r2[1],"g",28);
+        A.txt(s,215,214,"si capovolge solo la seconda","sm gn");
+      },
+      hint:"Si <b>capovolge la seconda</b> frazione (il divisore) e si moltiplica. La prima resta com'&egrave;.",
+      why:"Il reciproco di "+F(c2,e2,"a")+" &egrave; "+F(e2,c2,"g")+", quindi "+F(a2,b2,"c")+" : "+F(c2,e2,"a")+" = "+
+          F(a2,b2,"c")+" &times; "+F(e2,c2,"g")+" = "+F(r2[0],r2[1],"g")+". "+
+          (c2<e2?"Il divisore &egrave; minore di 1, e infatti il risultato &egrave; <u>cresciuto</u>.":"Controllo: il divisore &egrave; minore di 1, quindi il risultato deve crescere.")
+    };
+  }
+
+  if(v<.74){                                   /* reciproco */
+    var f=coppiaRidotta(9,false), n3=f[0], d3=f[1];
+    return{
+      w:W,h:206,tag:"Il mattarello",
+      text:"Qual &egrave; il <b>reciproco</b> di "+F(n3,d3,"a")+"?",
+      sub:"Il reciproco &egrave; la frazione che moltiplicata per questa d&agrave; esattamente 1.",
+      cap:"La frazione da capovolgere.",
+      kind:"frac",answer:{n:d3,d:n3},
+      draw:function(s){
+        A.card(s,150,32,130,104,"","a");
+        A.fracTxt(s,215,84,n3,d3,"a",32);
+        A.txt(s,215,170,"che cosa devi fare per arrivare a 1?","sm");
+      },
+      drawAnswer:function(s){
+        A.fracTxt(s,110,80,n3,d3,"a",26);
+        A.txt(s,168,80,"x","");
+        A.fracTxt(s,228,80,d3,n3,"g",26);
+        A.txt(s,286,80,"=","");
+        A.txt(s,320,80,"1","gn");
+        A.txt(s,215,164,"si scambiano di posto, e basta","sm gn");
+      },
+      hint:"Prova a moltiplicare "+F(n3,d3,"a")+" per qualcosa in modo che sopra e sotto vengano <u>uguali</u>: quale frazione fa questo scherzo?",
+      why:"Basta capovolgerla: "+F(d3,n3,"g")+". Infatti "+F(n3,d3,"a")+" &times; "+F(d3,n3,"g")+" = "+F(n3*d3,n3*d3)+" = <b>1</b>. "+
+          "Il reciproco di un numero intero come "+d3+" &egrave; "+F(1,d3)+", perch&eacute; "+d3+" si scrive "+F(d3,1)+"."
+    };
+  }
+
+  /* senza calcolare: cresce o cala? */
+  var f4=coppiaRidotta(8), n4=f4[0], d4=f4[1];
+  var op=pick(["xprop","ximp","divprop","divimp"]);
+  var g=coppiaRidotta(7), gn=g[0], gd=g[1];
+  var testo,corr,perche;
+  if(op==="xprop"){testo="Senza calcolare: "+F(n4,d4,"c")+" &times; "+F(gn,gd,"a")+" d&agrave; un risultato&hellip;";
+    corr="pi&ugrave; piccolo di "+F(n4,d4);perche="Moltiplicare per una frazione <u>minore di 1</u> vuol dire prendere solo una parte: il risultato cala."}
+  else if(op==="ximp"){testo="Senza calcolare: "+F(n4,d4,"c")+" &times; "+F(gd,gn,"a")+" d&agrave; un risultato&hellip;";
+    corr="pi&ugrave; grande di "+F(n4,d4);perche="Il secondo fattore &egrave; <u>maggiore di 1</u>, quindi il risultato cresce."}
+  else if(op==="divprop"){testo="Senza calcolare: "+F(n4,d4,"c")+" : "+F(gn,gd,"a")+" d&agrave; un risultato&hellip;";
+    corr="pi&ugrave; grande di "+F(n4,d4);perche="Dividere per un numero <u>minore di 1</u> fa crescere il risultato: quante volte una cosa piccola sta in una pi&ugrave; grande? Tante."}
+  else{testo="Senza calcolare: "+F(n4,d4,"c")+" : "+F(gd,gn,"a")+" d&agrave; un risultato&hellip;";
+    corr="pi&ugrave; piccolo di "+F(n4,d4);perche="Il divisore &egrave; <u>maggiore di 1</u>, quindi il risultato cala."}
+  return{
+    w:W,h:222,tag:"Il mattarello",
+    text:testo,
+    sub:"Non si calcola: si ragiona. Questo controllo smaschera quasi tutti gli errori di calcolo.",
+    cap:"Nessun conto sul tavolo: solo le due frazioni.",
+    kind:"choice",
+    choices:A.mixOpts(corr,["pi&ugrave;"+(corr.indexOf("piccolo")>0?" grande":" piccolo")+" di "+F(n4,d4),
+                            "esattamente uguale a "+F(n4,d4),"non si pu&ograve; dire senza calcolare"]),
+    draw:function(s){
+      A.fracTxt(s,120,88,n4,d4,"c",28);
+      A.txt(s,215,88,op.indexOf("div")===0?":":"x","");
+      if(op==="xprop"||op==="divprop")A.fracTxt(s,310,88,gn,gd,"a",28);
+      else A.fracTxt(s,310,88,gd,gn,"a",28);
+      A.txt(s,215,156,"guarda solo il secondo numero: e' maggiore o minore di 1?","sm");
+      A.txt(s,215,190,"1 e' il confine fra crescere e calare","sm");
+    },
+    hint:"Guarda solo la <b>seconda</b> frazione e chiediti se vale pi&ugrave; o meno di 1 (basta confrontare sopra e sotto). Poi ricorda: "+
+         "moltiplicare per meno di 1 rimpicciolisce, dividere per meno di 1 ingrandisce.",
+    why:perche+" &Egrave; il controllo di ragionevolezza: fallo <u>prima</u> di scrivere la risposta.",
+    leakOk:true
+  };
+}
+
+/* ============================================================
+   7. LE PORZIONI — la frazione di un numero
+   ============================================================ */
+function tPorzioni(){
+  var v=Math.random();
+  var oggetti=[["figurine","figurine"],["biglie","biglie"],["pagine","pagine"],["minuti","minuti"],["euro","euro"]];
+  var og=pick(oggetti)[0];
+
+  if(v<.42){                                   /* diretto */
+    var d=pick([3,4,5,6,8]), n=rnd(1,d-1), una=rnd(4,18), tot=d*una;
+    var ris=n*una;
+    return{
+      w:W,h:222,tag:"Le porzioni",
+      text:"Quanto fa "+F(n,d,"c")+" di <b>"+tot+" "+og+"</b>?",
+      sub:"Due mosse: prima si divide, poi si moltiplica. Il disegno ti d&agrave; solo il totale.",
+      cap:"Il totale, diviso in parti uguali.",
+      kind:"number",unit:" "+og,answer:ris,
+      draw:function(s){
+        var parts=[];for(var i=0;i<d;i++)parts.push({u:1,t:"",f:i<n?A.FILL.c:"rgba(245,240,250,.04)"});
+        A.bars(s,44,74,342,52,parts,tot+" "+og+" in tutto",null);
+        A.brace(s,44,44+342*n/d,132,1,"? "+og);
+        A.txt(s,215,204,"le parti prese sono colorate, il loro valore no","sm");
+      },
+      drawAnswer:function(s){
+        var parts=[];for(var i=0;i<d;i++)parts.push({u:1,t:String(una),f:i<n?A.FILL.g:"rgba(245,240,250,.04)",st:A.COL.g});
+        A.bars(s,44,74,342,52,parts,tot+" "+og+" in tutto",null);
+        A.brace(s,44,44+342*n/d,132,1,ris+" "+og);
+        A.txt(s,215,204,"una parte vale "+una+", e di parti ne prendi "+n,"sm gn");
+      },
+      hint:"Il numero <u>di sotto</u> dice in quante parti dividere il totale. Trova prima quanto vale <b>una sola parte</b>: da l&igrave; in poi &egrave; una moltiplicazione.",
+      why:"Prima: "+tot+" : "+d+" = <b>"+una+"</b> (quanto vale una parte). Poi: "+una+" &times; "+n+" = <b>"+ris+"</b>. "+
+          "Attenzione a non invertire le due mosse: si divide per il numero <u>di sotto</u>."
+    };
+  }
+
+  if(v<.72){                                   /* inverso, in due passi */
+    var d2=pick([3,4,5,6,8]), n2=rnd(2,d2-1), una2=rnd(5,16), parte=n2*una2, tot2=d2*una2;
+    return{
+      w:W,h:230,tag:"Le porzioni",
+      text:F(n2,d2,"a")+" di un numero fa <b>"+parte+" "+og+"</b>. Qual &egrave; il numero intero?",
+      sub:"&Egrave; il problema al contrario. Si fanno le stesse due mosse, ma scambiate di posto.",
+      cap:"So quanto vale la parte colorata, non il totale.",
+      kind:"chain",
+      steps:[
+        {text:"Primo passo: quanto vale <b>una sola parte</b>?",answer:una2,unit:"",
+         hint:"Le parti colorate sono "+n2+" e insieme fanno "+parte+": quindi una parte si trova con una divisione.",
+         why:parte+" : "+n2+" = <b>"+una2+"</b>: questo &egrave; il valore di "+F(1,d2)+"."},
+        {text:"Secondo passo: allora quanto vale l'<b>intero</b>?",answer:tot2,unit:"",
+         hint:"L'intero &egrave; fatto di "+d2+" parti uguali, e adesso sai quanto vale una parte.",
+         why:una2+" &times; "+d2+" = <b>"+tot2+"</b>."}
+      ],
+      draw:function(s,step){
+        var parts=[];for(var i=0;i<d2;i++)parts.push({u:1,t:(step>0&&i<n2)?String(una2):"",f:i<n2?A.FILL.a:"rgba(245,240,250,.04)",st:A.COL.a});
+        A.bars(s,44,78,342,52,parts,"? "+og+" in tutto",null);
+        A.brace(s,44,44+342*n2/d2,136,1,parte+" "+og);
+        A.txt(s,215,212,step>0?"adesso sai quanto vale una parte":"il totale e' quello che cerchi","sm");
+      },
+      drawAnswer:function(s){
+        var parts=[];for(var i=0;i<d2;i++)parts.push({u:1,t:String(una2),f:i<n2?A.FILL.g:"rgba(245,240,250,.04)",st:A.COL.g});
+        A.bars(s,44,78,342,52,parts,tot2+" "+og+" in tutto",null);
+        A.txt(s,215,212,"trovata una parte, l'intero e' a un passo","sm gn");
+      },
+      hint:"Trova sempre prima <b>quanto vale una parte</b>: &egrave; il passaggio che risolve tutti i problemi con le frazioni.",
+      why:"Le "+n2+" parti colorate valgono "+parte+", quindi una parte vale "+parte+" : "+n2+" = "+una2+
+          ". L'intero &egrave; fatto di "+d2+" parti: "+una2+" &times; "+d2+" = <b>"+tot2+"</b>. "+
+          "Controllo: "+F(n2,d2,"a")+" di "+tot2+" = "+parte+" &check;"
+    };
+  }
+
+  /* quale operazione: riconoscere la mossa */
+  var d3=pick([3,4,5,6]), n3=rnd(2,d3-1), una3=rnd(6,15), tot3=d3*una3;
+  var corr3="Divido per "+d3+" e moltiplico per "+n3;
+  return{
+    w:W,h:214,tag:"Le porzioni",
+    text:"Per calcolare "+F(n3,d3,"c")+" di "+tot3+", quali mosse fai (in quest'ordine)?",
+    sub:"Prima scegli la strada, poi la percorri: qui si chiede solo la strada.",
+    cap:"Il totale sul banco.",
+    kind:"choice",
+    choices:A.mixOpts(corr3,["Divido per "+n3+" e moltiplico per "+d3,
+                             "Moltiplico per "+d3+" e divido per "+n3,
+                             "Moltiplico per "+n3+" e per "+d3]),
+    draw:function(s){
+      A.card(s,146,40,138,88,String(tot3),"c",og);
+      A.txt(s,215,164,"in quante parti lo taglio?","sm");
+      A.txt(s,215,194,"e quante ne prendo?","sm");
+    },
+    drawAnswer:function(s){
+      var parts=[];for(var i=0;i<d3;i++)parts.push({u:1,t:String(una3),f:i<n3?A.FILL.g:"rgba(245,240,250,.04)",st:A.COL.g});
+      A.bars(s,44,66,342,50,parts,tot3+" in tutto",null);
+      A.txt(s,215,150,tot3+" : "+d3+" = "+una3+"   poi   "+una3+" x "+n3+" = "+(n3*una3),"sm gn");
+      A.txt(s,215,190,"prima dividere, poi moltiplicare","sm gn");
+    },
+    hint:"Il numero <u>di sotto</u> dice in quante parti tagliare, quello <u>di sopra</u> quante parti prendere. In che ordine vengono le due mosse?",
+    why:"Si divide per il denominatore ("+tot3+" : "+d3+" = "+una3+", il valore di una parte) e si moltiplica per il numeratore ("+
+        una3+" &times; "+n3+" = "+(n3*una3)+"). Invertire le due mosse d&agrave; un risultato pi&ugrave; grande del totale: impossibile per una frazione propria."
+  };
+}
+
+/* ============================================================
+   8. IL MENU DEL SABATO — i problemi
+   ============================================================ */
+function tMenu(){
+  var tipo=rnd(1,5);
+
+  if(tipo===1){                                /* tifosi: la parte che resta */
+    var d=pick([4,5,6,8]), n=rnd(1,d-1), una=pick([120,150,200,240,300]), tot=d*una;
+    var ris=(d-n)*una;
+    return{
+      w:W,h:226,tag:"Il menu del sabato",
+      text:"Allo stadio ci sono <b>"+tot+" tifosi</b>. "+F(n,d,"a")+" sono <b>ospiti</b>. Quanti sono i tifosi <b>di casa</b>?",
+      sub:"Il modello a barre ti mostra la situazione: la domanda per&ograve; riguarda la parte che <u>non</u> &egrave; colorata.",
+      cap:"Lo stadio diviso in settori uguali.",
+      kind:"number",unit:" tifosi",answer:ris,
+      draw:function(s){
+        var parts=[];for(var i=0;i<d;i++)parts.push({u:1,t:"",f:i<n?A.FILL.a:"rgba(245,240,250,.04)",st:A.COL.a});
+        A.bars(s,42,78,346,52,parts,tot+" tifosi",null);
+        A.brace(s,42,42+346*n/d,136,1,"ospiti");
+        A.brace(s,42+346*n/d,388,136,1,"di casa: ?");
+        A.txt(s,215,208,"i settori sono tutti della stessa capienza","sm");
+      },
+      drawAnswer:function(s){
+        var parts=[];for(var i=0;i<d;i++)parts.push({u:1,t:String(una),f:i<n?A.FILL.a:A.FILL.g,st:i<n?A.COL.a:A.COL.g});
+        A.bars(s,42,78,346,52,parts,tot+" tifosi",null);
+        A.brace(s,42+346*n/d,388,136,1,ris+" di casa");
+        A.txt(s,215,208,"un settore vale "+una+" tifosi","sm gn");
+      },
+      hint:"Puoi fare due strade: trovare gli ospiti e toglierli dal totale, oppure capire che frazione dello stadio &egrave; <u>di casa</u> e calcolare quella. "+
+           "In tutti e due i casi parti da quanto vale <b>un settore</b>.",
+      why:"Un settore vale "+tot+" : "+d+" = "+una+" tifosi. Gli ospiti sono "+n+(n===1?" settore":" settori")+" = "+(n*una)+
+          ", quindi quelli di casa sono "+tot+" &minus; "+(n*una)+" = <b>"+ris+"</b>. "+
+          "Pi&ugrave; veloce: di casa &egrave; "+F(d-n,d,"g")+" dello stadio, cio&egrave; "+(d-n)+" &times; "+una+" = "+ris+"."
+    };
+  }
+
+  if(tipo===2){                                /* album: quante mancano */
+    var d2=pick([4,5,6,8]), n2=rnd(1,d2-1), una2=pick([25,30,40,45,50,60]), tot2=d2*una2;
+    var ris2=(d2-n2)*una2;
+    return{
+      w:W,h:226,tag:"Il menu del sabato",
+      text:"L'album ha <b>"+tot2+" figurine</b>. Fomyn ne ha gi&agrave; attaccate "+F(n2,d2,"c")+". Quante gliene <b>mancano</b>?",
+      sub:"Attento alla domanda: non chiede quante ne ha, ma quante ne mancano.",
+      cap:"L'album, diviso in parti uguali.",
+      kind:"number",unit:" figurine",answer:ris2,
+      draw:function(s){
+        var parts=[];for(var i=0;i<d2;i++)parts.push({u:1,t:"",f:i<n2?A.FILL.c:"rgba(245,240,250,.04)",st:A.COL.c});
+        A.bars(s,42,78,346,52,parts,tot2+" figurine",null);
+        A.brace(s,42,42+346*n2/d2,136,1,"attaccate");
+        A.brace(s,42+346*n2/d2,388,136,1,"mancanti: ?");
+        A.txt(s,215,208,"nessun numero sulle singole parti","sm");
+      },
+      drawAnswer:function(s){
+        var parts=[];for(var i=0;i<d2;i++)parts.push({u:1,t:String(una2),f:i<n2?A.FILL.c:A.FILL.g,st:i<n2?A.COL.c:A.COL.g});
+        A.bars(s,42,78,346,52,parts,tot2+" figurine",null);
+        A.brace(s,42+346*n2/d2,388,136,1,ris2+" mancanti");
+        A.txt(s,215,208,"una parte vale "+una2+" figurine","sm gn");
+      },
+      hint:"Le parti mancanti sono "+(d2-n2)+" su "+d2+". Trova quanto vale una parte e poi moltiplica: eviti la sottrazione finale.",
+      why:"Una parte vale "+tot2+" : "+d2+" = "+una2+" figurine. Le mancanti sono "+F(d2-n2,d2,"g")+" dell'album: "+
+          (d2-n2)+" &times; "+una2+" = <b>"+ris2+"</b>. Controllo: "+(n2*una2)+" + "+ris2+" = "+tot2+" &check;"
+    };
+  }
+
+  if(tipo===3){                                /* partita: i minuti */
+    var d3=pick([2,3,5,6]), n3=rnd(1,d3-1), tot3=90, una3=90/d3;
+    if(una3%1!==0)return tMenu();
+    var ris3=(d3-n3)*una3;
+    return{
+      w:W,h:222,tag:"Il menu del sabato",
+      text:"La partita dura <b>90 minuti</b>. Ne sono gi&agrave; passati "+F(n3,d3,"a")+". Quanti minuti <b>mancano</b> alla fine?",
+      sub:"Il tempo si divide in parti uguali come qualunque altra cosa.",
+      cap:"I 90 minuti, in parti uguali.",
+      kind:"number",unit:" minuti",answer:ris3,
+      draw:function(s){
+        var parts=[];for(var i=0;i<d3;i++)parts.push({u:1,t:"",f:i<n3?A.FILL.a:"rgba(245,240,250,.04)",st:A.COL.a});
+        A.bars(s,42,76,346,50,parts,"90 minuti",null);
+        A.brace(s,42,42+346*n3/d3,132,1,"giocati");
+        A.brace(s,42+346*n3/d3,388,132,1,"da giocare: ?");
+        A.txt(s,215,202,"il cronometro non ti aiuta: fai i conti","sm");
+      },
+      drawAnswer:function(s){
+        var parts=[];for(var i=0;i<d3;i++)parts.push({u:1,t:String(una3),f:i<n3?A.FILL.a:A.FILL.g,st:i<n3?A.COL.a:A.COL.g});
+        A.bars(s,42,76,346,50,parts,"90 minuti",null);
+        A.brace(s,42+346*n3/d3,388,132,1,ris3+" minuti");
+        A.txt(s,215,202,"una parte vale "+una3+" minuti","sm gn");
+      },
+      hint:"Quanto vale <u>una</u> parte dei 90 minuti? Poi conta quante parti mancano: sono "+(d3-n3)+".",
+      why:"90 : "+d3+" = "+una3+" minuti per ogni parte. Mancano "+(d3-n3)+" parti: "+(d3-n3)+" &times; "+una3+" = <b>"+ris3+
+          " minuti</b>. Cio&egrave; "+F(d3-n3,d3,"g")+" della partita."
+    };
+  }
+
+  if(tipo===4){                                /* inverso: quanto era il totale */
+    var d4=pick([3,4,5,6,8]), n4=rnd(1,d4-1), una4=pick([15,20,25,30,35]), parte4=n4*una4, tot4=d4*una4;
+    return{
+      w:W,h:222,tag:"Il menu del sabato",
+      text:"Fomyn ha speso "+F(n4,d4,"c")+" dei suoi risparmi, cio&egrave; <b>"+parte4+" euro</b>. Quanti euro aveva <b>all'inizio</b>?",
+      sub:"Qui conosci la parte e cerchi l'intero: il problema gira al contrario.",
+      cap:"So quanto vale la parte spesa, non il totale.",
+      kind:"number",unit:" euro",answer:tot4,
+      draw:function(s){
+        var parts=[];for(var i=0;i<d4;i++)parts.push({u:1,t:"",f:i<n4?A.FILL.c:"rgba(245,240,250,.04)",st:A.COL.c});
+        A.bars(s,42,78,346,52,parts,"? euro in tutto",null);
+        A.brace(s,42,42+346*n4/d4,136,1,parte4+" euro spesi");
+        A.txt(s,215,204,"le parti spese sono "+n4+", non una sola","sm");
+      },
+      drawAnswer:function(s){
+        var parts=[];for(var i=0;i<d4;i++)parts.push({u:1,t:String(una4),f:i<n4?A.FILL.c:A.FILL.g,st:i<n4?A.COL.c:A.COL.g});
+        A.bars(s,42,78,346,52,parts,tot4+" euro in tutto",null);
+        A.txt(s,215,204,parte4+" : "+n4+" = "+una4+" (una parte), poi x "+d4,"sm gn");
+      },
+      hint:"I "+parte4+" euro non sono <u>una</u> parte, sono "+n4+" parti. Trova prima quanto vale una parte sola.",
+      why:parte4+" : "+n4+" = "+una4+" euro (il valore di "+F(1,d4)+"). L'intero &egrave; fatto di "+d4+" parti: "+
+          una4+" &times; "+d4+" = <b>"+tot4+" euro</b>. Errore tipico: moltiplicare subito "+parte4+" &times; "+d4+", che salta il passaggio della singola parte."
+    };
+  }
+
+  /* due passaggi: la parte della parte */
+  var d5=pick([3,4,5]), n5=rnd(1,d5-1), d6=pick([2,3,4]), una5=pick([60,120,180,240]);
+  var tot5=d5*una5, resto=(d5-n5)*una5;
+  if(resto%d6!==0)return tMenu();
+  var ris5=resto/d6;
+  return{
+    w:W,h:238,tag:"Il menu del sabato",
+    text:"Allo stadio ci sono <b>"+tot5+" tifosi</b>: "+F(n5,d5,"a")+" sono ospiti. Di quelli <u>rimasti</u>, "+F(1,d6,"c")+
+         " sono neutrali. Quanti sono i <b>neutrali</b>?",
+    sub:"Attenzione alla parola <u>rimasti</u>: la seconda frazione non si riferisce a tutto lo stadio.",
+    cap:"Prima divisione: ospiti e non ospiti.",
+    kind:"number",unit:" tifosi",answer:ris5,
+    draw:function(s){
+      var parts=[];for(var i=0;i<d5;i++)parts.push({u:1,t:"",f:i<n5?A.FILL.a:"rgba(245,240,250,.04)",st:A.COL.a});
+      A.bars(s,42,72,346,48,parts,tot5+" tifosi",null);
+      A.brace(s,42,42+346*n5/d5,126,1,"ospiti");
+      A.brace(s,42+346*n5/d5,388,126,1,"rimasti");
+      A.txt(s,215,186,"di questi rimasti, una parte e' neutrale","sm");
+      A.txt(s,215,220,"la seconda frazione riguarda solo la barra di destra","sm");
+    },
+    drawAnswer:function(s){
+      var parts=[];for(var i=0;i<d5;i++)parts.push({u:1,t:String(una5),f:i<n5?A.FILL.a:A.FILL.n,st:i<n5?A.COL.a:A.COL.n});
+      A.bars(s,42,58,346,44,parts,tot5+" tifosi",null);
+      var w2=346*(d5-n5)/d5, x2=42+346*n5/d5;
+      var p2=[];for(var j=0;j<d6;j++)p2.push({u:1,t:String(ris5),f:j<1?A.FILL.g:"rgba(245,240,250,.04)",st:A.COL.g});
+      A.bars(s,x2,132,w2,44,p2,null,"i "+resto+" rimasti, in "+d6+" parti");
+      A.txt(s,215,224,"neutrali: "+ris5,"sm gn");
+    },
+    hint:"Fai un passo alla volta: prima quanti sono i <b>rimasti</b> (il totale meno gli ospiti), poi prendi "+F(1,d6)+" <u>di quel numero</u>, non del totale.",
+    why:"Una parte vale "+tot5+" : "+d5+" = "+una5+". Ospiti: "+n5+" &times; "+una5+" = "+(n5*una5)+", quindi rimasti "+
+        tot5+" &minus; "+(n5*una5)+" = "+resto+". I neutrali sono "+F(1,d6,"c")+" <u>dei rimasti</u>: "+resto+" : "+d6+" = <b>"+ris5+"</b>. "+
+        "Chi calcola "+F(1,d6)+" del totale sbaglia: la frazione si riferisce sempre all'intero di cui si sta parlando in quel momento."
+  };
+}
+
+/* ============================================================
+   LE POSTAZIONI
+   ============================================================ */
+var MISSIONS=[
+  {id:"tagliere",name:"Il tagliere",desc:"Leggere una frazione da una figura.",color:"#FFC94D",n:6,make:tTagliere,
+   icon:'<rect x="6" y="14" width="36" height="20" rx="3" fill="none" stroke="#FFC94D" stroke-width="2.4"/><path d="M15 14 L15 34 M24 14 L24 34 M33 14 L33 34" stroke="#FFC94D" stroke-width="1.8"/><rect x="6" y="14" width="18" height="20" fill="rgba(255,201,77,.35)" stroke="none"/>'},
+  {id:"metro",name:"Il metro del banco",desc:"Le frazioni sulla retta dei numeri.",color:"#4FD1B6",n:6,make:tMetro,
+   icon:'<path d="M6 28 L42 28" stroke="#4FD1B6" stroke-width="2.6" stroke-linecap="round"/><path d="M9 20 L9 36 M18 23 L18 33 M27 20 L27 36 M36 23 L36 33" stroke="#4FD1B6" stroke-width="2"/><circle cx="22" cy="28" r="4.5" fill="#FFC94D"/>'},
+  {id:"riduzione",name:"La riduzione",desc:"Equivalenti e minimi termini.",color:"#63E08A",n:6,make:tRiduzione,
+   icon:'<rect x="8" y="10" width="14" height="28" rx="3" fill="rgba(99,224,138,.30)" stroke="#63E08A" stroke-width="2.2"/><rect x="30" y="17" width="10" height="14" rx="2" fill="rgba(99,224,138,.30)" stroke="#63E08A" stroke-width="2.2"/><path d="M24 24 L28 24" stroke="#63E08A" stroke-width="2"/>'},
+  {id:"bilancia",name:"La bilancia",desc:"Confrontare senza farsi ingannare.",color:"#C39BFF",n:6,make:tBilancia,
+   icon:'<path d="M24 10 L24 38 M12 38 L36 38" stroke="#C39BFF" stroke-width="2.4" stroke-linecap="round"/><path d="M8 18 L40 18" stroke="#C39BFF" stroke-width="2.4"/><path d="M2 18 a6 6 0 0 0 12 0 Z M34 18 a6 6 0 0 0 12 0 Z" fill="rgba(195,155,255,.28)" stroke="#C39BFF" stroke-width="1.8"/>'},
+  {id:"pentolone",name:"Il pentolone",desc:"Addizioni e sottrazioni, in due passi.",color:"#FFC94D",n:5,make:tPentolone,
+   icon:'<path d="M10 18 L38 18 L35 38 L13 38 Z" fill="rgba(255,201,77,.25)" stroke="#FFC94D" stroke-width="2.4" stroke-linejoin="round"/><path d="M6 18 L42 18" stroke="#FFC94D" stroke-width="2.4" stroke-linecap="round"/><path d="M18 12 L18 8 M24 12 L24 6 M30 12 L30 8" stroke="#AC9FBD" stroke-width="2" stroke-linecap="round"/>'},
+  {id:"mattarello",name:"Il mattarello",desc:"Moltiplicare, dividere, capovolgere.",color:"#4FD1B6",n:6,make:tMattarello,
+   icon:'<rect x="10" y="20" width="28" height="9" rx="4.5" fill="rgba(79,209,182,.30)" stroke="#4FD1B6" stroke-width="2.2"/><path d="M4 24.5 L10 24.5 M38 24.5 L44 24.5" stroke="#4FD1B6" stroke-width="2.6" stroke-linecap="round"/><path d="M16 14 L32 36" stroke="#FFC94D" stroke-width="2"/>'},
+  {id:"porzioni",name:"Le porzioni",desc:"La frazione di un numero, nei due sensi.",color:"#63E08A",n:6,make:tPorzioni,
+   icon:'<circle cx="24" cy="24" r="15" fill="none" stroke="#63E08A" stroke-width="2.4"/><path d="M24 24 L24 9 A15 15 0 0 1 37 31.5 Z" fill="rgba(99,224,138,.35)" stroke="none"/><path d="M24 24 L24 9 M24 24 L37 31.5 M24 24 L11 31.5" stroke="#63E08A" stroke-width="2"/>'},
+  {id:"menu",name:"Il menu del sabato",desc:"Problemi veri, con il modello a barre.",color:"#C39BFF",n:5,make:tMenu,
+   icon:'<rect x="9" y="7" width="30" height="34" rx="4" fill="none" stroke="#C39BFF" stroke-width="2.4"/><path d="M15 17 L33 17 M15 24 L33 24 M15 31 L26 31" stroke="#C39BFF" stroke-width="2" stroke-linecap="round"/>'}
+];
+var ALL=[tTagliere,tMetro,tRiduzione,tBilancia,tPentolone,tMattarello,tPorzioni,tMenu];
+var PARTITA={id:"servizio",name:"Il servizio completo",desc:"Otto piatti da tutte le postazioni: come in verifica.",
+  color:"#FFC94D",n:8,big:true,make:function(){return pick(ALL)()},
+  icon:'<circle cx="24" cy="24" r="17" fill="none" stroke="#FFC94D" stroke-width="2.6"/><path d="M16 25 l6 6 l11 -14" fill="none" stroke="#63E08A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'};
+
+window.PAGAME={MISSIONS:MISSIONS,PARTITA:PARTITA,ALL:ALL};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var A=window.PA,G=window.PAGAME,$=A.$;
+var MISSIONS=G.MISSIONS,PARTITA=G.PARTITA;
+var S={m:null,i:0,task:null,step:0,tries:0,score:0,wrong:[],cur:45,typed:"",sel:{},fn:"",fd:"",fld:0};
+/* unità del passo corrente: "°" se non specificata, "" per un numero puro */
+function unit(){
+  var t=S.task;if(!t)return "";
+  if(t.kind==="chain"){var st=t.steps[S.step];if(st&&st.unit!=null)return st.unit}
+  return t.unit!=null?t.unit:"";
+}
+
+/* ---------------- HOME ---------------- */
+function starsHTML(k){var h="";for(var i=0;i<3;i++)h+='<i class="'+(i<k?"on":"")+'"></i>';return h}
+function paintHome(){
+  var g=$("#grid");g.innerHTML="";
+  var list=MISSIONS.concat([PARTITA]);
+  list.forEach(function(m,i){
+    var b=document.createElement("button");
+    b.className="mission"+(m.big?" big":"");
+    b.style.setProperty("--mc",m.color);
+    b.style.animationDelay=(i*45)+"ms";
+    b.innerHTML='<svg class="ico" viewBox="0 0 48 48" aria-hidden="true">'+m.icon+'</svg>'+
+      '<h3>'+m.name+'</h3><p>'+m.desc+'</p>'+
+      '<div class="foot"><span class="stars">'+starsHTML(A.P.stars[m.id]||0)+'</span>'+
+      '<span class="go">'+m.n+' domande →</span></div>';
+    b.addEventListener("click",function(){start(m)});
+    g.appendChild(b);
+  });
+  A.paintXP();
+}
+
+/* ---------------- SESSIONE ---------------- */
+function show(id){
+  ["home","game","end"].forEach(function(s){$("#"+s).classList.toggle("hide",s!==id)});
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function start(m){
+  S={m:m,i:0,task:null,step:0,tries:0,score:0,wrong:[],cur:45,typed:"",sel:{},fn:"",fd:"",fld:0};
+  $("#modeName").textContent=m.name;
+  var d=$("#dots");d.innerHTML="";
+  for(var k=0;k<m.n;k++)d.appendChild(document.createElement("i"));
+  show("game");next();
+}
+function next(){
+  if(S.i>=S.m.n)return finish();
+  S.task=S.m.make();S.step=0;S.tries=0;S.cur=45;S.typed="";S.sel={};S.locked=false;S.fn="";S.fd="";S.fld=0;
+  var dots=$("#dots").children;
+  for(var k=0;k<dots.length;k++)dots[k].classList.toggle("now",k===S.i);
+  $("#qTag").textContent=S.task.tag;
+  $("#qText").innerHTML=S.task.text;
+  var sub=$("#qSub");
+  if(S.task.sub){sub.innerHTML=S.task.sub;sub.classList.remove("hide")}else sub.classList.add("hide");
+  $("#figCap").textContent=S.task.cap||"";
+  $("#fb").className="fb";$("#fb").innerHTML="";
+  $("#btnNext").classList.add("hide");
+  $("#btnHint").classList.remove("hide");$("#btnHint").disabled=false;
+  drawFig();renderAnswer();
+}
+function drawFig(rev){
+  var t=S.task,host=$("#fig");host.innerHTML="";
+  var s=A.Board(t.w||420,t.h||300);
+  try{
+    if(rev!==undefined&&t.drawAnswer)t.drawAnswer(s,rev);
+    else if(t.kind==="drag")t.draw(s,S.cur);
+    else if(t.kind==="chain")t.draw(s,S.step);
+    else t.draw(s);
+  }catch(e){}
+  host.appendChild(s);
+}
+/* interazioni delegate al contenitore, che non viene mai sostituito */
+(function(){
+  var host=$("#fig"),dragging=false;
+  function svgEl(){return host.firstChild}
+  function toAngle(ev){
+    var t=S.task,el=svgEl();if(!el||!t)return null;
+    var r=el.getBoundingClientRect();if(!r.width)return null;
+    var sc=(t.w||420)/r.width;
+    var x=(ev.clientX-r.left)*sc,y=(ev.clientY-r.top)*sc;
+    return Math.max(2,Math.min(178,Math.round(A.ang(t.cx,t.cy,x,y))));
+  }
+  host.addEventListener("click",function(ev){
+    var el=ev.target.closest?ev.target.closest("[data-pick]"):null;
+    if(el&&S.task&&S.task.kind==="pick"&&!S.locked)answer(parseInt(el.getAttribute("data-pick"),10));
+  });
+  host.addEventListener("pointerdown",function(ev){
+    if(!S.task||S.task.kind!=="drag"||S.locked)return;
+    dragging=true;var a=toAngle(ev);if(a!==null){S.cur=a;drawFig()}
+    ev.preventDefault();
+  });
+  window.addEventListener("pointermove",function(ev){
+    if(!dragging)return;var a=toAngle(ev);if(a!==null){S.cur=a;drawFig()}
+  },{passive:true});
+  window.addEventListener("pointerup",function(){dragging=false});
+  window.addEventListener("pointercancel",function(){dragging=false});
+})();
+
+/* ---------------- input ---------------- */
+function renderAnswer(){
+  var t=S.task,a=$("#answer");a.innerHTML="";
+  if(t.kind==="choice"){
+    var box=document.createElement("div");box.className="opts";
+    t.choices.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";
+      b.innerHTML='<span class="l">'+"ABCD"[i]+'</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(b.disabled)return;
+        b.classList.add(c.ok?"good":"bad");
+        if(!c.ok)b.disabled=true;
+        answer(c.ok);
+      });
+      box.appendChild(b);
+    });
+    a.appendChild(box);
+  }
+  else if(t.kind==="number"||t.kind==="chain"){
+    var st=t.kind==="chain"?t.steps[S.step]:null;
+    if(st){var h=document.createElement("div");h.className="q";
+      h.innerHTML='<span class="tag">Passo '+(S.step+1)+' di '+t.steps.length+'</span><h3>'+st.text+'</h3>';
+      a.appendChild(h)}
+    var line=document.createElement("div");line.className="numline";
+    line.innerHTML='<div class="numshow" id="nshow"><span class="cur">–</span><span class="deg">'+unit()+'</span></div>';
+    a.appendChild(line);
+    var pad=document.createElement("div");pad.className="pad";
+    ["1","2","3","4","5","6","7","8","9","←","0","✓"].forEach(function(k){
+      var b=document.createElement("button");b.textContent=k;
+      if(k==="✓")b.className="ok";if(k==="←")b.className="del";
+      b.addEventListener("click",function(){typeKey(k)});
+      pad.appendChild(b);
+    });
+    a.appendChild(pad);
+  }
+  else if(t.kind==="frac"){
+    var fbox=document.createElement("div");fbox.className="fracin";fbox.id="fracin";
+    fbox.innerHTML='<div class="stack">'+
+        '<button class="fb2 act" id="fnum" aria-label="numero di sopra">&ndash;</button>'+
+        '<div class="rule"></div>'+
+        '<button class="fb2" id="fden" aria-label="numero di sotto">&ndash;</button></div>'+
+      '<div class="say">Scrivi il numero <b>di sopra</b>, poi tocca il riquadro di sotto (oppure il tasto <b>/</b>) '+
+      'e scrivi quello <b>di sotto</b>. Alla fine premi <b>&#10003;</b>.</div>';
+    a.appendChild(fbox);
+    fbox.querySelector("#fnum").addEventListener("click",function(){if(!S.locked){S.fld=0;paintFrac()}});
+    fbox.querySelector("#fden").addEventListener("click",function(){if(!S.locked){S.fld=1;paintFrac()}});
+    var fpad=document.createElement("div");fpad.className="pad four";
+    [["1",""],["2",""],["3",""],["←","del"],["4",""],["5",""],["6",""],["/","sw"],
+     ["7",""],["8",""],["9",""],["✓","ok"],["0","wide"]].forEach(function(k){
+      var b=document.createElement("button");b.textContent=k[0];
+      if(k[1])b.className=k[1];
+      b.addEventListener("click",function(){typeKey(k[0])});
+      fpad.appendChild(b);
+    });
+    a.appendChild(fpad);
+  }
+  else if(t.kind==="slider"){
+    var w=document.createElement("div");w.className="slide";
+    w.innerHTML='<div class="val"><span id="sval">'+S.cur+'</span>°</div>'+
+      '<input type="range" id="srange" min="5" max="'+(t.max||180)+'" step="1" value="'+S.cur+'" aria-label="La tua stima">';
+    a.appendChild(w);
+    var btn=document.createElement("button");btn.className="btn pri";btn.textContent="È questo";
+    btn.addEventListener("click",function(){answer(S.cur)});
+    a.appendChild(btn);
+    var r=w.querySelector("#srange");
+    r.addEventListener("input",function(){S.cur=parseInt(r.value,10);$("#sval").textContent=S.cur});
+  }
+  else if(t.kind==="drag"){
+    var b2=document.createElement("button");b2.className="btn pri";b2.textContent="È questa la posizione";
+    b2.addEventListener("click",function(){answer(S.cur)});
+    a.appendChild(b2);
+    var p=document.createElement("p");p.className="sub";p.style.marginTop="10px";
+    p.textContent="Trascina il pallino arancione sul vertice C: i tre angoli si aggiornano mentre muovi.";
+    a.appendChild(p);
+  }
+  else if(t.kind==="pick"){
+    var p2=document.createElement("div");p2.className="q";
+    p2.innerHTML='<span class="tag">Tocca la figura</span><h3 style="font-size:16px;font-weight:600">Clicca direttamente sulla figura qui accanto.</h3>';
+    a.appendChild(p2);
+  }
+  else if(t.kind==="multi"){
+    var box2=document.createElement("div");box2.className="opts";
+    t.choices.forEach(function(c,i){
+      var b=document.createElement("button");b.className="opt";
+      b.innerHTML='<span class="box">&#10003;</span><span>'+c.label+'</span>';
+      b.addEventListener("click",function(){
+        if(S.locked)return;
+        S.sel[i]=!S.sel[i];
+        b.classList.toggle("sel",!!S.sel[i]);
+      });
+      box2.appendChild(b);
+    });
+    a.appendChild(box2);
+    var note=document.createElement("p");note.className="multihint";
+    note.textContent="Puoi sceglierne quante vuoi: la risposta e' giusta solo se l'insieme e' esatto.";
+    a.appendChild(note);
+    var okb=document.createElement("button");okb.className="btn pri";okb.style.marginTop="10px";
+    okb.textContent="Confermo la selezione";
+    okb.addEventListener("click",function(){
+      if(S.locked)return;
+      var right=true;
+      t.choices.forEach(function(c,i){if(!!S.sel[i]!==!!c.ok)right=false});
+      document.querySelectorAll(".opt").forEach(function(b,i){
+        if(t.choices[i].ok)b.classList.add("good");
+        else if(S.sel[i])b.classList.add("bad");
+      });
+      answer(right);
+    });
+    a.appendChild(okb);
+  }
+}
+function paintFrac(){
+  var n=$("#fnum"),d=$("#fden");if(!n||!d)return;
+  n.textContent=S.fn||"–";d.textContent=S.fd||"–";
+  n.classList.toggle("act",S.fld===0);d.classList.toggle("act",S.fld===1);
+}
+function typeKey(k){
+  var t=S.task;
+  if(t&&t.kind==="frac"){
+    if(k==="←"){if(S.fld===0)S.fn=S.fn.slice(0,-1);else S.fd=S.fd.slice(0,-1)}
+    else if(k==="/"){S.fld=1}
+    else if(k==="✓"){
+      if(!S.fn||!S.fd||parseInt(S.fd,10)===0){
+        fb("soft","Manca un pezzo","Servono tutti e due i numeri: quello di sopra e quello di sotto. "+
+           "Il numero di sotto non può essere zero, perché non si taglia niente in zero parti.");
+        return;
+      }
+      answer(null,{n:parseInt(S.fn,10),d:parseInt(S.fd,10)});
+      return;
+    }
+    else{
+      if(S.fld===0){if(S.fn.length<3)S.fn+=k}else{if(S.fd.length<3)S.fd+=k}
+    }
+    paintFrac();return;
+  }
+  if(k==="←"){S.typed=S.typed.slice(0,-1)}
+  else if(k==="✓"){
+    if(S.typed==="")return;
+    var v=parseInt(S.typed,10);S.typed="";paintNum();
+    var target=(t.kind==="chain")?t.steps[S.step].answer:t.answer;
+    answer(v===target,v);
+    return;
+  }
+  else if(S.typed.length<3)S.typed+=k;
+  paintNum();
+}
+function paintNum(){
+  var n=$("#nshow");if(!n)return;
+  n.innerHTML='<span class="cur">'+(S.typed||"–")+'</span><span class="deg">'+unit()+'</span>';
+}
+
+/* ---------------- valutazione ---------------- */
+function fb(cls,title,body){
+  var f=$("#fb");f.className="fb on "+cls;
+  f.innerHTML="<b>"+title+"</b>"+body;
+}
+function dotSet(cls){
+  var d=$("#dots").children[S.i];if(!d)return;
+  d.classList.remove("now");d.classList.add(cls);
+}
+function answer(val,typed){
+  var t=S.task,ok;
+  if(t.kind==="frac"){
+    var G=typed||{n:0,d:1};
+    var esatta=(G.n===t.answer.n&&G.d===t.answer.d);
+    var equiv=(G.n*t.answer.d===t.answer.n*G.d);
+    S.tries++;
+    var box=$("#fracin");if(box){box.classList.remove("good","bad");box.classList.add(esatta?"good":"bad")}
+    if(esatta){close(true,t.why);return}
+    if(equiv&&S.tries<3){
+      fb("soft","Giusto il valore, non la scrittura",
+        "La tua frazione vale davvero la stessa cosa, ma la risposta va data <b>ai minimi termini</b>: "+
+        "dividi sopra e sotto per il loro M.C.D. e riprova.");
+      shake();return;
+    }
+    if(S.tries<2){fb("soft","Non ancora",t.hint);shake();return}
+    fb("soft","Impariamo questa","La risposta era <b style='display:inline;font-size:15px'>"+
+      t.answer.n+"/"+t.answer.d+"</b>. "+t.why);
+    close(false,null,true);return;
+  }
+  if(t.kind==="choice"||t.kind==="multi")ok=(val===true);
+  else if(t.kind==="pick")ok=(val===t.answer);
+  else if(t.kind==="slider"||t.kind==="drag")ok=Math.abs(val-t.answer)<=t.tol;
+  else ok=(val===true);
+  S.tries++;
+
+  if(t.kind==="chain"){
+    var st=t.steps[S.step];
+    if(ok){
+      if(S.step<t.steps.length-1){
+        S.step++;S.tries=0;
+        fb("good","Anello trovato",st.why+" Ora il passo successivo.");
+        drawFig();renderAnswer();return;
+      }
+      close(true,st.why);
+    }else if(S.tries<2){
+      fb("soft","Non ancora",st.hint);shake();
+    }else{
+      fb("soft","Guarda qui","La risposta era <b style='display:inline;font-size:15px'>"+st.answer+unit()+"</b>. "+st.why);
+      if(S.step<t.steps.length-1){
+        S.step++;S.tries=0;S.wrong.push(t.why);
+        setTimeout(function(){drawFig();renderAnswer()},60);
+        return;
+      }
+      close(false,st.why);
+    }
+    return;
+  }
+
+  if(ok){
+    var extra="";
+    if(t.kind==="slider"||t.kind==="drag"){
+      var diff=Math.abs(val-t.answer);
+      extra=diff<=3?" Praticamente esatto: "+t.answer+"°.":" Il valore giusto era "+t.answer+"°: eri fuori di "+diff+"°.";
+      drawFig(val);
+    }
+    close(true,(t.why||"")+extra);
+  }else if(S.tries<2){
+    if(t.kind==="slider"||t.kind==="drag")fb("soft","Ci sei quasi","Sei ancora fuori di più di "+t.tol+"°. "+t.hint);
+    else fb("soft","Non ancora",t.hint);
+    shake();
+  }else{
+    var sol=(t.kind==="choice"||t.kind==="multi")?"":(" La risposta era <b style='display:inline;font-size:15px'>"+
+      (t.kind==="pick"?("il n. "+t.answer):(t.answer+unit()))+"</b>.");
+    if(t.kind==="choice"||t.kind==="multi"){
+      document.querySelectorAll(".opt").forEach(function(b,i){
+        if(t.choices[i].ok){b.classList.add("good")}b.disabled=true;
+      });
+    }
+    if(t.kind==="slider"||t.kind==="drag")drawFig(val);
+    if(t.kind==="pick")drawFig(0);
+    fb("soft","Impariamo questa",sol+" "+t.why);
+    close(false,null,true);
+  }
+}
+function shake(){var st=document.querySelector(".stage");st.classList.remove("shake");void st.offsetWidth;st.classList.add("shake")}
+function close(good,why,silent){
+  var t=S.task;S.locked=true;
+  if(t.drawAnswer&&t.kind!=="slider"&&t.kind!=="drag")drawFig(0);
+  if(good){
+    var pts=S.tries<=1?10:5;
+    if((t.kind==="slider"||t.kind==="drag")&&S.tries<=1)pts+=2;
+    A.P.xp+=pts;A.save();A.paintXP();
+    S.score+=S.tries<=1?1:0.5;
+    dotSet(S.tries<=1?"ok":"ko");
+    if(!silent)fb("good",S.tries<=1?"Esatto!":"Giusto, al secondo colpo",(why||"")+" <b style='display:inline;color:var(--amber);font-size:13px'>+"+pts+" XP</b>");
+  }else{
+    dotSet("ko");S.wrong.push(t.why);
+  }
+  $("#btnHint").classList.add("hide");
+  var b=$("#btnNext");b.classList.remove("hide");
+  b.textContent=(S.i===S.m.n-1)?"Vedi il risultato →":"Continua →";
+  document.querySelectorAll(".opt").forEach(function(x){x.disabled=true});
+  document.querySelectorAll(".pad").forEach(function(p){p.querySelectorAll("button").forEach(function(x){x.disabled=true})});
+  document.querySelectorAll(".fb2").forEach(function(x){x.disabled=true});
+  S.i++;
+}
+
+/* ---------------- fine ---------------- */
+function finish(){
+  var frac=S.score/S.m.n,stars=frac>=.9?3:frac>=.7?2:frac>=.5?1:0;
+  var prev=A.P.stars[S.m.id]||0;
+  if(stars>prev){A.P.stars[S.m.id]=stars}
+  if(stars===3){A.P.xp+=20}
+  A.save();A.paintXP();
+  $("#endTitle").textContent=(S.score===S.m.n)?"Perfetto":stars===3?"Quasi perfetto":stars===2?"Ci siamo":stars===1?"Buon lavoro":"Riproviamo";
+  $("#endScore").textContent=Math.round(S.score*10)/10;
+  $("#endOf").textContent="su "+S.m.n+" · "+S.m.name;
+  var st=$("#endStars").children;
+  for(var i=0;i<3;i++)st[i].className=i<stars?"on":"";
+  $("#endMsg").textContent=
+    stars===3?(S.score===S.m.n?"Serie perfetta, tutte al primo colpo. +20 XP di bonus: puoi passare a un altro allenamento.":"Quasi tutte al primo colpo: +20 XP di bonus. Rifalla una volta per chiuderla a punteggio pieno."):
+    stars===2?"Manca poco: quasi tutte al primo colpo. Rifai la serie e guarda se scendi a zero errori.":
+    stars===1?"Il metodo c'è, serve solo ripetizione. Rifai questa serie: i numeri cambiano ogni volta.":
+    "Nessun problema: è così che si impara. Rifai la serie con calma, leggendo ogni indizio prima di rispondere.";
+  var learn=$("#endLearn"),w=[];
+  S.wrong.forEach(function(x){if(x&&w.indexOf(x)<0)w.push(x)});
+  if(w.length){
+    learn.innerHTML='<h4>Da tenere a mente</h4><ul>'+w.map(function(x){return"<li>"+x+"</li>"}).join("")+'</ul>';
+  }else{
+    learn.innerHTML='<h4>Da tenere a mente</h4><ul><li>Non hai lasciato niente indietro: continua a cambiare allenamento per non abituarti a una sola figura.</li></ul>';
+  }
+  show("end");
+}
+
+/* ---------------- eventi ---------------- */
+$("#btnNext").addEventListener("click",next);
+$("#btnBack").addEventListener("click",function(){paintHome();show("home")});
+$("#btnHome").addEventListener("click",function(){paintHome();show("home")});
+$("#btnAgain").addEventListener("click",function(){start(S.m)});
+$("#btnReset").addEventListener("click",function(){
+  A.P.xp=0;A.P.stars={};A.save();paintHome();
+  this.textContent="Fatto: si riparte da zero";
+});
+$("#btnHint").addEventListener("click",function(){
+  var t=S.task,h=(t.kind==="chain")?t.steps[S.step].hint:t.hint;
+  fb("soft","Indizio",h);$("#btnHint").disabled=true;
+});
+document.addEventListener("keydown",function(e){
+  if($("#game").classList.contains("hide"))return;
+  var t=S.task;if(!t)return;
+  if(t.kind==="number"||t.kind==="chain"||t.kind==="frac"){
+    if(/^[0-9]$/.test(e.key))typeKey(e.key);
+    else if(e.key==="Backspace")typeKey("←");
+    else if(e.key==="Enter")typeKey("✓");
+    else if(t.kind==="frac"&&(e.key==="/"||e.key==="ArrowDown"))typeKey("/");
+    else if(t.kind==="frac"&&e.key==="ArrowUp"){S.fld=0;paintFrac()}
+  }else if(e.key==="Enter"&&!$("#btnNext").classList.contains("hide"))next();
+});
+
+/* ---------------- self-test ---------------- */
+function selftest(){
+  var out=[],n=0,bad=0;
+  var makers=G.ALL.concat([PARTITA.make]);
+  function fig(t){return A.Board(t.w||420,t.h||300)}
+  makers.forEach(function(mk,idx){
+    for(var k=0;k<40;k++){
+      n++;
+      try{
+        var t=mk();
+        var s=A.Board(t.w||420,t.h||300);
+        if(t.kind==="chain"){for(var q=0;q<t.steps.length;q++)t.draw(A.Board(t.w||420,t.h||300),q)}
+        else if(t.kind==="drag"){for(var g=15;g<=140;g+=25)t.draw(A.Board(t.w||420,t.h||300),g)}
+        else t.draw(s);
+        if(t.drawAnswer)t.drawAnswer(A.Board(t.w||420,t.h||300),t.kind==="drag"?t.answer:40);
+        if(!t.text||!t.why||!t.hint)throw new Error("testo mancante");
+        if(t.kind==="choice"){
+          var ok=t.choices.filter(function(c){return c.ok});
+          if(ok.length!==1)throw new Error("scelte corrette = "+ok.length);
+          if(t.choices.length<3)throw new Error("poche scelte");
+          var labs={};t.choices.forEach(function(c){if(labs[c.label])throw new Error("scelta doppia");labs[c.label]=1});
+        }else if(t.kind==="chain"){
+          t.steps.forEach(function(st){
+            if(!(st.answer>0&&st.answer<=9999&&st.answer%1===0))throw new Error("step "+st.answer);
+            if(!st.text||!st.hint||!st.why)throw new Error("passo senza testo");
+          });
+        }else if(t.kind==="frac"){
+          var an=t.answer;
+          if(!an||!(an.n>0&&an.d>0&&an.n%1===0&&an.d%1===0&&an.n<1000&&an.d<1000))throw new Error("frazione sballata");
+          if(A.gcd(an.n,an.d)!==1)throw new Error("risposta non ridotta: "+an.n+"/"+an.d);
+        }else if(t.kind==="multi"){
+          if(t.choices.length<3)throw new Error("poche scelte");
+          if(!t.choices.filter(function(c){return c.ok}).length)throw new Error("nessuna scelta giusta");
+        }else if(t.kind==="pick"){
+          if(!(t.answer>=1&&t.answer<=9))throw new Error("pick "+t.answer);
+        }else{
+          if(!(t.answer>0&&t.answer<=9999&&t.answer%1===0))throw new Error("answer "+t.answer);
+        }
+        /* REGOLA DELLA FABBRICA: la figura mostra i DATI, mai il risultato chiesto.
+           Qui si legge il testo disegnato e si controlla che non contenga gia' la risposta. */
+        function leggi(sv){
+          var words=[];
+          Array.prototype.forEach.call(sv.querySelectorAll("text"),function(e){
+            (e.textContent||"").split(/[^0-9A-Za-zÀ-ÿ]+/).forEach(function(w){if(w)words.push(w.toLowerCase())});
+          });
+          return words;
+        }
+        if(t.kind==="frac"&&!t.leakOk){
+          var sf=A.Board(t.w||420,t.h||300);t.draw(sf);
+          (sf.__fr||[]).forEach(function(p){
+            if(p[0]===t.answer.n&&p[1]===t.answer.d)throw new Error("la figura mostra gia' "+p[0]+"/"+p[1]);
+          });
+          var raw="";Array.prototype.forEach.call(sf.querySelectorAll("text"),function(e){raw+=" "+(e.textContent||"")});
+          if(raw.replace(/\s+/g,"").indexOf(t.answer.n+"/"+t.answer.d)>=0)throw new Error("la figura scrive la risposta");
+        }
+        if(t.kind==="chain"&&!t.leakOk){
+          for(var z=0;z<t.steps.length;z++){
+            var sz=A.Board(t.w||420,t.h||300);t.draw(sz,z);
+            if(leggi(sz).indexOf(String(t.steps[z].answer))>=0)
+              throw new Error("il disegno del passo "+(z+1)+" mostra "+t.steps[z].answer);
+          }
+        }
+        if(t.kind==="number"||t.kind==="choice"||t.kind==="multi"){
+          var sv=A.Board(t.w||420,t.h||300);t.draw(sv);
+          var words=leggi(sv);
+          if(!t.leakOk){
+            if(t.kind==="number"){
+              if(words.indexOf(String(t.answer))>=0)throw new Error("la figura mostra la risposta "+t.answer);
+            }else{
+              t.choices.forEach(function(c){
+                if(!c.ok)return;
+                var key=String(c.label).toLowerCase().split(/[^0-9a-zà-ÿ]+/).filter(function(w){return w.length>3});
+                if(key.length&&key.every(function(w){return words.indexOf(w)>=0}))
+                  throw new Error("la figura mostra la scelta giusta");
+              });
+            }
+          }
+        }
+      }catch(err){bad++;out.push("["+idx+"] "+err.message)}
+    }
+  });
+  $("#testout").classList.remove("hide");
+  $("#testout").textContent=(bad===0?"TUTTO OK — ":"ERRORI ")+n+" test, "+bad+" falliti\n"+out.slice(0,20).join("\n");
+}
+
+/* ---------------- boot ---------------- */
+paintHome();
+if(location.search.indexOf("test=1")>=0)selftest();
+var dm=/demo=(\d+)/.exec(location.search);
+if(dm)start(MISSIONS.concat([PARTITA])[parseInt(dm[1],10)]||MISSIONS[0]);
+if(/end=1/.test(location.search)){S.m=MISSIONS[4];S.score=5.5;S.wrong=[MISSIONS[4].make().why];finish()}
+if(dm&&/auto=1/.test(location.search))setTimeout(function(){
+  var t=S.task;if(!t)return;
+  if(t.kind==="choice"){var idx=0;t.choices.forEach(function(c,i){if(c.ok)idx=i});
+    var bs=document.querySelectorAll(".opt");if(bs[idx])bs[idx].click()}
+  else if(t.kind==="multi"){
+    var bs2=document.querySelectorAll(".opt");
+    t.choices.forEach(function(c,i){if(c.ok&&bs2[i])bs2[i].click()});
+    var conf=document.querySelector("#answer .btn.pri");if(conf)conf.click()}
+  else if(t.kind==="frac")answer(null,t.answer);
+  else if(t.kind==="chain"||t.kind==="number")answer(true);
+  else if(t.kind==="pick")answer(t.answer);
+  else answer(t.answer);
+},400);
+})();
+</script>
+</body>
+</html>
